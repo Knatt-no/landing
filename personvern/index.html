@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personvern — Knatt</title>
+<meta name="description" content="Knatts personvernerklæring publiseres før MVP-lansering høsten 2026.">
+<meta name="theme-color" content="#0E1116">
+<meta name="robots" content="noindex">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/favicon-512x512.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --glod: #FF4D38;
+  --blekk: #0E1116;
+  --bein: #F0EFEC;
+  --bein-edge: #E2E1DD;
+  --disp: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bein);
+  color: var(--blekk);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: inherit; }
+.container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+.header { padding: 24px 0; border-bottom: 1px solid var(--bein-edge); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.logo {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: flex-end;
+}
+.logo .dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--glod);
+  margin: 0 0 5px 3px;
+}
+.header-back {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  opacity: 0.7;
+}
+.header-back:hover { opacity: 1; }
+main { padding: 80px 0 120px; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0.65;
+  margin: 0 0 24px;
+}
+.eyebrow .dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--glod);
+}
+h1 {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+}
+h1 .dot {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--glod);
+  margin: 0 0 10px 4px;
+}
+.lede { font-size: 18px; line-height: 1.6; margin: 0 0 16px; max-width: 60ch; }
+.body-text { font-size: 16px; line-height: 1.7; margin: 0 0 32px; max-width: 60ch; opacity: 0.85; }
+.contact {
+  font-family: var(--mono);
+  font-size: 13px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--bein-edge);
+  opacity: 0.7;
+}
+.contact a { color: var(--glod); text-decoration: none; }
+.contact a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="logo" href="/">knatt<span class="dot"></span></a>
+      <a class="header-back" href="/">← Tilbake</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>Kommer før MVP høst 2026</div>
+    <h1>Personvern<span class="dot"></span></h1>
+    <p class="lede">Vi publiserer full personvernerklæring før Knatt slippes — hva vi samler inn, hvorfor, hvor lenge, og hvilke rettigheter du har.</p>
+    <p class="body-text">Knatt bygges EU-bosatt med dataminimering som premiss. Detaljert oversikt over behandlingsgrunnlag, sub-prosessorer, lagringstid og innsyns-/sletteflyt publiseres her når MVP nærmer seg lansering.</p>
+    <div class="contact">
+      Har du personvern-spørsmål allerede nå? Skriv til <a href="mailto:samuel@knatt.app">samuel@knatt.app</a>.
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

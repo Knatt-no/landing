@@ -1,420 +1,1224 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="nb">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knatt</title>
-<meta name="description" content="Knatt – det norrøne ordet for ball. Lanseres høsten 2026.">
-<meta name="robots" content="index, follow">
+<title>Knatt — mindre system, mer håndball</title>
+<meta name="description" content="Knatt er én app for klubber og lagidretter i Norge. Vi starter med håndball. Bygd rundt det laget faktisk gjør — ikke det administrasjonen krever. MVP høst 2026.">
+<meta name="theme-color" content="#0E1116">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Knatt">
-<meta property="og:description" content="Tusen år gammelt. Klart for digital tid.">
+<meta property="og:title" content="Knatt — mindre system, mer håndball">
+<meta property="og:description" content="Én app for klubber og lagidretter i Norge — vi starter med håndball. EU-bygd, personvern-først, designet for hverdagen.">
+<meta property="og:url" content="https://knatt.no">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://knatt.app">
+<meta property="og:image" content="https://knatt.no/og-image.png">
 <meta property="og:locale" content="nb_NO">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext x='50' y='68' font-family='serif' font-size='60' font-weight='400' text-anchor='middle' fill='%23fff'%3EK%3C/text%3E%3C/svg%3E">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Knatt — mindre system, mer håndball">
+<meta name="twitter:description" content="Én app for klubber og lagidretter i Norge.">
 
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/favicon-512x512.png">
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --bg-deeper: #050505;
-    --fg: #f5f3ef;
-    --fg-dim: #8a8680;
-    --fg-faint: #4a4844;
-    --accent: #d4c4a8;
-    --rule: rgba(245, 243, 239, 0.08);
-  }
+/* ─────────────────────────────────────────────────────────────
+   Knatt visuell profil v3 — landingside knatt.no
+   ───────────────────────────────────────────────────────────── */
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+:root {
+  /* Strømfarger */
+  --glod: #FF4D38;
+  --lime: #C8F03A;
+  --drom: #7C5CE0;
+  --gra: #D6D5D2;
+  /* Systemfarger */
+  --blekk: #0E1116;
+  --bein: #F0EFEC;
+  --bein-edge: #E2E1DD;
+  --natt: #15181E;
+  --natt-edge: #252932;
+  /* Lyse varianter */
+  --glod-l: #FFE3DD;
+  --lime-l: #EEFAC8;
+  --drom-l: #E0D2FF;
+  --gra-l: #ECEBE8;
+  /* Mørke varianter */
+  --glod-d: #C63520;
+  --lime-d: #5A7300;
+  --drom-d: #3B1F8C;
+  --gra-d: #6B6964;
+  /* Typografi */
+  --disp: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
 
-  html, body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 300;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
+*, *::before, *::after { box-sizing: border-box; }
 
-  body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
+html { scroll-behavior: smooth; }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.5;
-    z-index: 1;
-    mix-blend-mode: overlay;
-  }
+body {
+  margin: 0;
+  background: var(--bein);
+  color: var(--blekk);
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(212, 196, 168, 0.04), transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+a { color: inherit; }
 
-  header, main, footer {
-    position: relative;
-    z-index: 2;
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
 
-  header {
-    padding: 2rem 2.5rem;
-    display: flex;
+@media (min-width: 1024px) {
+  .container { padding: 0 48px; }
+}
+
+/* ─── Eyebrow ─── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--blekk);
+  opacity: 0.65;
+  margin: 0 0 20px;
+}
+
+.eyebrow .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--glod);
+}
+
+.eyebrow-dark {
+  color: var(--bein);
+  opacity: 0.7;
+}
+
+/* ─── Logo ─── */
+.logo {
+  font-family: var(--disp);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+.logo-md { font-size: 22px; }
+.logo-md .dot { width: 5px; height: 5px; margin: 0 0 4px 3px; }
+
+.logo .dot {
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--glod);
+}
+
+/* ─── Header ─── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(240, 239, 236, 0.85);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(14, 17, 22, 0.06);
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+}
+
+.header-cta {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--blekk);
+  text-decoration: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(14, 17, 22, 0.18);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.header-cta:hover {
+  border-color: var(--blekk);
+  background: var(--blekk);
+  color: var(--bein);
+}
+
+/* ─── Hero ─── */
+.hero {
+  padding: 80px 0 96px;
+}
+
+@media (min-width: 768px) {
+  .hero { padding: 120px 0 144px; }
+}
+
+.hero h1 {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: clamp(42px, 8vw, 96px);
+  letter-spacing: -0.05em;
+  line-height: 1.0;
+  margin: 0 0 24px;
+}
+
+.hero h1 .accent {
+  display: inline-block;
+}
+
+.hero h1 .dot {
+  display: inline-block;
+  width: 0.13em;
+  height: 0.13em;
+  border-radius: 50%;
+  background: var(--glod);
+  vertical-align: baseline;
+  margin: 0 0 0.04em 0.04em;
+}
+
+.hero .lede {
+  font-size: clamp(17px, 2.2vw, 22px);
+  color: rgba(14, 17, 22, 0.75);
+  max-width: 720px;
+  line-height: 1.5;
+  margin: 0 0 40px;
+}
+
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 13px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--blekk);
+  color: var(--bein);
+}
+
+.btn-primary:hover {
+  background: var(--natt);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--blekk);
+  border: 1.5px solid rgba(14, 17, 22, 0.18);
+}
+
+.btn-ghost:hover {
+  border-color: var(--blekk);
+}
+
+.btn-glod {
+  background: var(--glod);
+  color: var(--blekk);
+}
+
+.btn-glod:hover {
+  background: var(--glod-d);
+  color: var(--bein);
+}
+
+.btn-arrow::after {
+  content: "→";
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.btn:hover .btn-arrow::after,
+.btn-arrow:hover::after {
+  transform: translateX(3px);
+}
+
+/* ─── Sections shared ─── */
+.section {
+  padding: 80px 0;
+}
+
+@media (min-width: 768px) {
+  .section { padding: 112px 0; }
+}
+
+.section h2 {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: clamp(32px, 5vw, 56px);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin: 0 0 24px;
+}
+
+.section .section-lede {
+  font-size: clamp(16px, 2vw, 19px);
+  color: rgba(14, 17, 22, 0.7);
+  max-width: 640px;
+  line-height: 1.5;
+  margin: 0 0 56px;
+}
+
+.section-dark {
+  background: var(--blekk);
+  color: var(--bein);
+}
+
+.section-dark .eyebrow,
+.section-dark h2,
+.section-dark .section-lede,
+.section-dark p {
+  color: var(--bein);
+}
+
+.section-dark .section-lede,
+.section-dark p {
+  opacity: 0.75;
+}
+
+/* ─── Strømmer ─── */
+.streams-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+@media (min-width: 720px) {
+  .streams-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.stream-card {
+  border-radius: 18px;
+  padding: 36px 32px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stream-card .stream-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
+.stream-card h3 {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.stream-card p {
+  font-size: 15px;
+  margin: 0;
+  opacity: 0.82;
+  line-height: 1.5;
+}
+
+.stream-card .stream-tags {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stream-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(14, 17, 22, 0.10);
+  color: inherit;
+}
+
+/* Sport — Glød, mørk tekst */
+.stream-sport {
+  background: var(--glod);
+  color: var(--blekk);
+}
+
+/* Aktivitet — Lime, mørk tekst */
+.stream-aktivitet {
+  background: var(--lime);
+  color: var(--blekk);
+}
+
+/* Kommunikasjon — Drøm, lys tekst */
+.stream-kommunikasjon {
+  background: var(--drom);
+  color: var(--bein);
+}
+
+.stream-kommunikasjon .stream-tag {
+  background: rgba(240, 239, 236, 0.18);
+}
+
+/* Informasjon — Grå, mørk tekst */
+.stream-informasjon {
+  background: var(--gra);
+  color: var(--blekk);
+}
+
+/* ─── Datakildehierarki / differentiator ─── */
+.hierarchy-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+
+@media (min-width: 900px) {
+  .hierarchy-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+}
+
+.hierarchy-claim {
+  font-family: var(--disp);
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--bein);
+  margin: 0 0 24px;
+}
+
+.hierarchy-claim em {
+  color: var(--glod);
+  font-style: normal;
+}
+
+.hierarchy-detail p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  opacity: 0.8;
+}
+
+.hierarchy-detail p:last-child {
+  margin-bottom: 0;
+}
+
+.hierarchy-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.hierarchy-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(240, 239, 236, 0.04);
+  border: 1px solid rgba(240, 239, 236, 0.08);
+}
+
+.hierarchy-row-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+}
+
+.hierarchy-row-value {
+  font-size: 14.5px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* ─── For hvem ─── */
+.audiences-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+
+@media (min-width: 720px) {
+  .audiences-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .audiences-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.audience-card {
+  padding: 28px 4px;
+}
+
+.audience-card .audience-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--glod-d);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.audience-card .audience-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--glod);
+}
+
+.audience-card h3 {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+
+.audience-card p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(14, 17, 22, 0.72);
+  margin: 0;
+}
+
+/* ─── Trust / byggesteiner ─── */
+.section-trust { background: var(--gra-l); }
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+@media (min-width: 720px) {
+  .trust-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .trust-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+.trust-card {
+  background: var(--bein);
+  border-radius: 14px;
+  padding: 24px 22px;
+  border: 1px solid var(--bein-edge);
+}
+
+.trust-card .trust-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gra-d);
+  margin-bottom: 8px;
+}
+
+.trust-card .trust-name {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.trust-card .trust-desc {
+  font-size: 13px;
+  color: rgba(14, 17, 22, 0.65);
+  line-height: 1.45;
+}
+
+.trust-claims {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .trust-claims { grid-template-columns: 1fr 1fr; }
+}
+
+.trust-claim {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 22px;
+  border-radius: 12px;
+  background: var(--bein);
+  border: 1px solid var(--bein-edge);
+}
+
+.trust-claim-mark {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--glod);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blekk);
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.trust-claim-text {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.trust-claim-text strong {
+  font-weight: 500;
+}
+
+/* ─── Roadmap / status ─── */
+.roadmap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 48px;
+  border-left: 2px solid rgba(240, 239, 236, 0.15);
+  padding-left: 0;
+}
+
+.roadmap-item {
+  position: relative;
+  padding: 24px 0 24px 32px;
+  border-left: 2px solid rgba(240, 239, 236, 0.15);
+  margin-left: 0;
+}
+
+.roadmap-item::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 30px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--natt);
+  border: 2px solid rgba(240, 239, 236, 0.4);
+}
+
+.roadmap-item.current::before {
+  background: var(--glod);
+  border-color: var(--glod);
+  box-shadow: 0 0 0 4px rgba(255, 77, 56, 0.2);
+}
+
+.roadmap-when {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--glod);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.roadmap-item.future .roadmap-when {
+  color: rgba(240, 239, 236, 0.5);
+}
+
+.roadmap-what {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 6px;
+  color: var(--bein);
+}
+
+.roadmap-detail {
+  font-size: 14.5px;
+  color: rgba(240, 239, 236, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Founder ─── */
+.founder-card {
+  background: var(--blekk);
+  color: var(--bein);
+  border-radius: 24px;
+  padding: 48px 36px;
+  margin-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .founder-card { padding: 64px 56px; }
+}
+
+.founder-card .founder-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--glod);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+
+.founder-card .founder-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--glod);
+}
+
+.founder-card h3 {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 36px);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0 0 24px;
+}
+
+.founder-card p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  opacity: 0.85;
+  max-width: 720px;
+}
+
+.founder-card p:last-of-type {
+  margin-bottom: 0;
+}
+
+/* ─── CTA-seksjon ─── */
+.cta-section {
+  text-align: center;
+}
+
+.cta-section h2 {
+  margin: 0 auto 24px;
+  max-width: 800px;
+}
+
+.cta-section .section-lede {
+  margin: 0 auto 40px;
+}
+
+.cta-section .hero-ctas {
+  justify-content: center;
+}
+
+.cta-detail {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 28px;
+  color: rgba(14, 17, 22, 0.55);
+}
+
+/* ─── Footer ─── */
+.footer {
+  background: var(--natt);
+  color: var(--bein);
+  padding: 64px 0 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 720px) {
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 56px;
+  }
+}
+
+.footer-brand .logo {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.footer-brand .logo .dot { width: 8px; height: 8px; margin: 0 0 7px 4px; }
+
+.footer-brand p {
+  font-size: 14px;
+  color: rgba(240, 239, 236, 0.6);
+  max-width: 320px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.footer-col h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(240, 239, 236, 0.5);
+  margin: 0 0 16px;
+  font-weight: 400;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col li { margin-bottom: 10px; }
+
+.footer-col a {
+  color: var(--bein);
+  text-decoration: none;
+  font-size: 14.5px;
+  transition: color 0.15s ease;
+}
+
+.footer-col a:hover { color: var(--glod); }
+
+.footer-bottom {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--natt-edge);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(240, 239, 236, 0.4);
+}
+
+@media (min-width: 720px) {
+  .footer-bottom {
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
+}
 
-  .wordmark {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 1.125rem;
-    letter-spacing: -0.01em;
-    color: var(--fg);
+/* ─── Section header common ─── */
+.section-header {
+  margin-bottom: 8px;
+}
+
+/* ─── Accessibility ─── */
+:focus-visible {
+  outline: 2px solid var(--glod);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+a, button { transition: opacity 0.15s ease; }
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
 
-  .meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--fg-dim);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 4rem 2.5rem 3rem;
-    max-width: 720px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .display {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: clamp(4.5rem, 16vw, 11rem);
-    line-height: 0.9;
-    letter-spacing: -0.04em;
-    color: var(--fg);
-    margin-bottom: 2.5rem;
-    font-variation-settings: 'opsz' 144;
-    animation: fadeUp 1.2s ease-out;
-  }
-
-  .display em {
-    font-style: italic;
-    color: var(--accent);
-    font-variation-settings: 'opsz' 144;
-  }
-
-  .tagline {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
-    line-height: 1.3;
-    color: var(--fg);
-    margin-bottom: 4rem;
-    max-width: 32ch;
-    letter-spacing: -0.01em;
-    animation: fadeUp 1.2s ease-out 0.2s backwards;
-  }
-
-  .tagline span {
-    display: block;
-  }
-
-  .tagline span:last-child {
-    color: var(--fg-dim);
-    font-style: italic;
-  }
-
-  .rule {
-    height: 1px;
-    background: var(--rule);
-    margin: 0 0 3rem;
-    max-width: 80px;
-    animation: ruleExpand 1.5s ease-out 0.6s backwards;
-  }
-
-  @keyframes ruleExpand {
-    from { max-width: 0; opacity: 0; }
-    to { max-width: 80px; opacity: 1; }
-  }
-
-  .story {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    line-height: 1.7;
-    color: var(--fg-dim);
-    max-width: 50ch;
-    margin-bottom: 3rem;
-    animation: fadeUp 1.2s ease-out 0.4s backwards;
-  }
-
-  .story p {
-    margin-bottom: 1.25rem;
-  }
-
-  .story p:last-child {
-    margin-bottom: 0;
-    color: var(--fg);
-  }
-
-  .story em {
-    color: var(--accent);
-    font-style: italic;
-    font-weight: 400;
-  }
-
-  .whisper {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: clamp(0.95rem, 1.8vw, 1.05rem);
-    color: var(--fg-faint);
-    max-width: 44ch;
-    margin-bottom: 4rem;
-    line-height: 1.6;
-    animation: fadeUp 1.2s ease-out 0.6s backwards;
-  }
-
-  .signals {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 4rem;
-    animation: fadeUp 1.2s ease-out 0.8s backwards;
-  }
-
-  .signal {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--fg-dim);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .signal-key {
-    color: var(--fg-faint);
-    min-width: 90px;
-  }
-
-  .signal-val {
-    color: var(--fg-dim);
-  }
-
-  footer {
-    padding: 2rem 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 1rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--fg-faint);
-    letter-spacing: 0.05em;
-  }
-
-  footer .left,
-  footer .right {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  footer .right {
-    text-align: right;
-  }
-
-  footer a {
-    color: var(--fg-faint);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  footer a:hover {
-    color: var(--accent);
-  }
-
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .pulse-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.85); }
-  }
-
-  @media (max-width: 640px) {
-    header {
-      padding: 1.5rem 1.5rem;
-    }
-
-    main {
-      padding: 2rem 1.5rem 2rem;
-    }
-
-    .display {
-      margin-bottom: 2rem;
-    }
-
-    .tagline {
-      margin-bottom: 3rem;
-    }
-
-    .story {
-      margin-bottom: 2rem;
-    }
-
-    .whisper {
-      margin-bottom: 3rem;
-    }
-
-    .signals {
-      gap: 0.75rem;
-      margin-bottom: 3rem;
-    }
-
-    .signal {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.25rem;
-    }
-
-    .signal-key {
-      min-width: 0;
-    }
-
-    footer {
-      padding: 1.5rem 1.5rem 2rem;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    footer .right {
-      text-align: left;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  ::selection {
-    background: var(--accent);
-    color: var(--bg);
-  }
+/* ─── Selection ─── */
+::selection {
+  background: var(--glod);
+  color: var(--blekk);
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wordmark">Knatt</div>
-  <div class="meta"><span class="pulse-dot"></span>I stille bevegelse</div>
+<!-- ────────────────────────── HEADER ────────────────────────── -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="logo logo-md" href="/">knatt<span class="dot"></span></a>
+      <a class="header-cta" href="#kontakt">Få beskjed ved lansering</a>
+    </div>
+  </div>
 </header>
 
-<main>
-  <h1 class="display">Kn<em>a</em>tt</h1>
-
-  <p class="tagline">
-    <span>Tusen år gammelt.</span>
-    <span>Klart for digital tid.</span>
-  </p>
-
-  <div class="rule"></div>
-
-  <div class="story">
-    <p>
-      <em>Knatt</em> er det norrøne ordet for ball. I Egils saga fra 900-tallet
-      beskrives <em>knattleikr</em> – det første kjente ballspillet i Norden.
-    </p>
-    <p>
-      Et heldig lag i en heldig klubb skal snart være de første som knatter.
-      Vi gleder oss til å transformere den digitale hverdagen i lag og klubb.
-    </p>
-  </div>
-
-  <p class="whisper">
-    Mer kommer.
-  </p>
-
-  <div class="signals">
-    <div class="signal">
-      <span class="signal-key">— Status</span>
-      <span class="signal-val">Under utvikling</span>
-    </div>
-    <div class="signal">
-      <span class="signal-key">— Lansering</span>
-      <span class="signal-val">Høsten 2026</span>
-    </div>
-    <div class="signal">
-      <span class="signal-key">— Hjemmebase</span>
-      <span class="signal-val">Lillehammer, Norge</span>
+<!-- ────────────────────────── HERO ────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>For klubber og lagidretter · MVP høst 2026</div>
+    <h1>Mindre system.<br>Mer håndball<span class="dot"></span></h1>
+    <p class="lede">Én app for hele laget — bygd rundt det laget faktisk gjør i hverdagen. Treninger, kamper, beskjeder, oppmøte. Vi starter med håndball; modellen passer like godt for de andre lagidrettene.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary btn-arrow" href="#hvordan-virker-det">Slik virker det</a>
+      <a class="btn btn-ghost" href="#kontakt">Få beskjed ved lansering</a>
     </div>
   </div>
-</main>
+</section>
 
-<footer>
-  <div class="left">
-    <div>© 2026 Knatt</div>
-    <div>Bygd i Norge</div>
+<!-- ────────────────────────── STRØMMER ────────────────────────── -->
+<section class="section" id="hvordan-virker-det">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span class="dot"></span>Hvordan det er bygd</div>
+      <h2>Fire strømmer. Aldri mer.</h2>
+      <p class="section-lede">Hele appen er organisert rundt fire spørsmål du faktisk stiller deg som forelder, spiller, trener eller klubbleder. Hver strøm har sin egen farge — du leser hva slags ting det er før du leser teksten.</p>
+    </div>
+
+    <div class="streams-grid">
+      <div class="stream-card stream-aktivitet">
+        <div class="stream-meta">01 · Aktivitet</div>
+        <h3>Hva må jeg gjøre?</h3>
+        <p>Treninger, dugnader, påmeldinger, oppgaver. Det du må huske, og det du må svare på.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">Treninger</span>
+          <span class="stream-tag">Dugnader</span>
+          <span class="stream-tag">RSVP</span>
+        </div>
+      </div>
+
+      <div class="stream-card stream-sport">
+        <div class="stream-meta">02 · Sport</div>
+        <h3>Hva er neste kamp?</h3>
+        <p>Kamper, turneringer, live-resultater, lag og tropp. Det laget faktisk spiller.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">Seriespill</span>
+          <span class="stream-tag">Turneringer</span>
+          <span class="stream-tag">Live</span>
+        </div>
+      </div>
+
+      <div class="stream-card stream-kommunikasjon">
+        <div class="stream-meta">03 · Snakk</div>
+        <h3>Er det noe nytt?</h3>
+        <p>Beskjeder fra trener, foreldregruppe-praten, små kommentarer. En tråd per lag, ingen kaos.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">Beskjeder</span>
+          <span class="stream-tag">Foreldregruppe</span>
+          <span class="stream-tag">Reaksjoner</span>
+        </div>
+      </div>
+
+      <div class="stream-card stream-informasjon">
+        <div class="stream-meta">04 · Info</div>
+        <h3>Hvor finner jeg…?</h3>
+        <p>Klubb, region, lag, Min Idrett, profiler. Den rolige strømmen — den du sjekker når du trenger noe konkret.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">Klubb</span>
+          <span class="stream-tag">Lag</span>
+          <span class="stream-tag">Profil</span>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="right">
-    <div>knatt.app · knatt.no</div>
-    <div><a href="mailto:samuel@knatt.app">samuel@knatt.app</a></div>
+</section>
+
+<!-- ────────────────────────── DATAKILDEHIERARKI ────────────────────────── -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow eyebrow-dark"><span class="dot"></span>Det vi ikke gjør</div>
+      <h2>Vi lager ikke en til portal å vedlikeholde.</h2>
+    </div>
+
+    <div class="hierarchy-grid">
+      <div>
+        <p class="hierarchy-claim">Idretts-Norge har allerede mange systemer for medlemskap, kamper og kompetanse. Knatt prøver ikke å erstatte dem — vi <em>henter derfra</em> og bygger bare det som faktisk mangler: <em>hverdagsverktøyet for laget</em>.</p>
+        <p class="hierarchy-claim" style="font-size: clamp(17px, 2vw, 22px); opacity: 0.85;">Datadrevet design betyr at vi bygger med strømmen, ikke mot den. Det offisielle får bo der det allerede bor. Endringer flyter inn automatisk. Du registrerer aldri samme spiller to ganger, og synkroniserer ikke manuelt. Det er hele poenget.</p>
+      </div>
+
+      <div class="hierarchy-stack">
+        <div class="hierarchy-row">
+          <div class="hierarchy-row-label">Det offisielle</div>
+          <div class="hierarchy-row-value">Medlemsregistre, kompetansebevis, organisasjonsdata</div>
+        </div>
+        <div class="hierarchy-row">
+          <div class="hierarchy-row-label">Det administrative</div>
+          <div class="hierarchy-row-value">Kamper, serier, turneringer, registreringer</div>
+        </div>
+        <div class="hierarchy-row" style="background: rgba(255, 77, 56, 0.08); border-color: rgba(255, 77, 56, 0.25);">
+          <div class="hierarchy-row-label" style="color: var(--glod); opacity: 1;">Knatt henter</div>
+          <div class="hierarchy-row-value">Spillere, kamper, roller, godkjenninger</div>
+        </div>
+        <div class="hierarchy-row" style="background: rgba(255, 77, 56, 0.08); border-color: rgba(255, 77, 56, 0.25);">
+          <div class="hierarchy-row-label" style="color: var(--glod); opacity: 1;">Knatt skaper</div>
+          <div class="hierarchy-row-value">Treninger, beskjeder, oppmøte, samtaler</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── AUDIENCES ────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span class="dot"></span>For deg</div>
+      <h2>Én app. Fire roller.</h2>
+      <p class="section-lede">Knatt tilpasser seg hvem du er på laget. Du ser ikke trenerens kontroll-panel, og treneren ser ikke alle foreldrenes private samtaler.</p>
+    </div>
+
+    <div class="audiences-grid">
+      <div class="audience-card">
+        <div class="audience-eyebrow">Spiller</div>
+        <h3>Hva skjer?</h3>
+        <p>Neste trening, neste kamp, beskjedene fra trener. Det viktigste først — uten å måtte navigere seg gjennom et helt klubbsystem.</p>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-eyebrow">Forelder</div>
+        <h3>Hva må jeg vite?</h3>
+        <p>Møtepunkt, oppmøte, dugnader. Sjekk én plass om kvelden, så vet du om det er noe du har glemt før i morgen.</p>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-eyebrow">Lagleder</div>
+        <h3>Hvem kommer?</h3>
+        <p>Send en beskjed til hele laget. Se hvor mange som svarer. Planlegg neste uke uten å holde styr på en Excel-liste.</p>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-eyebrow">Klubbleder</div>
+        <h3>Hva trenger lagene?</h3>
+        <p>Oversikt over alle lag, politiattester på trenere, og hvor klubben står. Uten å logge inn i fem forskjellige systemer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── TRUST / BYGGESTEINER ────────────────────────── -->
+<section class="section section-trust">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span class="dot"></span>Bygd på</div>
+      <h2>Personvern er ikke et avhuk.</h2>
+      <p class="section-lede">Knatt er bygd på europeiske skytjenester, norske domener og åpen kildekode der vi kan. Ingen amerikanske skytjenester. Ingen annonsering. Ingen sporing av barna dine.</p>
+    </div>
+
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-label">E-post</div>
+        <div class="trust-name">Proton</div>
+        <div class="trust-desc">Sveits, EU-jurisdiksjon</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-label">Database</div>
+        <div class="trust-name">Supabase EU</div>
+        <div class="trust-desc">Frankfurt, AWS Europe</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-label">Hosting</div>
+        <div class="trust-name">Vercel EU</div>
+        <div class="trust-desc">Paris, Frankfurt</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-label">Feilrapport</div>
+        <div class="trust-name">Sentry EU</div>
+        <div class="trust-desc">Frankfurt</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-label">Analyse</div>
+        <div class="trust-name">Plausible</div>
+        <div class="trust-desc">Tyskland, ingen cookies</div>
+      </div>
+    </div>
+
+    <div class="trust-claims">
+      <div class="trust-claim">
+        <div class="trust-claim-mark">✓</div>
+        <div class="trust-claim-text"><strong>GDPR-kompatibel og personvern by design.</strong> Vi samler bare det vi trenger for at appen skal fungere. Aldri mer.</div>
+      </div>
+      <div class="trust-claim">
+        <div class="trust-claim-mark">✓</div>
+        <div class="trust-claim-text"><strong>Aldri annonsering.</strong> Knatt selger ikke data, viser ikke reklame, og lar ikke tredjeparter spore brukerne våre.</div>
+      </div>
+      <div class="trust-claim">
+        <div class="trust-claim-mark">✓</div>
+        <div class="trust-claim-text"><strong>Aldri amerikanske skytjenester</strong> for behandling av personopplysninger. Schrems II-tilpasset fra første rad i databasen.</div>
+      </div>
+      <div class="trust-claim">
+        <div class="trust-claim-mark">✓</div>
+        <div class="trust-claim-text"><strong>Eksport når du vil.</strong> Klubben eier sine data. Vi gjør dem tilgjengelige i åpne formater når dere ber om det.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── ROADMAP ────────────────────────── -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow eyebrow-dark"><span class="dot"></span>Veien videre</div>
+      <h2>Knatt bygges åpent, ett lag av gangen.</h2>
+      <p class="section-lede">Vi bygger sammen med en faktisk klubb, ikke i et tomrom. Hver feature testes med jenter, foreldre og trenere før den ruller ut bredere.</p>
+    </div>
+
+    <div class="roadmap">
+      <div class="roadmap-item current">
+        <span class="roadmap-when">Mai – august 2026 · pågår</span>
+        <h3 class="roadmap-what">MVP for LFH09 J2011</h3>
+        <p class="roadmap-detail">Bygger appen sammen med jentene som er motivasjonen. Treninger, kamper, RSVP, beskjeder. Magic link-innlogging for foreldre. Real-world testing før sesongstart.</p>
+      </div>
+
+      <div class="roadmap-item future">
+        <span class="roadmap-when">September 2026</span>
+        <h3 class="roadmap-what">Åpent for første klubber</h3>
+        <p class="roadmap-detail">Klubber i Innlandet og Oslo kan ta i bruk Knatt fra sesongstart. Manuell oppretting av spillere via Excel-mal mens vi venter på integrasjonen.</p>
+      </div>
+
+      <div class="roadmap-item future">
+        <span class="roadmap-when">Vinter 2026 – 2027</span>
+        <h3 class="roadmap-what">Tetter integrasjonene</h3>
+        <p class="roadmap-detail">Vi kobler oss mot de offisielle systemene klubbene allerede bruker. Når koblingene er på plass, slipper dere å vedlikeholde noe to ganger — endringer flyter inn automatisk.</p>
+      </div>
+
+      <div class="roadmap-item future">
+        <span class="roadmap-when">2027 og videre</span>
+        <h3 class="roadmap-what">Flere lagidretter</h3>
+        <p class="roadmap-detail">Andre lagidretter får sin egen versjon av Knatt — fotball, volleyball, basket, innebandy. Felles fundament for personvern og data, særpreg fra hver idrett.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── FOUNDER ────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span class="dot"></span>Hvem som lager Knatt</div>
+      <h2>Bygget av en som faktisk står i hallen.</h2>
+    </div>
+
+    <div class="founder-card">
+      <div class="founder-eyebrow">Samuel Andersen · grunder</div>
+      <h3>«Jeg startet med Knatt fordi jeg ble lei av å bruke fem apper for å gjøre én ting.»</h3>
+      <p>Jeg trener J2011-jentene i LFH09 Lillehammer Fåberg. Jeg er forelder, lagleder og kampansvarlig. Jeg har vært på begge sider — den som planlegger, og den som glemmer å sjekke gruppechatten.</p>
+      <p>Knatt er det jeg skulle ønske eksisterte da jeg overtok laget. Mindre system. Mer håndball. Bygd sammen med klubben min — for klubben din.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── CTA ────────────────────────── -->
+<section class="section cta-section" id="kontakt">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span class="dot"></span>Tidlig tilgang</div>
+      <h2>Vil klubben deres være med tidlig?</h2>
+      <p class="section-lede">Skriv noen ord — hva slags lag dere har, hva som er det største administrasjonsproblemet i dag. Vi svarer personlig.</p>
+    </div>
+
+    <div class="hero-ctas">
+      <a class="btn btn-glod btn-arrow" href="mailto:samuel@knatt.app?subject=Tidlig%20tilgang%20til%20Knatt">Skriv til samuel@knatt.app</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/samuelandersen" target="_blank" rel="noopener">Følg på LinkedIn</a>
+    </div>
+
+    <div class="cta-detail">Personlig svar innen 24 timer · Norsk eller engelsk</div>
+  </div>
+</section>
+
+<!-- ────────────────────────── FOOTER ────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="/">knatt<span class="dot"></span></a>
+        <p>App for klubber og lagidretter i Norge — vi starter med håndball. Bygd i Lillehammer, hostet i EU, eid av Knatt AS (under stiftelse).</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Knatt</h4>
+        <ul>
+          <li><a href="#hvordan-virker-det">Hvordan det virker</a></li>
+          <li><a href="#kontakt">Tidlig tilgang</a></li>
+          <li><a href="/personvern">Personvern</a></li>
+          <li><a href="/sikkerhet">Sikkerhet</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Følg</h4>
+        <ul>
+          <li><a href="https://www.linkedin.com/company/knatt" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://instagram.com/knatt.app" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://x.com/knatt_app" target="_blank" rel="noopener">X</a></li>
+          <li><a href="mailto:samuel@knatt.app">samuel@knatt.app</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 Knatt AS (under stiftelse) · Lillehammer, Norge</div>
+      <div>● Mindre system. Mer håndball.</div>
+    </div>
   </div>
 </footer>
 

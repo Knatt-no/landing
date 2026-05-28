@@ -324,6 +324,76 @@ a { color: inherit; }
   opacity: 0.75;
 }
 
+/* ─── Navnet (Natt-seksjon) ─── */
+.section-natt {
+  background: var(--natt);
+  color: var(--bein);
+}
+
+.section-natt .eyebrow {
+  color: var(--bein);
+  opacity: 0.7;
+}
+
+.navnet-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+}
+
+@media (min-width: 900px) {
+  .navnet-layout {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 72px;
+    align-items: center;
+  }
+}
+
+.navnet-display {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: clamp(52px, 9vw, 104px);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  margin: 18px 0 18px;
+}
+
+.navnet-root { color: var(--bein); }
+.navnet-suffix { color: var(--gra-d); }
+
+.navnet-era {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--bein);
+  opacity: 0.5;
+}
+
+.navnet-story p {
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.6;
+  color: var(--bein);
+  opacity: 0.82;
+  margin: 0 0 20px;
+}
+
+.navnet-story em {
+  font-style: italic;
+  opacity: 1;
+}
+
+.navnet-close {
+  font-family: var(--disp) !important;
+  font-weight: 500 !important;
+  font-size: clamp(19px, 2.4vw, 26px) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.35 !important;
+  color: var(--glod) !important;
+  opacity: 1 !important;
+  margin-top: 28px !important;
+}
+
 /* ─── Strømmer ─── */
 .streams-grid {
   display: grid;
@@ -921,6 +991,24 @@ a, button { transition: opacity 0.15s ease; }
     <div class="hero-ctas">
       <a class="btn btn-primary btn-arrow" href="#hvordan-virker-det">Slik virker det</a>
       <a class="btn btn-ghost" href="#kontakt">Få beskjed ved lansering</a>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── NAVNET ────────────────────────── -->
+<section class="section section-natt" id="navnet">
+  <div class="container">
+    <div class="navnet-layout">
+      <div class="navnet-word">
+        <div class="eyebrow"><span class="dot"></span>Navnet</div>
+        <div class="navnet-display"><span class="navnet-root">knatt</span><span class="navnet-suffix">leikr</span></div>
+        <div class="navnet-era">Island · vikingtiden</div>
+      </div>
+      <div class="navnet-story">
+        <p>Knatt henter navnet sitt fra <em>knattleikr</em> — et populært, men beinhardt lag- og ballspill fra vikingtidens Island. Reglene har gått tapt i historien, men de islandske sagaene forteller om et spill som krevde styrke, hurtighet og hode på samme tid: rå fysikk satt i system.</p>
+        <p>Det er nettopp den balansen vi bygger på. Knatt skal være verktøyet som gir laget struktur og oversikt — slik at spillerne kan bruke energien der den faktisk teller: på banen.</p>
+        <p class="navnet-close">Tusen år senere er ideen den samme. Mindre tid på det rundt spillet. Mer tid på spillet selv.</p>
+      </div>
     </div>
   </div>
 </section>

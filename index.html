@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Knatt — mindre system, mer ballspill</title>
-<meta name="description" content="Knatt er én app for klubber og lagidretter i Norge. Vi starter med håndball. Bygd rundt det laget faktisk gjør — ikke det administrasjonen krever. I bruk med ett lag nå, bygges videre gjennom sesongen.">
+<meta name="description" content="Knatt er én app for klubber og lagidretter i Norge. Vi starter med håndball. Bygd rundt det laget faktisk gjør — ikke det administrasjonen krever. Under utvikling, ett lag av gangen.">
 <meta name="theme-color" content="#0E1116">
 
 <!-- Open Graph -->
@@ -177,6 +177,36 @@ a { color: inherit; }
   border-color: var(--blekk);
   background: var(--blekk);
   color: var(--bein);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-login {
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--bein);
+  text-decoration: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--blekk);
+  background: var(--blekk);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.header-login:hover {
+  background: var(--glod);
+  border-color: var(--glod);
+}
+
+@media (max-width: 520px) {
+  .header-actions { gap: 8px; }
+  .header-cta,
+  .header-login { padding: 8px 13px; font-size: 13px; }
 }
 
 /* ─── Hero ─── */
@@ -981,7 +1011,10 @@ a, button { transition: opacity 0.15s ease; }
   <div class="container">
     <div class="header-inner">
       <a class="logo logo-md" href="/">knatt<span class="dot"></span></a>
-      <a class="header-cta" href="#kontakt">Ta kontakt</a>
+      <div class="header-actions">
+        <a class="header-cta" href="#kontakt">Ta kontakt</a>
+        <a class="header-login" href="https://knatt.app">Logg inn</a>
+      </div>
     </div>
   </div>
 </header>
@@ -989,7 +1022,7 @@ a, button { transition: opacity 0.15s ease; }
 <!-- ────────────────────────── HERO ────────────────────────── -->
 <section class="hero">
   <div class="container">
-    <div class="eyebrow"><span class="dot"></span>For klubber og lagidretter · i bruk denne sesongen</div>
+    <div class="eyebrow"><span class="dot"></span>For klubber og lagidretter · under utvikling</div>
     <h1>Mindre system.<br>Mer ballspill<span class="dot"></span></h1>
     <p class="lede">Én app for hele laget — bygd rundt det laget faktisk gjør i hverdagen. Treninger, kamper, beskjeder, oppmøte. Vi starter med håndball; modellen passer like godt for de andre lagidrettene.</p>
     <div class="hero-ctas">
@@ -1085,7 +1118,7 @@ a, button { transition: opacity 0.15s ease; }
     <div class="hierarchy-grid">
       <div>
         <p class="hierarchy-claim">Idretts-Norge har allerede mange systemer for medlemskap, kamper og kompetanse. Knatt prøver ikke å erstatte dem — vi <em>henter derfra</em> og bygger bare det som faktisk mangler: <em>hverdagsverktøyet for laget</em>.</p>
-        <p class="hierarchy-claim" style="font-size: clamp(17px, 2vw, 22px); opacity: 0.85;">Datadrevet design betyr at vi bygger med strømmen, ikke mot den. Det offisielle får bo der det allerede bor. Endringer flyter inn automatisk. Du registrerer aldri samme spiller to ganger, og synkroniserer ikke manuelt. Det er hele poenget.</p>
+        <p class="hierarchy-claim" style="font-size: clamp(17px, 2vw, 22px); opacity: 0.85;">Datadrevet design betyr at vi bygger med strømmen, ikke mot den. Det offisielle får bo der det allerede bor. Målet er at endringer flyter inn av seg selv, så ingen registrerer samme spiller to ganger eller synkroniserer manuelt. Det er hele poenget.</p>
       </div>
 
       <div class="hierarchy-stack">
@@ -1211,7 +1244,7 @@ a, button { transition: opacity 0.15s ease; }
     <div class="section-header">
       <div class="eyebrow eyebrow-dark"><span class="dot"></span>Veien videre</div>
       <h2>Knatt bygges åpent, ett lag av gangen.</h2>
-      <p class="section-lede">Vi setter ingen lanseringsdato. Knatt er i bruk nå, og bygges videre mens sesongen går — med jenter, foreldre og trenere som tester det i faktisk hverdag. Det som virker blir stående. Det som ikke virker, skrotes.</p>
+      <p class="section-lede">Vi setter ingen lanseringsdato. Knatt bygges og testes med ett lag av gangen, i det tempoet hverdagen tillater. Det som virker blir stående. Det som ikke virker, skrotes.</p>
     </div>
 
     <div class="roadmap">

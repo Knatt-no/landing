@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knatt — mindre system, mer ballspill</title>
-<meta name="description" content="Knatt er én app for klubber og lagidretter i Norge. Vi starter med håndball. Bygd rundt det laget faktisk gjør — ikke det administrasjonen krever. Under utvikling, ett lag av gangen.">
+<title>Knatt — hele sesongen, ett sted</title>
+<meta name="description" content="Knatt er lagapparatets verktøy for å drive LFH09 J15 gjennom sesongen: serien, troppen og motstanderne, samlet ett sted. Bare for trenere og lagledere.">
 <meta name="theme-color" content="#0E1116">
 
 <!-- Open Graph -->
-<meta property="og:title" content="Knatt — mindre system, mer ballspill">
-<meta property="og:description" content="Én app for klubber og lagidretter i Norge — vi starter med håndball. EU-bygd, personvern-først, designet for hverdagen.">
+<meta property="og:title" content="Knatt — hele sesongen, ett sted">
+<meta property="og:description" content="Lagapparatets verktøy for sesongen: serien, troppen og motstanderne, samlet ett sted.">
 <meta property="og:url" content="https://knatt.app">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://knatt.app/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Knatt — én app for klubber og lagidretter">
+<meta property="og:image:alt" content="Knatt — lagverktøy for sesongen">
 <meta property="og:locale" content="nb_NO">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Knatt — mindre system, mer ballspill">
-<meta name="twitter:description" content="Én app for klubber og lagidretter i Norge.">
+<meta name="twitter:title" content="Knatt — hele sesongen, ett sted">
+<meta name="twitter:description" content="Lagapparatets verktøy for sesongen.">
 <meta name="twitter:image" content="https://knatt.app/og-image.png">
 
 <!-- Favicon -->
@@ -592,79 +592,18 @@ a { color: inherit; }
   opacity: 0.9;
 }
 
-/* ─── For hvem ─── */
-.audiences-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-  margin-top: 48px;
-}
-
-@media (min-width: 720px) {
-  .audiences-grid { grid-template-columns: 1fr 1fr; }
-}
-
-@media (min-width: 1024px) {
-  .audiences-grid { grid-template-columns: repeat(4, 1fr); }
-}
-
-.audience-card {
-  padding: 28px 4px;
-}
-
-.audience-card .audience-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--glod-d);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.audience-card .audience-eyebrow::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--glod);
-}
-
-.audience-card h3 {
-  font-family: var(--disp);
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 12px;
-}
-
-.audience-card p {
-  font-size: 15px;
-  line-height: 1.55;
-  color: rgba(14, 17, 22, 0.72);
-  margin: 0;
-}
-
 /* ─── Trust / byggesteiner ─── */
 .section-trust { background: var(--gra-l); }
 
 .trust-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 16px;
   margin-top: 48px;
 }
 
 @media (min-width: 720px) {
   .trust-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (min-width: 1024px) {
-  .trust-grid { grid-template-columns: repeat(5, 1fr); }
 }
 
 .trust-card {
@@ -1012,7 +951,7 @@ a, button { transition: opacity 0.15s ease; }
     <div class="header-inner">
       <a class="logo logo-md" href="/">knatt<span class="dot"></span></a>
       <div class="header-actions">
-        <a class="header-cta" href="#kontakt">Ta kontakt</a>
+        <a class="header-cta" href="#hva">Hva er det</a>
         <a class="header-login" href="https://knatt.app">Logg inn</a>
       </div>
     </div>
@@ -1022,12 +961,103 @@ a, button { transition: opacity 0.15s ease; }
 <!-- ────────────────────────── HERO ────────────────────────── -->
 <section class="hero">
   <div class="container">
-    <div class="eyebrow"><span class="dot"></span>For klubber og lagidretter · under utvikling</div>
-    <h1>Mindre system.<br>Mer ballspill<span class="dot"></span></h1>
-    <p class="lede">Én app for hele laget — bygd rundt det laget faktisk gjør i hverdagen. Treninger, kamper, beskjeder, oppmøte. Vi starter med håndball; modellen passer like godt for de andre lagidrettene.</p>
+    <div class="eyebrow"><span class="dot"></span>Lagverktøy · LFH09 J15 · sesongen 2026/27</div>
+    <h1>Hele sesongen.<br>Ett sted<span class="dot"></span></h1>
+    <p class="lede">Knatt er verktøyet lagapparatet bruker for å drive laget gjennom sesongen — serien, troppen og motstanderne. Det erstatter regnearket vi hadde før, og brukes bare av trenerne og lagledere.</p>
     <div class="hero-ctas">
-      <a class="btn btn-primary btn-arrow" href="#hvordan-virker-det">Slik virker det</a>
-      <a class="btn btn-ghost" href="#kontakt">Bli med tidlig</a>
+      <a class="btn btn-primary btn-arrow" href="https://knatt.app">Logg inn</a>
+      <a class="btn btn-ghost" href="#hva">Hva Knatt gjør</a>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── HVA DEN GJØR ────────────────────────── -->
+<section class="section" id="hva">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span class="dot"></span>Hva Knatt gjør</div>
+      <h2>Det vi trenger fra uke til uke.</h2>
+      <p class="section-lede">Knatt dekker det et lagapparat holder styr på gjennom en sesong: hvor vi står, hvem vi møter og når. Det vi har bygget, er i bruk nå. Resten kommer etter hvert som vi trenger det.</p>
+    </div>
+
+    <div class="streams-grid">
+      <div class="stream-card stream-sport">
+        <div class="stream-meta">01 · Serien</div>
+        <h3>Hvor står vi?</h3>
+        <p>Tabellen regnes ut fra kampene etter NHFs regler, også innbyrdes oppgjør. Terminlista per dag, våre kamper uthevet. Forsiden viser de tre neste kampene og de tre siste resultatene.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">I bruk</span>
+          <span class="stream-tag">Tabell</span>
+          <span class="stream-tag">Terminliste</span>
+        </div>
+      </div>
+
+      <div class="stream-card stream-aktivitet">
+        <div class="stream-meta">02 · Oppdatering</div>
+        <h3>Hva er endret?</h3>
+        <p>Last opp terminlista fra handball.no. Før noe lagres, får du se nye kamper, flyttede kamper og nye resultater. Rader som ikke kan leses sikkert, vises med radnummer i stedet for å bli gjettet på.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">I bruk</span>
+          <span class="stream-tag">Forhåndsvisning</span>
+          <span class="stream-tag">Revisjonsspor</span>
+        </div>
+      </div>
+
+      <div class="stream-card stream-kommunikasjon">
+        <div class="stream-meta">03 · Motstanderne</div>
+        <h3>Hvem møter vi?</h3>
+        <p>Et kort notat før hver kamp om motstanderen: form, mål for og mot, hvordan det gikk sist. Bygd på tall for hele laget, ikke enkeltspillere.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">Planlagt</span>
+          <span class="stream-tag">Før kamp</span>
+        </div>
+      </div>
+
+      <div class="stream-card stream-informasjon">
+        <div class="stream-meta">04 · Henting</div>
+        <h3>Må jeg laste ned noe?</h3>
+        <p>Etter hvert henter Knatt terminliste og resultater fra handball.no selv, hver kveld og etter kampdager. Endringer som ikke kan kontrolleres automatisk, venter på godkjenning.</p>
+        <div class="stream-tags">
+          <span class="stream-tag">Planlagt</span>
+          <span class="stream-tag">handball.no</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── HVA DEN IKKE ER ────────────────────────── -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow eyebrow-dark"><span class="dot"></span>Det Knatt ikke er</div>
+      <h2>Et lite verktøy med én jobb.</h2>
+    </div>
+
+    <div class="hierarchy-grid">
+      <div>
+        <p class="hierarchy-claim">Knatt startet som en idé om én app for hele klubben. Nå er det noe mindre og mer nyttig: <em>verktøyet lagapparatet bruker for å komme gjennom sesongen</em>.</p>
+        <p class="hierarchy-claim" style="font-size: clamp(17px, 2vw, 22px); opacity: 0.85;">Det offisielle bor fortsatt der det bor. Kamper og resultater kommer fra handball.no. Beskjeder til spillere og foreldre går som før. Knatt holder oversikten for oss som planlegger.</p>
+      </div>
+
+      <div class="hierarchy-stack">
+        <div class="hierarchy-row">
+          <div class="hierarchy-row-label">Ikke en klubbapp</div>
+          <div class="hierarchy-row-value">Ett lag, LFH09 J15. Ingen andre klubber eller lag</div>
+        </div>
+        <div class="hierarchy-row">
+          <div class="hierarchy-row-label">Ikke for alle</div>
+          <div class="hierarchy-row-value">Spillere og foreldre har ikke tilgang, og det er meningen</div>
+        </div>
+        <div class="hierarchy-row">
+          <div class="hierarchy-row-label">Ikke til salgs</div>
+          <div class="hierarchy-row-value">Ingen abonnement, ingen reklame, ingen planer om det</div>
+        </div>
+        <div class="hierarchy-row" style="background: rgba(255, 77, 56, 0.08); border-color: rgba(255, 77, 56, 0.25);">
+          <div class="hierarchy-row-label" style="color: var(--glod); opacity: 1;">Det det er</div>
+          <div class="hierarchy-row-value">Serien, troppen og motstanderne, samlet for trenerne og lagledere</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1043,270 +1073,128 @@ a, button { transition: opacity 0.15s ease; }
       </div>
       <div class="navnet-story">
         <p>Knatt henter navnet sitt fra <em>knattleikr</em> — et populært, men beinhardt lag- og ballspill fra vikingtidens Island. Reglene har gått tapt i historien, men de islandske sagaene forteller om et spill som krevde styrke, hurtighet og hode på samme tid: rå fysikk satt i system.</p>
-        <p>Det er nettopp den balansen vi bygger på. Knatt skal være verktøyet som gir laget struktur og oversikt — slik at spillerne kan bruke energien der den faktisk teller: på banen.</p>
+        <p>Det er den balansen vi er ute etter. Knatt gir oss som driver laget struktur og oversikt, slik at mer av tiden går til det som skjer på banen.</p>
         <p class="navnet-close">Tusen år senere er ideen den samme. Mindre tid på det rundt spillet. Mer tid på spillet selv.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ────────────────────────── STRØMMER ────────────────────────── -->
-<section class="section" id="hvordan-virker-det">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><span class="dot"></span>Hvordan det er bygd</div>
-      <h2>Fire strømmer. Aldri mer.</h2>
-      <p class="section-lede">Hele appen er organisert rundt fire spørsmål du faktisk stiller deg som forelder, spiller, trener eller klubbleder. Hver strøm har sin egen farge — du leser hva slags ting det er før du leser teksten.</p>
-    </div>
-
-    <div class="streams-grid">
-      <div class="stream-card stream-aktivitet">
-        <div class="stream-meta">01 · Aktivitet</div>
-        <h3>Hva må jeg gjøre?</h3>
-        <p>Treninger, dugnader, påmeldinger, oppgaver. Det du må huske, og det du må svare på.</p>
-        <div class="stream-tags">
-          <span class="stream-tag">Treninger</span>
-          <span class="stream-tag">Dugnader</span>
-          <span class="stream-tag">RSVP</span>
-        </div>
-      </div>
-
-      <div class="stream-card stream-sport">
-        <div class="stream-meta">02 · Sport</div>
-        <h3>Hva er neste kamp?</h3>
-        <p>Kamper, turneringer, live-resultater, lag og tropp. Det laget faktisk spiller.</p>
-        <div class="stream-tags">
-          <span class="stream-tag">Seriespill</span>
-          <span class="stream-tag">Turneringer</span>
-          <span class="stream-tag">Live</span>
-        </div>
-      </div>
-
-      <div class="stream-card stream-kommunikasjon">
-        <div class="stream-meta">03 · Snakk</div>
-        <h3>Er det noe nytt?</h3>
-        <p>Beskjeder fra trener, foreldregruppe-praten, små kommentarer. En tråd per lag, ingen kaos.</p>
-        <div class="stream-tags">
-          <span class="stream-tag">Beskjeder</span>
-          <span class="stream-tag">Foreldregruppe</span>
-          <span class="stream-tag">Reaksjoner</span>
-        </div>
-      </div>
-
-      <div class="stream-card stream-informasjon">
-        <div class="stream-meta">04 · Info</div>
-        <h3>Hvor finner jeg…?</h3>
-        <p>Klubb, region, lag, Min Idrett, profiler. Den rolige strømmen — den du sjekker når du trenger noe konkret.</p>
-        <div class="stream-tags">
-          <span class="stream-tag">Klubb</span>
-          <span class="stream-tag">Lag</span>
-          <span class="stream-tag">Profil</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ────────────────────────── DATAKILDEHIERARKI ────────────────────────── -->
-<section class="section section-dark">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow eyebrow-dark"><span class="dot"></span>Det vi ikke gjør</div>
-      <h2>Vi lager ikke en til portal å vedlikeholde.</h2>
-    </div>
-
-    <div class="hierarchy-grid">
-      <div>
-        <p class="hierarchy-claim">Idretts-Norge har allerede mange systemer for medlemskap, kamper og kompetanse. Knatt prøver ikke å erstatte dem — vi <em>henter derfra</em> og bygger bare det som faktisk mangler: <em>hverdagsverktøyet for laget</em>.</p>
-        <p class="hierarchy-claim" style="font-size: clamp(17px, 2vw, 22px); opacity: 0.85;">Datadrevet design betyr at vi bygger med strømmen, ikke mot den. Det offisielle får bo der det allerede bor. Målet er at endringer flyter inn av seg selv, så ingen registrerer samme spiller to ganger eller synkroniserer manuelt. Det er hele poenget.</p>
-      </div>
-
-      <div class="hierarchy-stack">
-        <div class="hierarchy-row">
-          <div class="hierarchy-row-label">Det offisielle</div>
-          <div class="hierarchy-row-value">Medlemsregistre, kompetansebevis, organisasjonsdata</div>
-        </div>
-        <div class="hierarchy-row">
-          <div class="hierarchy-row-label">Det administrative</div>
-          <div class="hierarchy-row-value">Kamper, serier, turneringer, registreringer</div>
-        </div>
-        <div class="hierarchy-row" style="background: rgba(255, 77, 56, 0.08); border-color: rgba(255, 77, 56, 0.25);">
-          <div class="hierarchy-row-label" style="color: var(--glod); opacity: 1;">Knatt henter</div>
-          <div class="hierarchy-row-value">Spillere, kamper, roller, godkjenninger</div>
-        </div>
-        <div class="hierarchy-row" style="background: rgba(255, 77, 56, 0.08); border-color: rgba(255, 77, 56, 0.25);">
-          <div class="hierarchy-row-label" style="color: var(--glod); opacity: 1;">Knatt skaper</div>
-          <div class="hierarchy-row-value">Treninger, beskjeder, oppmøte, samtaler</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ────────────────────────── AUDIENCES ────────────────────────── -->
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><span class="dot"></span>For deg</div>
-      <h2>Én app. Fire roller.</h2>
-      <p class="section-lede">Knatt tilpasser seg hvem du er på laget. Du ser ikke trenerens kontroll-panel, og treneren ser ikke alle foreldrenes private samtaler.</p>
-    </div>
-
-    <div class="audiences-grid">
-      <div class="audience-card">
-        <div class="audience-eyebrow">Spiller</div>
-        <h3>Hva skjer?</h3>
-        <p>Neste trening, neste kamp, beskjedene fra trener. Det viktigste først — uten å måtte navigere seg gjennom et helt klubbsystem.</p>
-      </div>
-
-      <div class="audience-card">
-        <div class="audience-eyebrow">Forelder</div>
-        <h3>Hva må jeg vite?</h3>
-        <p>Møtepunkt, oppmøte, dugnader. Sjekk én plass om kvelden, så vet du om det er noe du har glemt før i morgen.</p>
-      </div>
-
-      <div class="audience-card">
-        <div class="audience-eyebrow">Lagleder</div>
-        <h3>Hvem kommer?</h3>
-        <p>Send en beskjed til hele laget. Se hvor mange som svarer. Planlegg neste uke uten å holde styr på en Excel-liste.</p>
-      </div>
-
-      <div class="audience-card">
-        <div class="audience-eyebrow">Klubbleder</div>
-        <h3>Hva trenger lagene?</h3>
-        <p>Oversikt over alle lag, politiattester på trenere, og hvor klubben står. Uten å logge inn i fem forskjellige systemer.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ────────────────────────── TRUST / BYGGESTEINER ────────────────────────── -->
+<!-- ────────────────────────── PERSONVERN ────────────────────────── -->
 <section class="section section-trust">
   <div class="container">
     <div class="section-header">
-      <div class="eyebrow"><span class="dot"></span>Bygd på</div>
-      <h2>Personvern er ikke et avhuk.</h2>
-      <p class="section-lede">Knatt er bygd på europeiske skytjenester, norske domener og åpen kildekode der vi kan. Ingen amerikanske skytjenester. Ingen annonsering. Ingen sporing av barna dine.</p>
+      <div class="eyebrow"><span class="dot"></span>Tilgang og personvern</div>
+      <h2>Bare lagapparatet slipper inn.</h2>
+      <p class="section-lede">Det finnes ingen registrering. Bare e-postadresser på lagapparat-lista får innloggingskode, og databasen sjekker det samme ved hvert eneste oppslag.</p>
     </div>
 
     <div class="trust-grid">
       <div class="trust-card">
-        <div class="trust-label">E-post</div>
-        <div class="trust-name">Proton</div>
-        <div class="trust-desc">Sveits, EU-jurisdiksjon</div>
-      </div>
-      <div class="trust-card">
         <div class="trust-label">Database</div>
-        <div class="trust-name">Supabase EU</div>
-        <div class="trust-desc">Frankfurt, AWS Europe</div>
+        <div class="trust-name">Supabase</div>
+        <div class="trust-desc">Irland, EU</div>
       </div>
       <div class="trust-card">
-        <div class="trust-label">Hosting</div>
-        <div class="trust-name">Vercel EU</div>
-        <div class="trust-desc">Paris, Frankfurt</div>
+        <div class="trust-label">Web-app</div>
+        <div class="trust-name">Vercel</div>
+        <div class="trust-desc">Next.js</div>
       </div>
       <div class="trust-card">
-        <div class="trust-label">Feilrapport</div>
-        <div class="trust-name">Sentry EU</div>
-        <div class="trust-desc">Frankfurt</div>
-      </div>
-      <div class="trust-card">
-        <div class="trust-label">Analyse</div>
-        <div class="trust-name">Plausible</div>
-        <div class="trust-desc">Tyskland, ingen cookies</div>
+        <div class="trust-label">Innloggingskoder</div>
+        <div class="trust-name">Resend</div>
+        <div class="trust-desc">E-post fra knatt.app</div>
       </div>
     </div>
 
     <div class="trust-claims">
       <div class="trust-claim">
         <div class="trust-claim-mark">✓</div>
-        <div class="trust-claim-text"><strong>GDPR-kompatibel og personvern by design.</strong> Vi samler bare det vi trenger for at appen skal fungere. Aldri mer.</div>
+        <div class="trust-claim-text"><strong>Ingen passord.</strong> Engangskode på e-post, deretter Face ID eller fingeravtrykk (passkey).</div>
       </div>
       <div class="trust-claim">
         <div class="trust-claim-mark">✓</div>
-        <div class="trust-claim-text"><strong>Aldri annonsering.</strong> Knatt selger ikke data, viser ikke reklame, og lar ikke tredjeparter spore brukerne våre.</div>
+        <div class="trust-claim-text"><strong>Databasen håndhever tilgangen.</strong> Hver tabell har egne regler, så en feil på en side kan ikke vise data til feil person.</div>
       </div>
       <div class="trust-claim">
         <div class="trust-claim-mark">✓</div>
-        <div class="trust-claim-text"><strong>Aldri amerikanske skytjenester</strong> for behandling av personopplysninger. Schrems II-tilpasset fra første rad i databasen.</div>
+        <div class="trust-claim-text"><strong>Motstanderne er også barn.</strong> Spillernavn vises bare for lagapparatet, og aldri i varsler.</div>
       </div>
       <div class="trust-claim">
         <div class="trust-claim-mark">✓</div>
-        <div class="trust-claim-text"><strong>Eksport når du vil.</strong> Klubben eier sine data. Vi gjør dem tilgjengelige i åpne formater når dere ber om det.</div>
+        <div class="trust-claim-text"><strong>Sporbart.</strong> Endringer i terminlista og innloggingsoppsett logges, og loggen kan ikke endres fra appen.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ────────────────────────── ROADMAP ────────────────────────── -->
+<!-- ────────────────────────── SESONGEN ────────────────────────── -->
 <section class="section section-dark">
   <div class="container">
     <div class="section-header">
-      <div class="eyebrow eyebrow-dark"><span class="dot"></span>Veien videre</div>
-      <h2>Knatt bygges åpent, ett lag av gangen.</h2>
-      <p class="section-lede">Vi setter ingen lanseringsdato. Knatt bygges og testes med ett lag av gangen, i det tempoet hverdagen tillater. Det som virker blir stående. Det som ikke virker, skrotes.</p>
+      <div class="eyebrow eyebrow-dark"><span class="dot"></span>Gjennom sesongen</div>
+      <h2>Bygges mens laget spiller.</h2>
+      <p class="section-lede">Ingen lanseringsdato. Nye ting kommer i småbiter når lagapparatet trenger dem. Det som virker, blir stående. Det som ikke virker, skrotes.</p>
     </div>
 
     <div class="roadmap">
       <div class="roadmap-item current">
-        <span class="roadmap-when">Nå · Bygger for</span>
-        <h3 class="roadmap-what">Ett lag, utover sesongen</h3>
-        <p class="roadmap-detail">Funksjonalitet et lag trenger i det daglige som treninger, kamper, oppmøte og beskjeder. Innlogging med OTP-kode og Passkey for spillere og foreldre.</p>
-      </div>
-
-      <div class="roadmap-item current">
-        <span class="roadmap-when">Gjennom sesongen</span>
-        <h3 class="roadmap-what">Bygger og tester parallelt</h3>
-        <p class="roadmap-detail">Nye ting kommer i småbiter, mens laget spiller, mens vi er på dugnader og turneringer. Skritt for skritt, stein for stein.</p>
+        <span class="roadmap-when">I bruk</span>
+        <h3 class="roadmap-what">Serien og innlogging</h3>
+        <p class="roadmap-detail">Tabell, terminliste og import fra handball.no. Innlogging med e-postkode og passkey for lagapparatet.</p>
       </div>
 
       <div class="roadmap-item future">
-        <span class="roadmap-when">Når det er klart</span>
-        <h3 class="roadmap-what">Slutt på dobbeltarbeid</h3>
-        <p class="roadmap-detail">Vi kobler oss mot systemene klubbene allerede bruker, så endringer flyter inn i stedet for å vedlikeholdes to ganger. Til det er på plass, går det an å legge inn spillere manuelt.</p>
+        <span class="roadmap-when">Neste</span>
+        <h3 class="roadmap-what">Henting fra handball.no</h3>
+        <p class="roadmap-detail">Terminliste og resultater hentes automatisk hver kveld, i stedet for å lastes ned og opp for hånd.</p>
       </div>
 
       <div class="roadmap-item future">
-        <span class="roadmap-when">På sikt</span>
-        <h3 class="roadmap-what">Flere lagidretter</h3>
-        <p class="roadmap-detail">Fundamentet passer like godt for fotball, volleyball, basket og innebandy. Men det får vente til håndball sitter skikkelig — heller én idrett som virker enn fire som halvveis gjør det.</p>
+        <span class="roadmap-when">Så</span>
+        <h3 class="roadmap-what">Motstandere og «før kamp»</h3>
+        <p class="roadmap-detail">Et kort notat per kommende motstander, laget fra tall for hele laget.</p>
+      </div>
+
+      <div class="roadmap-item future">
+        <span class="roadmap-when">Senere</span>
+        <h3 class="roadmap-what">Kamprapporter</h3>
+        <p class="roadmap-detail">Mål og utvisninger fra kamprapportene. Kommer først når det er skrevet ned hvorfor og hvordan vi kan behandle opplysninger om mindreårige spillere.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ────────────────────────── FOUNDER ────────────────────────── -->
+<!-- ────────────────────────── HVEM ────────────────────────── -->
 <section class="section">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow"><span class="dot"></span>Hvem som lager Knatt</div>
-      <h2>Bygget av en som faktisk står i hallen.</h2>
+      <h2>Bygget i hallen, for hallen.</h2>
     </div>
 
     <div class="founder-card">
-      <div class="founder-eyebrow">Samuel Andersen · grunder</div>
-      <h3>«Jeg startet med Knatt fordi jeg ble lei av å bruke fem apper for å gjøre én ting.»</h3>
-      <p>Jeg trener J2011-jentene i LFH09 Lillehammer Fåberg. Jeg er forelder, lagleder og kampansvarlig. Jeg har vært på begge sider — den som planlegger, og den som glemmer å sjekke gruppechatten.</p>
-      <p>Knatt er det jeg skulle ønske eksisterte da jeg overtok laget. Mindre system. Mer ballspill. Bygd sammen med klubben min — for klubben din.</p>
+      <div class="founder-eyebrow">Samuel Andersen · trener, LFH09 J15</div>
+      <h3>«Jeg ville ha hele sesongen ett sted, ikke spredt over et regneark, handball.no og hukommelsen.»</h3>
+      <p>Jeg trener J2011-jentene i LFH09 Lillehammer Fåberg, og har vært både den som planlegger og den som glemmer å sjekke gruppechatten.</p>
+      <p>Knatt er verktøyet vi i lagapparatet bruker gjennom sesongen. Det lages for oss, og blir bare så stort som vi trenger.</p>
     </div>
   </div>
 </section>
 
-<!-- ────────────────────────── CTA ────────────────────────── -->
+<!-- ────────────────────────── KONTAKT ────────────────────────── -->
 <section class="section cta-section" id="kontakt">
   <div class="container">
     <div class="section-header">
-      <div class="eyebrow"><span class="dot"></span>Tidlig tilgang</div>
-      <h2>Vil klubben deres være med tidlig?</h2>
-      <p class="section-lede">Skriv noen ord — hva slags lag dere har, hva som er det største administrasjonsproblemet i dag. Vi svarer personlig.</p>
+      <div class="eyebrow"><span class="dot"></span>Kontakt</div>
+      <h2>Spørsmål om Knatt?</h2>
+      <p class="section-lede">Er du i lagapparatet og mangler tilgang, eller lurer du på noe om personvern? Skriv en linje.</p>
     </div>
 
     <div class="hero-ctas">
-      <a class="btn btn-glod btn-arrow" href="mailto:samuel@knatt.app?subject=Tidlig%20tilgang%20til%20Knatt">Skriv til samuel@knatt.app</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/company/knatt" target="_blank" rel="noopener">Følg på LinkedIn</a>
+      <a class="btn btn-glod btn-arrow" href="mailto:samuel@knatt.app?subject=Knatt">Skriv til samuel@knatt.app</a>
+      <a class="btn btn-ghost" href="https://knatt.app">Logg inn</a>
     </div>
-
-    <div class="cta-detail">Personlig svar innen 24 timer · Norsk eller engelsk</div>
   </div>
 </section>
 
@@ -1316,25 +1204,22 @@ a, button { transition: opacity 0.15s ease; }
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="logo" href="/">knatt<span class="dot"></span></a>
-        <p>App for klubber og lagidretter i Norge — vi starter med håndball. Bygd i Lillehammer, hostet i EU.</p>
+        <p>Lagverktøy for LFH09 J15 — serien, troppen og motstanderne gjennom sesongen. Bygd i Lillehammer.</p>
       </div>
 
       <div class="footer-col">
         <h4>Knatt</h4>
         <ul>
-          <li><a href="#hvordan-virker-det">Hvordan det virker</a></li>
-          <li><a href="#kontakt">Tidlig tilgang</a></li>
+          <li><a href="#hva">Hva Knatt gjør</a></li>
+          <li><a href="https://knatt.app">Logg inn</a></li>
           <li><a href="/personvern">Personvern</a></li>
           <li><a href="/sikkerhet">Sikkerhet</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Følg</h4>
+        <h4>Kontakt</h4>
         <ul>
-          <li><a href="https://www.linkedin.com/company/knatt" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li><a href="https://instagram.com/knatt.app" target="_blank" rel="noopener">Instagram</a></li>
-          <li><a href="https://x.com/knatt_app" target="_blank" rel="noopener">X</a></li>
           <li><a href="mailto:samuel@knatt.app">samuel@knatt.app</a></li>
         </ul>
       </div>

@@ -232,6 +232,31 @@ a { color: inherit; }
   pointer-events: none;
 }
 
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 60%;
+  transform: scaleX(-1);
+  opacity: 0.7;
+}
+
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(14, 17, 22, 0.92) 0%, rgba(14, 17, 22, 0.72) 45%, rgba(14, 17, 22, 0.25) 100%),
+    linear-gradient(180deg, rgba(14, 17, 22, 0.55) 0%, rgba(14, 17, 22, 0) 30%, rgba(14, 17, 22, 0) 70%, var(--blekk) 100%);
+}
+
+@media (max-width: 959px) {
+  .hero-shade {
+    background: linear-gradient(180deg, rgba(14, 17, 22, 0.6) 0%, rgba(14, 17, 22, 0.8) 45%, var(--blekk) 85%);
+  }
+}
+
 .hero-glow {
   position: absolute;
   width: 70vmax;
@@ -253,18 +278,6 @@ a { color: inherit; }
   background: radial-gradient(closest-side, rgba(124, 92, 224, 0.18), rgba(124, 92, 224, 0) 70%);
   animation-duration: 24s;
   animation-direction: alternate-reverse;
-}
-
-.hero-court {
-  position: absolute;
-  inset: 0;
-  opacity: 0.07;
-  background-image:
-    linear-gradient(var(--bein) 1px, transparent 1px),
-    linear-gradient(90deg, var(--bein) 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%);
-          mask-image: radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%);
 }
 
 @keyframes glow-drift {
@@ -1245,9 +1258,9 @@ a, button { transition: opacity 0.15s ease; }
 <!-- ────────────────────────── HERO ────────────────────────── -->
 <section class="hero" id="topp">
   <div class="hero-bg" aria-hidden="true">
-    <div class="hero-court"></div>
+    <video class="hero-video" muted loop playsinline preload="none" poster="hero.webp" data-src="hero.mp4"></video>
+    <div class="hero-shade"></div>
     <div class="hero-glow"></div>
-    <div class="hero-glow two"></div>
   </div>
   <div class="container">
     <div class="hero-layout">
@@ -1557,6 +1570,15 @@ a, button { transition: opacity 0.15s ease; }
 (function () {
   document.documentElement.classList.add('js');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Bakgrunnsvideo: bare når brukeren ikke har bedt om mindre bevegelse eller sparer data
+  var video = document.querySelector('.hero-video');
+  var saveData = navigator.connection && navigator.connection.saveData;
+  if (video && !reduce && !saveData) {
+    video.src = video.getAttribute('data-src');
+    var p = video.play();
+    if (p && p.catch) p.catch(function () {});
+  }
 
   // Avsløring ved scrolling
   var els = document.querySelectorAll('[data-reveal]');

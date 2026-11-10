@@ -1042,6 +1042,21 @@ a { color: inherit; }
   line-height: 1.5;
 }
 
+/* ─── Knatt i bilen ─── */
+.bilen { background: var(--blekk); }
+.bilen-kort {
+  display: grid; grid-template-columns: 1fr; overflow: hidden; border-radius: 24px;
+  background: var(--natt); color: var(--bein); text-decoration: none;
+  box-shadow: 0 0 0 1px var(--natt-edge), 0 40px 100px -40px rgba(255, 77, 56, 0.45);
+}
+@media (min-width: 900px) { .bilen-kort { grid-template-columns: 0.8fr 1.2fr; align-items: center; } }
+.bilen-tekst { padding: 36px 32px; }
+.bilen-tekst h2 { color: var(--bein); margin-bottom: 16px; }
+.bilen-tekst p { opacity: 0.75; margin: 0 0 24px; font-size: 16px; }
+.bilen-lenke { font-weight: 500; color: var(--glod); }
+.bilen-kort img { display: block; width: 100%; height: auto; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1); }
+@media (hover: hover) { .bilen-kort:hover img { transform: scale(1.03); } }
+
 /* ─── Founder ─── */
 .founder-card {
   background: var(--blekk);
@@ -1413,6 +1428,21 @@ a, button { transition: opacity 0.15s ease; }
         <p class="navnet-close">Tusen år senere er ideen den samme. Mindre tid på det rundt spillet. Mer tid på spillet selv.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ────────────────────────── I BILEN ────────────────────────── -->
+<section class="section bilen" id="bilen">
+  <div class="container">
+    <a class="bilen-kort" href="/knatt-i-bilen/" data-reveal>
+      <div class="bilen-tekst">
+        <div class="eyebrow eyebrow-dark"><span class="dot"></span>Nytt · Knatt i bilen</div>
+        <h2>«Hva er neste kamp?»</h2>
+        <p>Spør assistenten i bilen, og få svaret fra Knatt — tid, motstander, hall og vei dit. Bare offentlige lagdata fra Min Håndball.</p>
+        <span class="bilen-lenke">Les saken →</span>
+      </div>
+      <img src="/knatt-i-bilen/tesla-grok.webp" width="1344" height="752" loading="lazy" alt="Illustrasjon: Grok på skjermen i en Tesla svarer på «Hva er neste kamp?» og navigerer til Åsneshallen">
+    </a>
   </div>
 </section>
 

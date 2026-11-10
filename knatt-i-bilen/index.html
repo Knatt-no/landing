@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knatt i bilen — Knatt</title>
+<meta name="description" content="Spør Grok i bilen om neste kamp, og få svaret fra Knatt. Knatt-lite gir KI-assistenter bare offentlige lagdata fra Min Håndball.">
+<meta name="theme-color" content="#0E1116">
+
+<meta property="og:title" content="Knatt i bilen — «Hva er neste kamp?»">
+<meta property="og:description" content="Knatt-lite kobler lagets offentlige kampdata til KI-assistenten i bilen. Spør, få svar, kjør.">
+<meta property="og:url" content="https://knatt.app/knatt-i-bilen/">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://knatt.app/knatt-i-bilen/tesla-grok.jpg">
+<meta property="og:image:alt" content="Illustrasjon: Grok på skjermen i en Tesla svarer på «Hva er neste kamp?» og navigerer til Åsneshallen">
+<meta property="og:locale" content="nb_NO">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/favicon-512x512.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+<script>document.documentElement.classList.add("js")</script>
+<style>
+:root {
+  --glod: #FF4D38;
+  --glod-l: #FFE3DD;
+  --lime: #C8F03A;
+  --drom: #7C5CE0;
+  --gra-d: #6B6964;
+  --blekk: #0E1116;
+  --bein: #F0EFEC;
+  --bein-edge: #E2E1DD;
+  --natt: #15181E;
+  --natt-edge: #252932;
+  --disp: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--blekk);
+  color: var(--bein);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: inherit; }
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+@media (min-width: 1024px) { .container { padding: 0 48px; } }
+.narrow { max-width: 760px; }
+
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(14, 17, 22, 0.75);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(240, 239, 236, 0.08);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.logo {
+  font-family: var(--disp); font-weight: 700; font-size: 22px; letter-spacing: -0.05em;
+  text-decoration: none; display: inline-flex; align-items: flex-end; line-height: 1;
+}
+.logo .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--glod); margin: 0 0 4px 3px; }
+.header-back {
+  font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em;
+  text-decoration: none; opacity: 0.7;
+}
+.header-back:hover { opacity: 1; }
+
+/* Eyebrow */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+  opacity: 0.7; margin: 0 0 20px;
+}
+.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--glod); }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; padding: 88px 0 48px; isolation: isolate; }
+@media (min-width: 900px) { .hero { padding: 120px 0 64px; } }
+.hero::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  width: 70vmax; height: 70vmax; right: -25vmax; top: -35vmax; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 77, 56, 0.26), rgba(255, 77, 56, 0) 70%);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+@keyframes drift { to { transform: translate3d(-6vmax, 4vmax, 0) scale(1.08); } }
+.hero h1 {
+  font-family: var(--disp); font-weight: 700; font-size: clamp(44px, 8.5vw, 104px);
+  letter-spacing: -0.05em; line-height: 0.98; margin: 0 0 28px;
+}
+.hero h1 .dot {
+  display: inline-block; width: 0.13em; height: 0.13em; border-radius: 50%; background: var(--glod);
+  margin: 0 0 0.04em 0.04em;
+}
+.hero .lede { font-size: clamp(17px, 2.2vw, 22px); line-height: 1.5; opacity: 0.78; max-width: 680px; margin: 0; }
+
+/* Bildet */
+.shot { padding: 24px 0 24px; }
+.shot figure { margin: 0; }
+.shot-frame {
+  position: relative; border-radius: 24px; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 50px 120px -30px rgba(0, 0, 0, 0.8), 0 0 160px -40px rgba(255, 77, 56, 0.45);
+}
+.shot-frame img { display: block; width: 100%; height: auto; transform: scale(1.04); transition: transform 1.6s cubic-bezier(.2, .8, .2, 1); }
+.js .shot-frame.shown img { transform: scale(1); }
+.shot figcaption {
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em;
+  opacity: 0.45; margin-top: 14px; text-align: center;
+}
+
+/* Seksjoner */
+.section { padding: 80px 0; }
+@media (min-width: 768px) { .section { padding: 112px 0; } }
+.section h2 {
+  font-family: var(--disp); font-weight: 700; font-size: clamp(32px, 5vw, 56px);
+  letter-spacing: -0.035em; line-height: 1.05; margin: 0 0 20px;
+}
+.section-lede { font-size: clamp(16px, 2vw, 19px); opacity: 0.72; max-width: 640px; margin: 0 0 48px; line-height: 1.55; }
+.light { background: var(--bein); color: var(--blekk); }
+.light .section-lede { opacity: 0.7; }
+
+/* Samtalen */
+.chat-layout { display: grid; gap: 48px; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 960px) { .chat-layout { grid-template-columns: 0.9fr 1.1fr; gap: 72px; } }
+.chat {
+  background: var(--natt); border: 1px solid var(--natt-edge); border-radius: 22px; padding: 22px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.chat-top { display: flex; align-items: center; gap: 10px; font-family: var(--disp); font-weight: 700; font-size: 17px; margin-bottom: 6px; }
+.chat-top .ring { width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--glod); box-shadow: 0 0 14px rgba(255, 77, 56, 0.6); }
+.chat-top small { margin-left: auto; font-family: var(--mono); font-weight: 400; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; }
+.msg { max-width: 88%; padding: 11px 15px; border-radius: 16px; font-size: 15px; line-height: 1.45; }
+.msg.du { align-self: flex-end; background: var(--bein); color: var(--blekk); border-bottom-right-radius: 5px; }
+.msg.ki { align-self: flex-start; background: var(--natt-edge); border-bottom-left-radius: 5px; }
+.msg.ki b { font-weight: 500; color: var(--bein); }
+.msg .kilde {
+  display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--glod); opacity: 0.9;
+}
+.wave { display: flex; gap: 3px; align-items: center; height: 26px; justify-content: center; margin-top: 6px; }
+.wave i { width: 3px; border-radius: 2px; background: var(--glod); height: 30%; animation: wave 1.1s ease-in-out infinite; }
+.wave i:nth-child(2n) { animation-delay: .15s; } .wave i:nth-child(3n) { animation-delay: .3s; } .wave i:nth-child(5n) { animation-delay: .45s; }
+@keyframes wave { 50% { height: 100%; } }
+.js .chat .msg { opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s cubic-bezier(.2, .8, .2, 1); }
+.js .chat .msg.vis { opacity: 1; transform: none; }
+
+.steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 28px; }
+.steps li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; }
+.steps .n {
+  width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--disp); font-weight: 700; background: var(--glod); color: var(--blekk);
+}
+.steps h3 { font-family: var(--disp); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 6px 0 6px; }
+.steps p { margin: 0; opacity: 0.75; font-size: 15.5px; }
+
+/* Under panseret */
+.code-layout { display: grid; gap: 40px; grid-template-columns: 1fr; }
+@media (min-width: 960px) { .code-layout { grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; } }
+pre {
+  margin: 0; background: var(--blekk); color: var(--bein); border-radius: 18px; padding: 22px 22px;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.6; overflow-x: auto;
+  box-shadow: 0 30px 60px -30px rgba(14, 17, 22, 0.5);
+}
+pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity: 0.45; }
+.flow { display: flex; flex-direction: column; gap: 10px; }
+.flow-row {
+  display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;
+  padding: 14px 18px; border-radius: 12px; background: var(--bein); border: 1px solid var(--bein-edge);
+}
+.flow-row .lbl { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gra-d); }
+.flow-row .val { font-size: 14.5px; }
+.flow-row.hot { background: var(--glod-l); border-color: var(--glod); }
+.flow-row.hot .lbl { color: var(--blekk); }
+
+/* Personvern */
+.cols { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .cols { grid-template-columns: 1fr 1fr; } }
+.box { border-radius: 18px; padding: 28px 26px; border: 1px solid var(--natt-edge); background: var(--natt); }
+.box h3 { font-family: var(--disp); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 0 0 14px; }
+.box ul { margin: 0; padding: 0 0 0 18px; }
+.box li { margin: 0 0 8px; opacity: 0.85; font-size: 15px; }
+.box.ja h3::before { content: "✓ "; color: var(--lime); }
+.box.nei h3::before { content: "× "; color: var(--glod); }
+
+.note {
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+  opacity: 0.45; text-align: center; padding: 40px 0 56px; line-height: 1.8;
+}
+.cta { text-align: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; padding: 13px 22px;
+  border-radius: 10px; text-decoration: none; background: var(--glod); color: var(--blekk);
+}
+.btn:hover { background: var(--bein); }
+
+/* Avsløring */
+.js [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.2, .8, .2, 1), transform .8s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--d, 0) * 90ms); }
+.js [data-reveal].shown { opacity: 1; transform: none; }
+
+:focus-visible { outline: 2px solid var(--glod); outline-offset: 3px; border-radius: 4px; }
+::selection { background: var(--glod); color: var(--blekk); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js [data-reveal], .js .chat .msg { opacity: 1 !important; transform: none !important; }
+  .shot-frame img { transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a class="logo" href="/">knatt<span class="dot"></span></a>
+      <a class="header-back" href="/">← Til forsiden</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="dot"></span>Knatt-lite · Grok · i bilen</div>
+    <h1>«Hva er neste<br>kamp?»</h1>
+    <p class="lede">Lørdag morgen, nøkkelen i hånda og to bortekamper i Solør. I stedet for å lete i appen spør du assistenten i bilen — og svaret kommer fra Knatt.</p>
+  </div>
+</section>
+
+<section class="shot">
+  <div class="container">
+    <figure>
+      <div class="shot-frame" data-reveal>
+        <img src="tesla-grok.webp" width="1344" height="752" alt="Illustrasjon: skjermen i en Tesla Model Y en vinterkveld. Kartet viser ruta til Åsneshallen på Flisa, og Grok-panelet viser samtalen: «Hva er neste kamp?» — «Lørdag kl. 13:00: Flisa 2 – LFH09 2 i Åsneshallen. Samme dag Vaaler – LFH09 2 kl. 17:15.» — «Naviger dit.» — «Navigerer til Åsneshallen.»">
+      </div>
+      <figcaption>Illustrasjon laget med KI · kampene er ekte, fra Knatt-lite</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="chat-layout">
+      <div>
+        <div class="eyebrow" data-reveal><span class="dot"></span>Samtalen</div>
+        <h2 data-reveal>Tre setninger fra garasjen til hallen.</h2>
+        <p class="section-lede" data-reveal>Knatt-lite er en egen tilkobling som lar en KI-assistent lese lagets kampdata. Assistenten spør Knatt og svarer med det Knatt vet om kampene — tid, motstander, hall og adresse.</p>
+        <ol class="steps">
+          <li data-reveal style="--d:0"><span class="n">1</span><div><h3>Hva er neste kamp?</h3><p>Grok spør Knatt om dagens og kommende kamper. Svaret er rett fra terminlista: tid, motstander og hall — og om det er flere kamper samme dag.</p></div></li>
+          <li data-reveal style="--d:1"><span class="n">2</span><div><h3>Når må jeg kjøre?</h3><p>Knatt gir avkast og adresse. Si når dere har oppmøte, så vet assistenten når du må være der — og navigasjonen viser kjøretiden.</p></div></li>
+          <li data-reveal style="--d:2"><span class="n">3</span><div><h3>Naviger dit.</h3><p>Adressen til hallen kommer fra handball.no via Knatt. Bilen tar resten.</p></div></li>
+        </ol>
+      </div>
+
+      <div class="chat" aria-label="Eksempel på samtale med Grok" data-chat>
+        <div class="chat-top"><span class="ring" aria-hidden="true"></span>Grok<small>Knatt-lite tilkoblet</small></div>
+        <div class="msg du">Hva er neste kamp?</div>
+        <div class="msg ki">Lørdag 21. november kl. 13:00 spiller <b>LFH09 2</b> borte mot <b>Flisa 2</b> i Åsneshallen på Flisa. Samme dag møter dere <b>Vaaler</b> kl. 17:15 i Våler Aktivitetshus.<span class="kilde">Kilde: Knatt-lite · kamper</span></div>
+        <div class="msg du">Vi har oppmøte en time før. Når må jeg kjøre?</div>
+        <div class="msg ki">Da må du være i Åsneshallen kl. 12:00. Skal jeg sette opp ruta, så ser du hvor lang tid det tar?</div>
+        <div class="msg du">Naviger dit.</div>
+        <div class="msg ki">Navigerer til Åsneshallen, Idrettsvegen 24, 2270 Flisa.<span class="kilde">Kilde: Knatt-lite · arenaer</span></div>
+        <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section light">
+  <div class="container">
+    <div class="eyebrow" data-reveal><span class="dot"></span>Under panseret</div>
+    <h2 data-reveal>Slik svarer Knatt.</h2>
+    <p class="section-lede" data-reveal>Knatt-lite er en MCP-server — den åpne standarden KI-assistenter bruker for å koble seg til verktøy og data. Grok kobler seg til selv, og en admin i lagapparatet godkjenner tilkoblingen med innloggingskode eller Face ID.</p>
+
+    <div class="code-layout">
+      <div class="flow">
+        <div class="flow-row" data-reveal style="--d:0"><div class="lbl">Kilde</div><div class="val">Terminliste, resultater og haller fra handball.no og Min Håndball</div></div>
+        <div class="flow-row" data-reveal style="--d:1"><div class="lbl">Knatt</div><div class="val">Henter og kontrollerer hver kveld, og fem minutter etter hver kamp</div></div>
+        <div class="flow-row hot" data-reveal style="--d:2"><div class="lbl">Knatt-lite</div><div class="val">Gir bare offentlige lagdata, bare lesing, felt for felt fra en hviteliste</div></div>
+        <div class="flow-row" data-reveal style="--d:3"><div class="lbl">Grok</div><div class="val">Spør Knatt-lite, svarer med stemme og tar deg dit</div></div>
+      </div>
+
+      <pre data-reveal aria-label="Eksempel på svar fra Knatt-lite"><span class="c">// kamper · periode: kommende · utdrag</span>
+{
+  <span class="k">"kampnr"</span>: <span class="s">"30141501051"</span>,
+  <span class="k">"dato"</span>: <span class="s">"2026-11-21"</span>,
+  <span class="k">"tid"</span>: <span class="s">"13:00"</span>,
+  <span class="k">"hjemme"</span>: <span class="s">"Flisa 2"</span>,
+  <span class="k">"borte"</span>: <span class="s">"LFH09 2"</span>,
+  <span class="k">"hall"</span>: <span class="s">"Åsneshallen"</span>,
+  <span class="k">"adresse"</span>: <span class="s">"Idrettsvegen 24"</span>,
+  <span class="k">"postnummer"</span>: <span class="s">"2270"</span>,
+  <span class="k">"poststed"</span>: <span class="s">"Flisa"</span>,
+  <span class="k">"spilt"</span>: false
+}</pre>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow" data-reveal><span class="dot"></span>Personvern</div>
+    <h2 data-reveal>Bare det som allerede er offentlig.</h2>
+    <p class="section-lede" data-reveal>Assistenten i bilen er en tjeneste laget ikke har avtale med. Derfor får den bare det Min Håndball viser åpent, og bare om lagene — aldri om spillerne.</p>
+    <div class="cols">
+      <div class="box ja" data-reveal style="--d:0">
+        <h3>Knatt-lite gir</h3>
+        <ul>
+          <li>Tabellen og terminlista med resultater</li>
+          <li>Hall og adresse, slik handball.no oppgir dem</li>
+          <li>Pausestilling og lagtall fra kamprapporten</li>
+          <li>Hvem som dømmer, slik det står på kampsiden</li>
+        </ul>
+      </div>
+      <div class="box nei" data-reveal style="--d:1">
+        <h3>Knatt-lite gir aldri</h3>
+        <ul>
+          <li>Spillernavn eller draktnummer</li>
+          <li>Oppmøte, tropp, kampfordeling eller vurderinger</li>
+          <li>Noe fra Tribune eller det laget har ført selv</li>
+          <li>Mulighet til å endre noe — den kan bare lese</li>
+        </ul>
+      </div>
+    </div>
+    <p class="section-lede" data-reveal style="margin: 32px 0 0;">Tilkoblingen kan kobles fra med ett trykk, og slutter å virke hvis den som godkjente den ikke lenger er admin.</p>
+  </div>
+</section>
+
+<section class="section cta">
+  <div class="container narrow">
+    <h2 data-reveal>Mindre styr. Også i bilen.</h2>
+    <p class="section-lede" data-reveal style="margin: 0 auto 32px;">Admin i lagapparatet kobler til Knatt-lite under Lagapparat → API-nøkler.</p>
+    <a class="btn" href="https://knatt.app" data-reveal>Logg inn i Knatt →</a>
+  </div>
+  <p class="note">Knatt er ikke tilknyttet Tesla eller xAI.<br>Tesla og Grok er varemerker som tilhører sine eiere.</p>
+</section>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('[data-reveal]');
+  var chat = document.querySelector('[data-chat]');
+  var msgs = chat ? chat.querySelectorAll('.msg') : [];
+  function visAlle() { els.forEach(function (e) { e.classList.add('shown'); }); msgs.forEach(function (m) { m.classList.add('vis'); }); }
+  if (reduce || !('IntersectionObserver' in window)) { visAlle(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      if (e.target === chat) {
+        msgs.forEach(function (m, i) { setTimeout(function () { m.classList.add('vis'); }, 350 + i * 750); });
+      } else {
+        e.target.classList.add('shown');
+      }
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+  els.forEach(function (el) { io.observe(el); });
+  if (chat) io.observe(chat);
+})();
+</script>
+</body>
+</html>

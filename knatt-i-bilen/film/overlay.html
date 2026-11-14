@@ -129,7 +129,7 @@ const DOTS = 14; for (let i = 0; i < DOTS; i++) { const p = document.createEleme
 function renderAt(t) {
   // skygger for lesbarhet
   show($('shadeTop'), Math.max(win(t, 0.3, 5.4), win(t, T.c3[0] + 0.2, T.c3[1] - 0.2), win(t, T.c4[0] + 0.2, T.c4[1] - 0.2)));
-  show($('shadeBot'), Math.max(win(t, 3.4, 5.9), win(t, T.c3[0] + 0.3, T.c3[1] - 0.2)));
+  show($('shadeBot'), win(t, T.c3[0] + 0.3, T.c3[1] - 0.2));
   show($('shadeAll'), clamp((t - T.end[0]) / 0.6));
 
   show($('eyebrow'), win(t, 0.4, 5.4), 12);
@@ -139,10 +139,10 @@ function renderAt(t) {
   show($('card1'), 0);
   show($('card2'), 0);
 
-  show($('s1'), win(t, 3.6, 5.9), 16);
+  show($('s1'), 0); // stemmen sier spørsmålet; skjermen viser det
   show($('s2'), 0); $('s2t').innerHTML = typed(A1, (t - 7.25) / 2.8); $('s2s').style.opacity = clamp((t - 10.1) / 0.3);
-  show($('s3'), win(t, T.c4[0] + 0.3, T.c4[0] + 1.9), 16);
-  show($('s4'), win(t, T.c4[0] + 2.0, T.c4[1] - 0.15), 16); $('s4t').innerHTML = typed(A2, (t - T.c4[0] - 2.1) / 1.6); $('s4s').style.opacity = clamp((t - T.c4[0] - 3.8) / 0.3);
+  show($('s3'), win(t, 17.5, 19.0, 0.3), 16); // «Naviger dit.» sies 17,7–18,6
+  show($('s4'), win(t, 20.0, T.c4[1] - 0.15, 0.3), 16); $('s4t').innerHTML = typed(A2, (t - 20.1) / 1.3); $('s4s').style.opacity = clamp((t - 21.4) / 0.3); // etter «Bilen tar resten»
 
   const fk = clamp((t - T.c3[0] - 0.4) / 2.2);
   show($('flow'), win(t, T.c3[0] + 0.3, T.c3[1] - 0.2), 20);

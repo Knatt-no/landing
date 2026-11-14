@@ -56,7 +56,15 @@ canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block
   padding: 9px 14px; border-radius: 10px; cursor: pointer; text-decoration: none;
 }
 .controls button:hover, .controls a:hover { border-color: var(--glod); }
-.capture .controls, .capture .start { display: none; }
+.capture .controls, .capture .start, .capture .rotate { display: none; }
+.controls { transition: opacity .4s ease; }
+body.playing.idle .controls { opacity: 0; pointer-events: none; }
+.rotate { display: none; position: fixed; left: 0; right: 0; bottom: 84px; text-align: center; font: 500 14px var(--body); color: var(--bein); opacity: .75; }
+@media (orientation: portrait) and (max-width: 700px) {
+  .rotate { display: block; }
+  .start span { font-size: 13px; padding: 10px 16px; gap: 8px; }
+  .controls { left: 12px; right: 12px; justify-content: center; flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
@@ -68,6 +76,7 @@ canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block
 </div>
 <audio id="lyd" src="lyd.m4a" preload="auto"></audio>
 
+<div class="rotate" aria-hidden="true">↻ Snu telefonen for større bilde</div>
 <div class="controls">
   <button id="play" type="button">Spill</button>
   <button id="mute" type="button">Lyd av</button>
@@ -312,13 +321,15 @@ const lyd = document.getElementById('lyd'), start = document.getElementById('sta
 let playing = false, t0 = 0, clockStart = 0;
 const now = () => (playing ? (lyd.muted || lyd.paused ? (performance.now() - clockStart) / 1000 : lyd.currentTime) : t0);
 function go(from) {
-  t0 = from; clockStart = performance.now() - from * 1000; playing = true; play.textContent = 'Pause'; start.classList.add('hidden');
+  t0 = from; clockStart = performance.now() - from * 1000; playing = true; play.textContent = 'Pause'; start.classList.add('hidden'); document.body.classList.add('playing'); poke();
   lyd.currentTime = from; lyd.play().catch(() => {}); loop();
 }
-function stop() { t0 = now(); playing = false; play.textContent = 'Spill'; lyd.pause(); }
+function stop() { t0 = now(); playing = false; play.textContent = 'Spill'; lyd.pause(); document.body.classList.remove('playing'); }
+let idleTimer; function poke() { document.body.classList.remove('idle'); clearTimeout(idleTimer); idleTimer = setTimeout(() => document.body.classList.add('idle'), 2500); }
+['pointerdown', 'pointermove', 'keydown', 'touchstart'].forEach((e) => addEventListener(e, poke, { passive: true }));
 function loop() {
   if (!playing) return; const t = now();
-  if (t >= DUR) { playing = false; play.textContent = 'Spill igjen'; t0 = DUR - 0.01; renderAt(t0); return; }
+  if (t >= DUR) { playing = false; document.body.classList.remove('playing', 'idle'); play.textContent = 'Spill igjen'; t0 = DUR - 0.01; renderAt(t0); return; }
   renderAt(t); requestAnimationFrame(loop);
 }
 start.onclick = () => go(0);

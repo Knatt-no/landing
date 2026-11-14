@@ -105,7 +105,7 @@ a { color: inherit; }
 
 /* Hero */
 .hero { position: relative; padding: 88px 0 40px; }
-@media (min-width: 900px) { .hero { padding: 120px 0 56px; } }
+@media (min-width: 900px) { .hero { padding: 120px 0 40px; } }
 .hero h1 {
   font-family: var(--disp); font-weight: 700; font-size: clamp(44px, 8.5vw, 104px);
   letter-spacing: -0.05em; line-height: 0.98; margin: 0 0 28px;
@@ -121,7 +121,7 @@ a { color: inherit; }
 .stage-sticky { position: relative; }
 .stage-frame {
   position: relative; margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; background: var(--natt);
-  border-radius: 20px; transform-origin: 50% 50%; will-change: transform;
+  border-radius: 20px; transform-origin: 50% 0; will-change: transform;
   box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 50px 120px -30px rgba(0, 0, 0, 0.85);
 }
 .stage-frame video, .stage-frame .still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -216,7 +216,7 @@ a { color: inherit; }
 
 /* Desktop: rammen vokser til full bredde mens du scroller */
 .stage.expand .stage-track { height: calc(100svh + 60vh); }
-.stage.expand .stage-sticky { position: sticky; top: var(--hh, 60px); height: calc(100svh - var(--hh, 60px)); display: grid; place-items: center; }
+.stage.expand .stage-sticky { position: sticky; top: var(--hh, 60px); height: calc(100svh - var(--hh, 60px)); display: grid; place-items: start center; }
 
 /* Seksjoner */
 .section { padding: 80px 0; }

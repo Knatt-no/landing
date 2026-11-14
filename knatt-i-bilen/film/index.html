@@ -411,7 +411,7 @@ function addLabel(text, cls, getPos, vis) { const el = document.createElement('d
 nodes.forEach((n, i) => addLabel(n.label, n.big ? 'big glod' : '', () => n.p.clone().add(new THREE.Vector3(0, n.r + 0.2, 0)), (t) => inS(t, 'flow') ? clamp((t - S.flow[0] - 0.5 - i * 0.45) / 0.4) * clamp((S.flow[1] - t) / 0.35) : 0));
 stops.forEach(([name, la, lo], i) => {
   if (!['Lillehammer', 'Hamar', 'Elverum', 'Våler', 'Flisa'].includes(name)) return;
-  const u = [0, 0, 0, 0.36, 0, 0.62, 0.86, 1][i];
+  const u = [0, 0, 0, 0.36, 0, 0.62, 0.86, 0.94][i];
   addLabel(name === 'Flisa' ? 'Åsneshallen · Flisa' : name, 'place' + (name === 'Flisa' ? ' end' : ''), () => P(la, lo, name === 'Flisa' ? 1.1 : 0.1), (t) => {
     if (!inS(t, 'map')) return 0; const draw = ease(clamp((t - S.map[0] - 0.4) / 3.6));
     return clamp((draw - u + 0.02) / 0.06) * clamp((S.map[1] - t) / 0.35) * (name === 'Flisa' ? clamp((t - S.map[0] - 4.3) / 0.4) : 1);

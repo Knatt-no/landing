@@ -1,0 +1,10 @@
+Voiceover — Knatt i bilen (26 s)
+Stemme: «Barrett» (ElevenLabs via Higgsfield, text2speech_v2), norsk. Pauser kortet til ~0,4 s.
+Miks: −16 LUFS, toppnivå −1,5 dBTP.
+
+0,7 s   Lørdag morgen. To bortekamper, én dag i Solør.
+5,2 s   Du spør bilen: Hva er neste kamp?
+8,3 s   Svaret kommer fra Knatt. Tid, motstander og hall.
+13,2 s  Bare offentlige lagdata. Aldri noe om spillerne.
+17,4 s  Naviger dit. Bilen tar resten.
+22,4 s  Knatt. Mer innsikt. Mindre styr.

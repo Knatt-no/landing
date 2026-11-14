@@ -104,15 +104,8 @@ a { color: inherit; }
 .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--glod); }
 
 /* Hero */
-.hero { position: relative; overflow: hidden; padding: 88px 0 48px; isolation: isolate; }
-@media (min-width: 900px) { .hero { padding: 120px 0 64px; } }
-.hero::before {
-  content: ""; position: absolute; z-index: -1; pointer-events: none;
-  width: 70vmax; height: 70vmax; right: -25vmax; top: -35vmax; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 77, 56, 0.26), rgba(255, 77, 56, 0) 70%);
-  animation: drift 18s ease-in-out infinite alternate;
-}
-@keyframes drift { to { transform: translate3d(-6vmax, 4vmax, 0) scale(1.08); } }
+.hero { position: relative; padding: 88px 0 40px; }
+@media (min-width: 900px) { .hero { padding: 120px 0 56px; } }
 .hero h1 {
   font-family: var(--disp); font-weight: 700; font-size: clamp(44px, 8.5vw, 104px);
   letter-spacing: -0.05em; line-height: 0.98; margin: 0 0 28px;
@@ -123,30 +116,107 @@ a { color: inherit; }
 }
 .hero .lede { font-size: clamp(17px, 2.2vw, 22px); line-height: 1.5; opacity: 0.78; max-width: 680px; margin: 0; }
 
-/* Bildet */
-.shot { padding: 24px 0 24px; }
-.shot figure { margin: 0; }
-.shot-frame {
-  position: relative; border-radius: 24px; overflow: hidden;
-  box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 50px 120px -30px rgba(0, 0, 0, 0.8), 0 0 160px -40px rgba(255, 77, 56, 0.45);
+/* Scenen: stillbildet er plakaten, filmen spiller i samme ramme */
+.stage { position: relative; }
+.stage-sticky { position: relative; }
+.stage-frame {
+  position: relative; margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; background: var(--natt);
+  border-radius: 20px; transform-origin: 50% 50%; will-change: transform;
+  box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 50px 120px -30px rgba(0, 0, 0, 0.85);
 }
-.shot-frame img { display: block; width: 100%; height: auto; transform: scale(1.04); transition: transform 1.6s cubic-bezier(.2, .8, .2, 1); }
-.js .shot-frame.shown img { transform: scale(1); }
-.film { margin-top: 56px; }
-.film-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
-.film-head .eyebrow { margin: 0; }
-.share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; }
+.stage-frame video, .stage-frame .still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.stage-frame .still { transition: opacity .7s ease, transform 2.4s cubic-bezier(.2, .8, .2, 1); transform: scale(1.06); }
+.stage.shown .still { transform: scale(1); }
+.stage.playing .still { opacity: 0; }
+.stage-frame::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; background: rgba(14, 17, 22, 0.28);
+  transition: opacity .6s ease;
+}
+.stage.playing .stage-frame::after { opacity: 0; }
+
+.play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 3;
+  display: inline-flex; align-items: center; gap: 16px; padding: 12px 26px 12px 12px; border-radius: 999px;
+  border: 1px solid rgba(240, 239, 236, 0.18); background: rgba(14, 17, 22, 0.55); color: var(--bein);
+  backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%);
+  font: 500 17px var(--disp); letter-spacing: -0.01em; cursor: pointer; text-align: left;
+  transition: opacity .45s ease, transform .45s cubic-bezier(.2, .8, .2, 1), background .25s ease;
+}
+.play:hover { background: rgba(14, 17, 22, 0.75); }
+.play-ring {
+  position: relative; width: 52px; height: 52px; border-radius: 50%; background: var(--glod); color: var(--blekk);
+  display: grid; place-items: center; flex: none; transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+.play:hover .play-ring { transform: scale(1.08); }
+.play-ring::before {
+  content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid var(--glod); opacity: 0;
+  animation: puls 2.6s cubic-bezier(.2, .8, .2, 1) infinite;
+}
+@keyframes puls { 0% { transform: scale(.85); opacity: .7; } 100% { transform: scale(1.35); opacity: 0; } }
+.play small { display: block; font: 400 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; opacity: .65; margin-top: 3px; }
+.stage.playing .play { opacity: 0; transform: translate(-50%, -46%) scale(.96); pointer-events: none; }
+
+.hud {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: center; gap: 14px;
+  padding: 18px 20px 16px; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease;
+  background: linear-gradient(to top, rgba(14, 17, 22, 0.55), rgba(14, 17, 22, 0));
+}
+.stage.started .hud { opacity: 1; transform: none; }
+.stage.playing.idle .hud { opacity: 0; }
+.hud button {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(240, 239, 236, 0.12);
+  color: var(--bein); display: grid; place-items: center; cursor: pointer; transition: background .2s ease;
+}
+.hud button:hover { background: rgba(240, 239, 236, 0.24); }
+.hud svg { width: 15px; height: 15px; }
+.bar { position: relative; flex: 1; height: 22px; cursor: pointer; touch-action: none; }
+.bar-track { position: absolute; left: 0; right: 0; top: 10px; height: 2px; border-radius: 2px; background: rgba(240, 239, 236, 0.22); }
+.bar-fill { position: absolute; left: 0; top: 10px; height: 2px; border-radius: 2px; background: var(--glod); width: 100%; transform-origin: 0 50%; transform: scaleX(0); }
+.bar-tick { position: absolute; top: 8px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--bein); opacity: .55; transition: background .3s ease, opacity .3s ease; }
+.bar-tick.past { background: var(--glod); opacity: 1; }
+.hud-time { font: 400 11px var(--mono); letter-spacing: .08em; opacity: .7; font-variant-numeric: tabular-nums; min-width: 74px; text-align: right; }
+
+.stage-meta { padding-top: 22px; }
+.chapters { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 20px; }
+@media (min-width: 760px) { .chapters { grid-template-columns: repeat(6, 1fr); } }
+.chapters button {
+  width: 100%; text-align: left; background: none; border: 0; color: inherit; cursor: pointer; padding: 12px 0 10px;
+  border-top: 2px solid rgba(240, 239, 236, 0.12); position: relative; font: 400 13.5px/1.35 var(--body); opacity: .55;
+  transition: opacity .35s ease;
+}
+.chapters button::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -2px; height: 2px; background: var(--glod);
+  transform: scaleX(var(--p, 0)); transform-origin: 0 50%;
+}
+.chapters button:hover { opacity: .85; }
+.chapters button.on { opacity: 1; }
+.chapters .t { display: block; font: 400 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; opacity: .7; margin-bottom: 4px; }
+.chapters button.on .t { color: var(--glod); opacity: 1; }
+.stage-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-top: 22px; }
+.stage-foot .cap { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.45; }
+.share { display: flex; align-items: center; gap: 10px; }
 .share-main {
   display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--body); cursor: pointer;
-  background: var(--glod); color: var(--blekk); border: none; padding: 11px 18px; border-radius: 10px;
+  background: transparent; color: var(--bein); border: 1px solid rgba(240, 239, 236, 0.22); padding: 10px 16px; border-radius: 999px;
+  transition: border-color .2s ease, background .2s ease;
 }
-.share-main:hover { background: var(--bein); }
-.share-status { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); margin-left: 4px; }
-.film-video { display: block; width: 100%; height: auto; border-radius: 20px; background: var(--natt); box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 40px 100px -40px rgba(255, 77, 56, 0.45); }
-.shot figcaption {
-  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em;
-  opacity: 0.45; margin-top: 14px; text-align: center;
+.share-main:hover { border-color: var(--glod); background: rgba(255, 77, 56, 0.08); }
+.share-status { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); }
+
+@media (max-width: 600px) {
+  .stage-frame { border-radius: 14px; }
+  .play { gap: 10px; padding: 7px 16px 7px 7px; font-size: 14px; white-space: nowrap; }
+  .play-ring { width: 38px; height: 38px; }
+  .play-ring svg { width: 15px; height: 15px; }
+  .play small { display: none; }
+  .hud { gap: 10px; padding: 12px 12px 10px; }
+  .hud button { width: 30px; height: 30px; }
+  .hud-time { display: none; }
 }
+
+/* Desktop: rammen vokser til full bredde mens du scroller */
+.stage.expand .stage-track { height: calc(100svh + 60vh); }
+.stage.expand .stage-sticky { position: sticky; top: var(--hh, 60px); height: calc(100svh - var(--hh, 60px)); display: grid; place-items: center; }
 
 /* Seksjoner */
 .section { padding: 80px 0; }
@@ -242,7 +312,7 @@ pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js [data-reveal], .js .chat .msg { opacity: 1 !important; transform: none !important; }
-  .shot-frame img { transform: none !important; }
+  .stage-frame .still { transform: none !important; }
 }
 </style>
 </head>
@@ -265,26 +335,45 @@ pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity
   </div>
 </section>
 
-<section class="shot">
-  <div class="container">
-    <figure>
-      <div class="shot-frame" data-reveal>
-        <img src="tesla-grok.webp" width="1920" height="1080" alt="Illustrasjon: på E6 langs den islagte Mjøsa en vinterkveld, med den liggende skjermen i en Tesla Model Y. Til venstre kjørevisningen med Grok-kortet, til høyre kartet. Kartet viser ruta fra Lillehammer langs E6 på østsiden av Mjøsa til Hamar, videre til Elverum og Rv 2 sørover til Flisa, og Grok-kortet viser samtalen: «Hva er neste kamp?» — «Lørdag kl. 13:00: Flisa 2 – LFH09 2 i Åsneshallen. Samme dag Vaaler – LFH09 2 kl. 17:15.» — «Naviger dit.» — «Navigerer til Åsneshallen.»">
+<section class="stage" id="filmen" aria-label="Filmen: Knatt i bilen">
+  <div class="stage-track" data-track>
+  <div class="stage-sticky">
+    <div class="stage-frame" data-frame>
+      <video data-video src="film/knatt-i-bilen.mp4" poster="tesla-grok.jpg" playsinline preload="none" width="1920" height="1080"></video>
+      <img class="still" src="tesla-grok.webp" width="1920" height="1080" alt="Illustrasjon: på E6 langs den islagte Mjøsa en vinterkveld, med den liggende skjermen i en Tesla Model Y. Til venstre kjørevisningen med Grok-kortet, til høyre kartet. Kartet viser ruta fra Lillehammer langs E6 på østsiden av Mjøsa til Hamar, videre til Elverum og Rv 2 sørover til Flisa, og Grok-kortet viser samtalen: «Hva er neste kamp?» — «Lørdag kl. 13:00: Flisa 2 – LFH09 2 i Åsneshallen. Samme dag Vaaler – LFH09 2 kl. 17:15.» — «Naviger dit.» — «Navigerer til Åsneshallen.»">
+      <button class="play" type="button" data-play>
+        <span class="play-ring" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+        <span><span data-play-label>Se filmen</span><small>26 sekunder · med lyd</small></span>
+      </button>
+      <div class="hud">
+        <button type="button" data-toggle aria-label="Pause"><svg viewBox="0 0 24 24" data-ico-pause><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" data-ico-play style="display:none"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
+        <div class="bar" data-bar role="slider" aria-label="Posisjon i filmen" aria-valuemin="0" aria-valuemax="26" aria-valuenow="0" tabindex="0">
+          <div class="bar-track"></div><div class="bar-fill" data-fill></div>
+        </div>
+        <span class="hud-time" data-time>0:00 / 0:26</span>
+        <button type="button" data-mute aria-label="Slå av lyd"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path data-waves d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <button type="button" data-full aria-label="Fullskjerm"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
-      <figcaption>Illustrasjon laget med KI · kampene er ekte, fra Knatt-lite</figcaption>
-    </figure>
-
-    <div class="film" id="filmen" data-reveal>
-      <div class="film-head">
-        <div class="eyebrow"><span class="dot"></span>Filmen · 26 sekunder · med lyd</div>
-      </div>
-      <video class="film-video" src="film/knatt-i-bilen.mp4" poster="film/plakat.jpg" controls playsinline preload="none" width="1920" height="1080"></video>
+    </div>
+  </div>
+  </div>
+  <div class="container stage-meta">
+    <ol class="chapters" data-chapters>
+      <li><button type="button" data-at="0"><span class="t">0:00</span>To bortekamper i Solør</button></li>
+      <li><button type="button" data-at="5.4"><span class="t">0:05</span>«Hva er neste kamp?»</button></li>
+      <li><button type="button" data-at="8.4"><span class="t">0:08</span>Svaret kommer fra Knatt</button></li>
+      <li><button type="button" data-at="13.3"><span class="t">0:13</span>Bare offentlige lagdata</button></li>
+      <li><button type="button" data-at="17.6"><span class="t">0:17</span>«Naviger dit.»</button></li>
+      <li><button type="button" data-at="22.5"><span class="t">0:22</span>Mer innsikt. Mindre styr.</button></li>
+    </ol>
+    <div class="stage-foot">
+      <span class="cap">Bilde og film laget med KI · kampene er ekte, fra Knatt-lite</span>
       <div class="share" aria-label="Del filmen">
+        <span class="share-status" role="status" aria-live="polite"></span>
         <button class="share-main" type="button" data-share>
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Del filmen
         </button>
-        <span class="share-status" role="status" aria-live="polite"></span>
       </div>
     </div>
   </div>
@@ -408,6 +497,136 @@ pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
   els.forEach(function (el) { io.observe(el); });
   if (chat) io.observe(chat);
+})();
+</script>
+<script>
+(function () {
+  var stage = document.querySelector('.stage'); if (!stage) return;
+  var track = stage.querySelector('[data-track]'), frame = stage.querySelector('[data-frame]'), v = stage.querySelector('[data-video]');
+  var playBtn = stage.querySelector('[data-play]'), playLabel = stage.querySelector('[data-play-label]');
+  var toggle = stage.querySelector('[data-toggle]'), muteBtn = stage.querySelector('[data-mute]'), fullBtn = stage.querySelector('[data-full]');
+  var bar = stage.querySelector('[data-bar]'), fill = stage.querySelector('[data-fill]'), time = stage.querySelector('[data-time]');
+  var chaps = [].slice.call(stage.querySelectorAll('[data-at]'));
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DUR = 26, ats = chaps.map(function (b) { return parseFloat(b.getAttribute('data-at')); });
+
+  // Merker på tidslinja ved hver replikk
+  ats.forEach(function (a, i) { if (!i) return; var t = document.createElement('i'); t.className = 'bar-tick'; t.style.left = (a / DUR * 100) + '%'; bar.appendChild(t); });
+  var ticks = [].slice.call(bar.querySelectorAll('.bar-tick'));
+
+  function fmt(t) { t = Math.max(0, Math.floor(t)); return Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2); }
+  function dur() { return v.duration || DUR; }
+  function paint() {
+    var t = v.currentTime, d = dur(), p = Math.min(1, t / d);
+    fill.style.transform = 'scaleX(' + p + ')';
+    time.textContent = fmt(t) + ' / ' + fmt(d);
+    bar.setAttribute('aria-valuenow', Math.round(t));
+    ticks.forEach(function (k, i) { k.classList.toggle('past', t >= ats[i + 1]); });
+    chaps.forEach(function (b, i) {
+      var a = ats[i], z = i + 1 < ats.length ? ats[i + 1] : d;
+      var q = t <= a ? 0 : t >= z ? 1 : (t - a) / (z - a);
+      b.style.setProperty('--p', stage.classList.contains('started') ? q : 0);
+      b.classList.toggle('on', stage.classList.contains('started') && t >= a && t < z);
+    });
+  }
+  var raf;
+  function loop() { paint(); if (!v.paused) raf = requestAnimationFrame(loop); }
+
+  function start(at) {
+    stage.classList.add('started');
+    if (typeof at === 'number') { try { v.currentTime = at; } catch (e) {} }
+    v.muted = false; syncMute();
+    var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; syncMute(); v.play(); });
+  }
+  v.addEventListener('playing', function () { stage.classList.add('playing'); syncToggle(); cancelAnimationFrame(raf); loop(); poke(); });
+  v.addEventListener('pause', function () { syncToggle(); paint(); stage.classList.remove('idle'); });
+  v.addEventListener('ended', function () {
+    stage.classList.remove('playing', 'started'); playLabel.textContent = 'Se filmen igjen';
+    try { v.currentTime = 0; } catch (e) {} paint();
+  });
+
+  playBtn.addEventListener('click', function () { start(v.ended || v.currentTime >= dur() - 0.1 ? 0 : undefined); });
+  toggle.addEventListener('click', function () { v.paused ? v.play() : v.pause(); });
+  v.addEventListener('click', function () { v.paused ? v.play() : v.pause(); });
+  function syncToggle() {
+    toggle.querySelector('[data-ico-pause]').style.display = v.paused ? 'none' : '';
+    toggle.querySelector('[data-ico-play]').style.display = v.paused ? '' : 'none';
+    toggle.setAttribute('aria-label', v.paused ? 'Spill av' : 'Pause');
+  }
+  function syncMute() {
+    muteBtn.querySelector('[data-waves]').style.opacity = v.muted ? 0.2 : 1;
+    muteBtn.setAttribute('aria-label', v.muted ? 'Slå på lyd' : 'Slå av lyd');
+  }
+  muteBtn.addEventListener('click', function () { v.muted = !v.muted; syncMute(); });
+  fullBtn.addEventListener('click', function () {
+    if (document.fullscreenElement) return document.exitFullscreen();
+    if (frame.requestFullscreen) frame.requestFullscreen();
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+  });
+
+  // Spol på tidslinja
+  function seekAt(x) { var r = bar.getBoundingClientRect(); v.currentTime = Math.max(0, Math.min(1, (x - r.left) / r.width)) * dur(); paint(); }
+  bar.addEventListener('pointerdown', function (e) { bar.setPointerCapture(e.pointerId); seekAt(e.clientX); bar.onpointermove = function (m) { seekAt(m.clientX); }; });
+  bar.addEventListener('pointerup', function () { bar.onpointermove = null; });
+  bar.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { v.currentTime = Math.min(dur(), v.currentTime + 2); paint(); }
+    if (e.key === 'ArrowLeft') { v.currentTime = Math.max(0, v.currentTime - 2); paint(); }
+  });
+  chaps.forEach(function (b, i) { b.addEventListener('click', function () { start(ats[i]); }); });
+
+  // Kontrollene trekker seg unna når filmen går og musa står stille
+  var idleT;
+  function poke() { stage.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (!v.paused) stage.classList.add('idle'); }, 2200); }
+  frame.addEventListener('pointermove', poke);
+  frame.addEventListener('pointerdown', poke);
+
+  // Stopp filmen når den er scrollet helt ut av syne; myk innzoom av stillbildet første gang
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) stage.classList.add('shown'); else if (!v.paused) v.pause(); });
+  }, { threshold: 0.2 }).observe(frame);
+  else stage.classList.add('shown');
+
+  // Rammen vokser fra kolonnebredde til full bredde når du scroller (bare på store skjermer)
+  var header = document.querySelector('.header');
+  var mq = window.matchMedia('(min-width: 900px) and (min-height: 560px)');
+  var finalW = 0, startS = 1, ticking = false;
+  function measure() {
+    var hh = header ? header.offsetHeight : 0;
+    document.documentElement.style.setProperty('--hh', hh + 'px');
+    var on = mq.matches && !reduce;
+    stage.classList.toggle('expand', on);
+    var avail = window.innerHeight - hh, vw = document.documentElement.clientWidth;
+    if (on) {
+      finalW = Math.min(vw, avail * 16 / 9);
+      var colW = Math.min(1120, vw) - (vw >= 1024 ? 96 : 48);
+      startS = Math.min(1, colW / finalW);
+      frame.style.width = finalW + 'px';
+    } else {
+      frame.style.width = ''; frame.style.transform = ''; frame.style.borderRadius = '';
+      var c = Math.min(1120, vw) - (vw >= 1024 ? 96 : 48);
+      frame.style.maxWidth = c + 'px';
+    }
+    if (on) frame.style.maxWidth = '';
+    onScroll();
+  }
+  function ease(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      if (!stage.classList.contains('expand')) return;
+      var r = track.getBoundingClientRect(), vh = window.innerHeight;
+      var travel = r.height - (vh - (header ? header.offsetHeight : 0));
+      var p = Math.max(0, Math.min(1, (vh * 0.55 - r.top) / (vh * 0.55 + travel * 0.75)));
+      var e = ease(p), s = startS + (1 - startS) * e;
+      frame.style.transform = 'scale(' + s + ')';
+      frame.style.borderRadius = ((1 - e) * 20 / s) + 'px';
+    });
+  }
+  measure();
+  window.addEventListener('resize', measure);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  syncToggle(); syncMute(); paint();
 })();
 </script>
 <script>

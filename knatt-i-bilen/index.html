@@ -127,6 +127,12 @@ a { color: inherit; }
 }
 .shot-frame img { display: block; width: 100%; height: auto; transform: scale(1.04); transition: transform 1.6s cubic-bezier(.2, .8, .2, 1); }
 .js .shot-frame.shown img { transform: scale(1); }
+.film { margin-top: 56px; }
+.film-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.film-head .eyebrow { margin: 0; }
+.film-link { font-size: 14px; font-weight: 500; color: var(--glod); text-decoration: none; }
+.film-link:hover { text-decoration: underline; }
+.film-video { display: block; width: 100%; height: auto; border-radius: 20px; background: var(--natt); box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 40px 100px -40px rgba(255, 77, 56, 0.45); }
 .shot figcaption {
   font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em;
   opacity: 0.45; margin-top: 14px; text-align: center;
@@ -257,6 +263,14 @@ pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity
       </div>
       <figcaption>Illustrasjon laget med KI · kampene er ekte, fra Knatt-lite</figcaption>
     </figure>
+
+    <div class="film" data-reveal>
+      <div class="film-head">
+        <div class="eyebrow"><span class="dot"></span>Filmen · 26 sekunder</div>
+        <a class="film-link" href="film/">Se den i 3D i nettleseren →</a>
+      </div>
+      <video class="film-video" src="film/knatt-i-bilen.mp4" poster="film/plakat.jpg" controls muted playsinline preload="none" width="1920" height="1080"></video>
+    </div>
   </div>
 </section>
 

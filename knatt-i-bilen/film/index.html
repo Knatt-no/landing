@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knatt i bilen — filmen</title>
+<meta name="description" content="En kort animert film om Knatt i bilen: spør Grok om neste kamp, og få svaret fra Knatt.">
+<meta name="theme-color" content="#0E1116">
+<meta name="robots" content="noindex">
+
+<link rel="canonical" href="https://knatt.no/knatt-i-bilen/film/">
+<meta property="og:site_name" content="Knatt">
+<meta property="og:type" content="video.other">
+<meta property="og:url" content="https://knatt.no/knatt-i-bilen/film/">
+<meta property="og:title" content="Knatt i bilen — filmen">
+<meta property="og:description" content="«Hva er neste kamp?» Spør Grok i bilen, og få svaret fra Knatt.">
+<meta property="og:image" content="https://knatt.no/knatt-i-bilen/film/plakat.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:locale" content="nb_NO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Knatt i bilen — filmen">
+<meta name="twitter:image" content="https://knatt.no/knatt-i-bilen/film/plakat.jpg">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+
+<style>
+:root {
+  --glod: #FF4D38;
+  --lime: #C8F03A;
+  --drom: #7C5CE0;
+  --blekk: #0E1116;
+  --bein: #F0EFEC;
+  --natt: #15181E;
+  --natt-edge: #252932;
+  --disp: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; color: var(--bein); font-family: var(--body); overflow: hidden; }
+
+/* Scenen er alltid 16:9, sentrert */
+.stage {
+  position: absolute; left: 50%; top: 50%;
+  width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16));
+  transform: translate(-50%, -50%); overflow: hidden; background: var(--blekk);
+  container-type: size;
+}
+canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ui { position: absolute; inset: 0; pointer-events: none; }
+.fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+
+/* Typografi i scenen skalerer med scenebredden (cqw) */
+.eyebrow {
+  position: absolute; left: 6cqw; top: 7cqh; display: flex; align-items: center; gap: .7cqw;
+  font-family: var(--mono); font-size: 1.15cqw; letter-spacing: .16em; text-transform: uppercase; opacity: 0;
+}
+.eyebrow i { width: .7cqw; height: .7cqw; border-radius: 50%; background: var(--glod); }
+
+.headline {
+  position: absolute; left: 6cqw; bottom: 12cqh; max-width: 70cqw;
+  font-family: var(--disp); font-weight: 700; font-size: 6.4cqw; line-height: 1; letter-spacing: -0.045em; opacity: 0;
+}
+.headline .dot { display: inline-block; width: .13em; height: .13em; border-radius: 50%; background: var(--glod); margin-left: .04em; }
+
+.chat { position: absolute; right: 6cqw; bottom: 9cqh; width: 40cqw; display: flex; flex-direction: column; gap: 1.1cqh; }
+.chat-head {
+  display: flex; align-items: center; gap: .8cqw; font-family: var(--disp); font-weight: 700; font-size: 1.5cqw; opacity: 0;
+}
+.chat-head .ring { width: 1.5cqw; height: 1.5cqw; border-radius: 50%; border: .28cqw solid var(--glod); box-shadow: 0 0 1.2cqw rgba(255, 77, 56, .7); }
+.chat-head small { margin-left: auto; font-family: var(--mono); font-weight: 400; font-size: .85cqw; letter-spacing: .12em; text-transform: uppercase; opacity: .55; }
+.bubble {
+  padding: 1.4cqh 1.3cqw; border-radius: 1.2cqw; font-size: 1.45cqw; line-height: 1.4; opacity: 0;
+  max-width: 92%; backdrop-filter: blur(.6cqw); -webkit-backdrop-filter: blur(.6cqw);
+}
+.bubble.du { align-self: flex-end; background: var(--bein); color: var(--blekk); border-bottom-right-radius: .3cqw; }
+.bubble.ki { align-self: flex-start; background: rgba(28, 31, 39, .96); border: 1px solid rgba(240, 239, 236, .08); border-bottom-left-radius: .3cqw; }
+.bubble.ki b { font-weight: 500; }
+.bubble .src { display: block; margin-top: .6cqh; font-family: var(--mono); font-size: .8cqw; letter-spacing: .1em; text-transform: uppercase; color: var(--glod); }
+.caret { display: inline-block; width: .12cqw; height: 1.1em; background: var(--bein); vertical-align: -0.15em; margin-left: .1cqw; }
+
+.label {
+  position: absolute; transform: translate(-50%, -140%); white-space: nowrap; opacity: 0;
+  font-family: var(--mono); font-size: 1.05cqw; letter-spacing: .12em; text-transform: uppercase;
+  padding: .5cqh .7cqw; border-radius: .5cqw; background: rgba(14, 17, 22, .75); border: 1px solid rgba(240, 239, 236, .12);
+}
+.label.big { font-family: var(--disp); font-weight: 700; font-size: 1.6cqw; letter-spacing: -0.01em; text-transform: none; }
+.label.glod { border-color: var(--glod); color: var(--bein); }
+.label.place { font-size: .95cqw; transform: translate(-50%, -170%); }
+.label.lake { background: none; border: none; font-family: var(--disp); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 1.4cqw; color: #9cb8e8; transform: translate(-50%, -50%); }
+.label.place.end { transform: translate(-8%, -130%); }
+.label.place.end { background: var(--glod); color: var(--blekk); border-color: var(--glod); font-weight: 700; }
+
+.card {
+  position: absolute; left: 6cqw; top: 14cqh; padding: 1.6cqh 1.4cqw; border-radius: 1cqw; opacity: 0;
+  background: rgba(14, 17, 22, .8); border: 1px solid rgba(240, 239, 236, .1); min-width: 22cqw;
+}
+.card .k { font-family: var(--mono); font-size: .85cqw; letter-spacing: .14em; text-transform: uppercase; opacity: .6; }
+.card .v { font-family: var(--disp); font-weight: 700; font-size: 2cqw; letter-spacing: -0.02em; margin-top: .4cqh; }
+.card .s { font-size: 1.1cqw; opacity: .75; margin-top: .3cqh; }
+
+.endcard { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: 0; }
+.wordmark { font-family: var(--disp); font-weight: 700; font-size: 13cqw; letter-spacing: -0.06em; line-height: 1; display: inline-flex; align-items: flex-end; }
+.wordmark i { display: inline-block; width: 2.2cqw; height: 2.2cqw; border-radius: 50%; background: var(--glod); margin: 0 0 1.7cqw .9cqw; box-shadow: 0 0 3cqw rgba(255, 77, 56, .8); }
+.tag { font-family: var(--disp); font-weight: 500; font-size: 3cqw; letter-spacing: -0.02em; margin-top: 2.4cqh; }
+.sub { font-size: 1.5cqw; opacity: .75; margin-top: 1.6cqh; }
+.url { font-family: var(--mono); font-size: 1.2cqw; letter-spacing: .12em; color: var(--glod); margin-top: 3.4cqh; text-transform: lowercase; }
+.legal { position: absolute; bottom: 3.2cqh; left: 0; right: 0; text-align: center; font-family: var(--mono); font-size: .75cqw; letter-spacing: .1em; text-transform: uppercase; opacity: .4; }
+
+.progress { position: absolute; left: 0; bottom: 0; height: .35cqh; background: var(--glod); width: 0; opacity: .85; }
+
+/* Kontroller (skjules ved opptak) */
+.controls { position: fixed; right: 16px; bottom: 16px; display: flex; gap: 8px; z-index: 10; }
+.controls button, .controls a {
+  font: 500 13px var(--body); color: var(--bein); background: rgba(21, 24, 30, .8); border: 1px solid var(--natt-edge);
+  padding: 9px 14px; border-radius: 10px; cursor: pointer; text-decoration: none;
+}
+.controls button:hover, .controls a:hover { border-color: var(--glod); }
+.capture .controls { display: none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <canvas id="c" aria-label="Animert film: Knatt i bilen"></canvas>
+  <div class="ui" id="ui">
+    <div class="eyebrow" id="eyebrow"><i></i><span id="eyebrowText">Lørdag morgen · E6 sørover</span></div>
+    <div class="headline" id="headline"></div>
+
+    <div class="card" id="card"><div class="k" id="cardK"></div><div class="v" id="cardV"></div><div class="s" id="cardS"></div></div>
+
+    <div class="chat" id="chat">
+      <div class="chat-head" id="chatHead"><span class="ring"></span>Grok<small>Knatt-lite tilkoblet</small></div>
+      <div class="bubble du" id="q1">Hva er neste kamp?</div>
+      <div class="bubble ki" id="a1"><span id="a1t"></span><span class="src" id="a1s">Kilde: Knatt-lite · kamper</span></div>
+      <div class="bubble du" id="q2">Naviger dit.</div>
+      <div class="bubble ki" id="a2"><span id="a2t"></span><span class="src" id="a2s">Kilde: Knatt-lite · arenaer</span></div>
+    </div>
+
+    <div id="labels"></div>
+
+    <div class="endcard" id="end">
+      <div class="wordmark">knatt<i></i></div>
+      <div class="tag">Mer innsikt. Mindre styr.</div>
+      <div class="sub">Spør Grok om neste kamp — svaret kommer fra Knatt.</div>
+      <div class="url">knatt.no/knatt-i-bilen</div>
+      <div class="legal">Illustrasjon · Kampdata fra Knatt-lite · Knatt er ikke tilknyttet xAI eller Tesla</div>
+    </div>
+
+    <div class="fade" id="fade"></div>
+    <div class="progress" id="progress"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button id="play" type="button">Pause</button>
+  <button id="replay" type="button">Spill av på nytt</button>
+  <a href="/knatt-i-bilen/">← Til saken</a>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const DUR = 26;
+const params = new URLSearchParams(location.search);
+const CAPTURE = params.has('capture');
+if (CAPTURE) document.documentElement.classList.add('capture');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ───────── Tidslinje ───────── */
+const S = { road: [0, 5.2], voice: [5.2, 11.2], flow: [11.2, 15.8], map: [15.8, 21.8], end: [21.8, 26] };
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+const win = (t, a, b, f = 0.4) => clamp((t - a) / f) * clamp((b - t) / f); // inn/ut-toning
+const inS = (t, k) => t >= S[k][0] && t < S[k][1];
+
+/* ───────── Seedet tilfeldighet (samme film hver gang) ───────── */
+function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const R = rng(20261121);
+
+/* ───────── Renderer ───────── */
+const canvas = document.getElementById('c');
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: CAPTURE });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, 16 / 9, 0.05, 400);
+
+const C = {
+  blekk: new THREE.Color('#0E1116'), natt: new THREE.Color('#15181E'), glod: new THREE.Color('#FF4D38'),
+  lime: new THREE.Color('#C8F03A'), drom: new THREE.Color('#7C5CE0'), bein: new THREE.Color('#F0EFEC'),
+  is: new THREE.Color('#2B3A55'), bla: new THREE.Color('#3E7BFF'), sno: new THREE.Color('#C9D3E6'),
+};
+
+function glowTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 128, 128); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const GLOW = glowTexture();
+const glow = (color, size, opacity = 1) => {
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: GLOW, color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false }));
+  s.scale.setScalar(size); return s;
+};
+
+/* ───────── Scene 1–2: vei, brøytestikker, skog, snø ───────── */
+const road = new THREE.Group(); scene.add(road);
+const L = 160; // lengde på veien som går i løkke
+{
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 400), new THREE.MeshStandardMaterial({ color: '#8e9bb3', roughness: 1 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.set(0, -0.01, -150); road.add(ground);
+  const asphalt = new THREE.Mesh(new THREE.PlaneGeometry(7, 400), new THREE.MeshStandardMaterial({ color: '#2a2f38', roughness: 0.55, metalness: 0.1 }));
+  asphalt.rotation.x = -Math.PI / 2; asphalt.position.set(0, 0, -150); road.add(asphalt);
+  // hjulspor med snø
+  for (const x of [-2.4, -1.2, 1.2, 2.4]) {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 400), new THREE.MeshStandardMaterial({ color: '#5d6676', roughness: 1, transparent: true, opacity: 0.22 }));
+    m.rotation.x = -Math.PI / 2; m.position.set(x, 0.005, -150); road.add(m);
+  }
+}
+const movers = []; // { mesh(instanced), base: [{x,y,z}], speedMul }
+function instanced(geo, mat, n, place) {
+  const im = new THREE.InstancedMesh(geo, mat, n); const base = [];
+  for (let i = 0; i < n; i++) base.push(place(i)); road.add(im); movers.push({ im, base }); return im;
+}
+const dash = instanced(new THREE.BoxGeometry(0.14, 0.01, 2.2), new THREE.MeshBasicMaterial({ color: '#e7c64a' }), 24, (i) => ({ x: 0, y: 0.012, z: -i * (L / 24), s: 1 }));
+const poleGeo = new THREE.CylinderGeometry(0.035, 0.035, 2.2, 6); poleGeo.translate(0, 1.1, 0);
+const tipGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.5, 6); tipGeo.translate(0, 1.95, 0);
+const poleMat = new THREE.MeshStandardMaterial({ color: '#1b1f27', roughness: 0.8 });
+const tipMat = new THREE.MeshStandardMaterial({ color: '#ff7a1a', emissive: '#ff5a00', emissiveIntensity: 0.6 });
+const polePlace = (i) => ({ x: i % 2 ? 4.4 : -4.4, y: 0, z: -Math.floor(i / 2) * 8 - (i % 2) * 4, s: 1 });
+instanced(poleGeo, poleMat, 40, polePlace);
+instanced(tipGeo, tipMat, 40, polePlace);
+const treeGeo = new THREE.ConeGeometry(1.4, 6, 7); treeGeo.translate(0, 3, 0);
+const treeMat = new THREE.MeshStandardMaterial({ color: '#16241f', roughness: 1, flatShading: true });
+const snowCapGeo = new THREE.ConeGeometry(1.05, 2.6, 7); snowCapGeo.translate(0, 4.9, 0);
+const snowCapMat = new THREE.MeshStandardMaterial({ color: '#dfe7f5', roughness: 1, flatShading: true });
+const treeN = 140;
+const treePlace = (() => { const r = rng(7); return () => { const side = r() < 0.5 ? -1 : 1; return { x: side * (8 + r() * 26), y: 0, z: -r() * L, s: 0.7 + r() * 0.9 }; }; })();
+const treesBase = Array.from({ length: treeN }, treePlace);
+instanced(treeGeo, treeMat, treeN, (i) => treesBase[i]);
+instanced(snowCapGeo, snowCapMat, treeN, (i) => treesBase[i]);
+// baklys langt fremme
+const tail = new THREE.Group(); road.add(tail);
+for (const x of [-0.45, 0.45]) { const g = glow('#ff2a1a', 0.9, 0.9); g.position.set(x, 0.75, 0); tail.add(g); }
+// snø
+const SNOW = 2600; const snowGeo = new THREE.BufferGeometry(); const snowBase = new Float32Array(SNOW * 3); const snowPos = new Float32Array(SNOW * 3);
+{ const r = rng(3); for (let i = 0; i < SNOW; i++) { snowBase[i * 3] = (r() - 0.5) * 40; snowBase[i * 3 + 1] = r() * 14; snowBase[i * 3 + 2] = -r() * 60; } }
+snowGeo.setAttribute('position', new THREE.BufferAttribute(snowPos, 3));
+const snow = new THREE.Points(snowGeo, new THREE.PointsMaterial({ color: '#ffffff', size: 0.07, transparent: true, opacity: 0.85, map: GLOW, depthWrite: false }));
+road.add(snow);
+const hemi = new THREE.HemisphereLight('#7f9bd6', '#1a2233', 1.4); scene.add(hemi);
+const moon = new THREE.DirectionalLight('#b8c8ff', 0.7); moon.position.set(-6, 10, 4); scene.add(moon);
+const headl = new THREE.SpotLight('#fff3dd', 60, 60, 0.45, 0.6, 1.6); headl.position.set(0, 1.0, 1); headl.target.position.set(0, 0, -25); scene.add(headl, headl.target);
+
+const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), v3 = new THREE.Vector3(), sc = new THREE.Vector3();
+function updateRoad(t) {
+  const speed = 22; // m/s ≈ 80 km/t
+  const d = t * speed;
+  for (const { im, base } of movers) {
+    for (let i = 0; i < base.length; i++) {
+      const b = base[i]; let z = ((b.z + d) % L + L) % L - L + 6; // løkke foran kamera
+      v3.set(b.x, b.y, z); sc.setScalar(b.s || 1); m4.compose(v3, q, sc); im.setMatrixAt(i, m4);
+    }
+    im.instanceMatrix.needsUpdate = true;
+  }
+  for (let i = 0; i < SNOW; i++) {
+    const x = snowBase[i * 3] + Math.sin(t * 0.7 + i) * 0.3;
+    const y = ((snowBase[i * 3 + 1] - t * 1.6) % 14 + 14) % 14;
+    const z = ((snowBase[i * 3 + 2] + t * 10) % 60 + 60) % 60 - 58;
+    snowPos[i * 3] = x; snowPos[i * 3 + 1] = y; snowPos[i * 3 + 2] = z;
+  }
+  snowGeo.attributes.position.needsUpdate = true;
+  tail.position.set(-1.7 + Math.sin(t * 0.4) * 0.15, 0, -70 - Math.sin(t * 0.3) * 6);
+}
+
+/* ───────── Scene 2: lydbølge ───────── */
+const voice = new THREE.Group(); scene.add(voice);
+const BARS = 72;
+const barGeo = new THREE.BoxGeometry(0.06, 1, 0.06); barGeo.translate(0, 0.5, 0);
+const barMat = new THREE.MeshBasicMaterial({ toneMapped: false });
+const bars = new THREE.InstancedMesh(barGeo, barMat, BARS); voice.add(bars);
+const barColor = new THREE.Color();
+for (let i = 0; i < BARS; i++) { const k = i / (BARS - 1); barColor.copy(C.drom).lerp(C.bla, clamp(k * 1.6)).lerp(C.glod, clamp((k - 0.6) / 0.4)); bars.setColorAt(i, barColor); }
+const voiceGlow = glow('#7c5ce0', 6, 0.5); voice.add(voiceGlow);
+function updateVoice(t, k) {
+  const talk = (t > 5.6 && t < 6.6) || (t > 7.2 && t < 10.6) ? 1 : 0.18;
+  for (let i = 0; i < BARS; i++) {
+    const x = (i - (BARS - 1) / 2) * 0.085;
+    const env = Math.exp(-Math.pow(x / 1.6, 2));
+    const h = 0.05 + env * talk * (0.35 + 0.65 * Math.abs(Math.sin(t * 7.3 + i * 0.55) * Math.sin(t * 3.1 + i * 0.21)));
+    v3.set(x, -h * 0.5, 0); sc.set(1, h, 1); m4.compose(v3, q, sc); bars.setMatrixAt(i, m4);
+  }
+  bars.instanceMatrix.needsUpdate = true; bars.instanceColor.needsUpdate = true;
+  voice.position.set(-1.25, 1.18, -3.2); voice.scale.setScalar(lerp(0.6, 1, easeOut(k)));
+  voiceGlow.material.opacity = 0.25 + 0.25 * talk;
+}
+
+/* ───────── Scene 3: dataflyt ───────── */
+const flow = new THREE.Group(); scene.add(flow);
+const nodes = [
+  { id: 'handball', label: 'handball.no · Min Håndball', color: C.sno, p: new THREE.Vector3(-6, 0.6, 0), r: 0.32 },
+  { id: 'knatt', label: 'Knatt', color: C.glod, p: new THREE.Vector3(-2, -0.2, 0.6), r: 0.5, big: true },
+  { id: 'lite', label: 'Knatt-lite · bare offentlige lagdata', color: C.lime, p: new THREE.Vector3(2, 0.3, 0), r: 0.36 },
+  { id: 'grok', label: 'Grok i bilen', color: C.drom, p: new THREE.Vector3(6, -0.3, 0.4), r: 0.4 },
+];
+for (const n of nodes) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(n.r, 48, 32), new THREE.MeshStandardMaterial({ color: n.color, emissive: n.color, emissiveIntensity: 0.9, roughness: 0.3 }));
+  m.position.copy(n.p); flow.add(m); n.mesh = m;
+  const g = glow(n.color, n.r * 7, 0.55); g.position.copy(n.p); flow.add(g); n.glow = g;
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(n.r * 1.7, 0.012, 8, 96), new THREE.MeshBasicMaterial({ color: n.color, transparent: true, opacity: 0.6, toneMapped: false }));
+  ring.position.copy(n.p); flow.add(ring); n.ring = ring;
+}
+const curve = new THREE.CatmullRomCurve3(nodes.map((n) => n.p), false, 'catmullrom', 0.4);
+const line = new THREE.Mesh(new THREE.TubeGeometry(curve, 240, 0.012, 8, false), new THREE.MeshBasicMaterial({ color: '#3a4256', toneMapped: false }));
+flow.add(line);
+const PN = 160; const pGeo = new THREE.BufferGeometry(); const pPos = new Float32Array(PN * 3); const pCol = new Float32Array(PN * 3);
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3)); pGeo.setAttribute('color', new THREE.BufferAttribute(pCol, 3));
+const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.16, map: GLOW, vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }));
+flow.add(particles);
+const pOff = Array.from({ length: PN }, () => R());
+const pc = new THREE.Color();
+function updateFlow(t, k) {
+  const draw = easeOut(clamp(k * 1.6));
+  for (let i = 0; i < PN; i++) {
+    let u = (pOff[i] + t * 0.16) % 1; u = Math.min(u, draw);
+    curve.getPointAt(u, v3); pPos[i * 3] = v3.x + Math.sin(i * 12.9 + t) * 0.03; pPos[i * 3 + 1] = v3.y + Math.cos(i * 7.1 + t) * 0.03; pPos[i * 3 + 2] = v3.z;
+    const seg = u * 3; const a = nodes[Math.floor(clamp(seg, 0, 2.999))].color, b = nodes[Math.ceil(clamp(seg, 0.001, 3))].color;
+    pc.copy(a).lerp(b, seg % 1); pCol[i * 3] = pc.r; pCol[i * 3 + 1] = pc.g; pCol[i * 3 + 2] = pc.b;
+  }
+  pGeo.attributes.position.needsUpdate = true; pGeo.attributes.color.needsUpdate = true;
+  nodes.forEach((n, i) => {
+    const on = clamp((k - i * 0.12) / 0.2); const pulse = 1 + 0.06 * Math.sin(t * 3 + i);
+    n.mesh.scale.setScalar(easeOut(on) * pulse); n.glow.material.opacity = 0.55 * on;
+    n.ring.rotation.set(Math.PI / 2 + Math.sin(t * 0.6 + i) * 0.4, t * 0.5 + i, 0); n.ring.material.opacity = 0.6 * on;
+  });
+}
+
+/* ───────── Scene 4: kartet ───────── */
+const map = new THREE.Group(); scene.add(map);
+const LAT0 = 60.82, LON0 = 11.2, KX = 54.3 * 0.1, KZ = 111 * 0.1;
+const P = (lat, lon, y = 0) => new THREE.Vector3((lon - LON0) * KX, y, -(lat - LAT0) * KZ);
+{
+  const base = new THREE.Mesh(new THREE.PlaneGeometry(40, 40, 1, 1), new THREE.MeshStandardMaterial({ color: '#141a22', roughness: 1 }));
+  base.rotation.x = -Math.PI / 2; base.position.y = -0.02; map.add(base);
+  // prikkrutenett som terreng
+  const dots = []; const r = rng(11);
+  for (let x = -18; x <= 18; x += 0.32) for (let z = -18; z <= 18; z += 0.32) { if (r() < 0.55) dots.push(x + (r() - 0.5) * 0.12, 0, z + (r() - 0.5) * 0.12); }
+  const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.Float32BufferAttribute(dots, 3));
+  map.add(new THREE.Points(dg, new THREE.PointsMaterial({ color: '#66748e', size: 0.05, transparent: true, opacity: 0.85 })));
+  // Mjøsa (forenklet omriss)
+  const lake = [[61.11, 10.46], [61.03, 10.55], [60.95, 10.65], [60.9, 10.78], [60.86, 10.9], [60.82, 11.0], [60.79, 11.06], [60.74, 11.1], [60.66, 11.13], [60.58, 11.12], [60.5, 11.19], [60.42, 11.24], [60.35, 11.22], [60.36, 11.16], [60.45, 11.1], [60.55, 11.0], [60.63, 10.93], [60.7, 10.8], [60.77, 10.71], [60.84, 10.65], [60.92, 10.6], [61.0, 10.53], [61.08, 10.46]];
+  const shape = new THREE.Shape(lake.map(([la, lo]) => { const p = P(la, lo); return new THREE.Vector2(p.x, -p.z); }));
+  const lm = new THREE.Mesh(new THREE.ShapeGeometry(shape, 24), new THREE.MeshStandardMaterial({ color: '#2f5590', emissive: '#22457f', emissiveIntensity: 0.9, roughness: 0.25, metalness: 0.1 }));
+  lm.rotation.x = -Math.PI / 2; lm.position.y = 0.002; map.add(lm);
+  // Glomma (enkel linje)
+  const glomma = new THREE.CatmullRomCurve3([[61.05, 11.42], [60.95, 11.5], [60.88, 11.56], [60.78, 11.7], [60.68, 11.83], [60.6, 12.0], [60.5, 12.05]].map(([a, b]) => P(a, b, 0.003)));
+  map.add(new THREE.Mesh(new THREE.TubeGeometry(glomma, 120, 0.035, 6, false), new THREE.MeshBasicMaterial({ color: '#3a63a6' })));
+}
+const stops = [
+  ['Lillehammer', 61.115, 10.466], ['Moelv', 60.93, 10.7], ['Brumunddal', 60.88, 10.94], ['Hamar', 60.795, 11.075],
+  ['Løten', 60.82, 11.33], ['Elverum', 60.881, 11.563], ['Våler', 60.672, 11.83], ['Flisa', 60.612, 12.015],
+];
+const routeCurve = new THREE.CatmullRomCurve3([
+  P(61.115, 10.466, 0.06), P(61.03, 10.585, 0.06), P(60.93, 10.7, 0.06), P(60.88, 10.94, 0.06), P(60.82, 11.04, 0.06), P(60.795, 11.075, 0.06),
+  P(60.81, 11.25, 0.06), P(60.82, 11.33, 0.06), P(60.86, 11.47, 0.06), P(60.881, 11.563, 0.06),
+  P(60.8, 11.66, 0.06), P(60.72, 11.77, 0.06), P(60.672, 11.83, 0.06), P(60.63, 11.95, 0.06), P(60.612, 12.015, 0.06),
+], false, 'catmullrom', 0.3);
+const routeGeo = new THREE.TubeGeometry(routeCurve, 600, 0.07, 10, false);
+const routeMat = new THREE.MeshBasicMaterial({ color: '#4d8dff', toneMapped: false });
+const route = new THREE.Mesh(routeGeo, routeMat); map.add(route);
+const routeHalo = new THREE.Mesh(new THREE.TubeGeometry(routeCurve, 600, 0.18, 10, false), new THREE.MeshBasicMaterial({ color: '#3e7bff', transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }));
+map.add(routeHalo);
+const head = glow('#9cc1ff', 1.4, 1); map.add(head);
+const pin = new THREE.Group(); map.add(pin);
+{
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.6, 24), new THREE.MeshStandardMaterial({ color: C.glod, emissive: C.glod, emissiveIntensity: 0.8 }));
+  cone.rotation.x = Math.PI; cone.position.y = 0.3; pin.add(cone);
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(0.26, 32, 16), new THREE.MeshStandardMaterial({ color: C.glod, emissive: C.glod, emissiveIntensity: 0.9 }));
+  ball.position.y = 0.7; pin.add(ball);
+  const g = glow(C.glod, 2.4, 0.8); g.position.y = 0.6; pin.add(g);
+  const ripple = new THREE.Mesh(new THREE.RingGeometry(0.3, 0.36, 48), new THREE.MeshBasicMaterial({ color: C.glod, transparent: true, side: THREE.DoubleSide, toneMapped: false }));
+  ripple.rotation.x = -Math.PI / 2; ripple.position.y = 0.01; pin.add(ripple); pin.userData.ripple = ripple;
+}
+pin.position.copy(P(60.612, 12.015));
+const routeTotal = routeGeo.index.count;
+function updateMap(t, k) {
+  const draw = ease(clamp((t - S.map[0] - 0.4) / 3.6));
+  const n = Math.floor(routeTotal * draw / 60) * 60;
+  routeGeo.setDrawRange(0, n); routeHalo.geometry.setDrawRange(0, n);
+  routeCurve.getPointAt(clamp(draw, 0.0001, 1), v3); head.position.copy(v3); head.material.opacity = draw < 1 ? 1 : 0.4 + 0.3 * Math.sin(t * 4);
+  const drop = clamp((t - (S.map[0] + 3.9)) / 0.7);
+  const bounce = drop < 1 ? (1 - easeOut(drop)) * 3 + Math.abs(Math.sin(drop * Math.PI * 2)) * (1 - drop) * 0.4 : 0;
+  pin.visible = drop > 0; pin.position.y = bounce; pin.rotation.y = t * 1.2;
+  const rp = ((t * 0.8) % 1); pin.userData.ripple.scale.setScalar(1 + rp * 4); pin.userData.ripple.material.opacity = drop >= 1 ? (1 - rp) * 0.8 : 0;
+}
+
+/* ───────── HTML-etiketter som følger 3D-punkter ───────── */
+const labelsEl = document.getElementById('labels');
+const labels = [];
+function addLabel(text, cls, getPos, vis) { const el = document.createElement('div'); el.className = 'label ' + cls; el.textContent = text; labelsEl.appendChild(el); labels.push({ el, getPos, vis }); }
+nodes.forEach((n, i) => addLabel(n.label, n.big ? 'big glod' : '', () => n.p.clone().add(new THREE.Vector3(0, n.r + 0.2, 0)), (t) => inS(t, 'flow') ? clamp((t - S.flow[0] - 0.5 - i * 0.45) / 0.4) * clamp((S.flow[1] - t) / 0.35) : 0));
+stops.forEach(([name, la, lo], i) => {
+  if (!['Lillehammer', 'Hamar', 'Elverum', 'Våler', 'Flisa'].includes(name)) return;
+  const u = [0, 0, 0, 0.36, 0, 0.62, 0.86, 1][i];
+  addLabel(name === 'Flisa' ? 'Åsneshallen · Flisa' : name, 'place' + (name === 'Flisa' ? ' end' : ''), () => P(la, lo, name === 'Flisa' ? 1.1 : 0.1), (t) => {
+    if (!inS(t, 'map')) return 0; const draw = ease(clamp((t - S.map[0] - 0.4) / 3.6));
+    return clamp((draw - u + 0.02) / 0.06) * clamp((S.map[1] - t) / 0.35) * (name === 'Flisa' ? clamp((t - S.map[0] - 4.3) / 0.4) : 1);
+  });
+});
+addLabel('Mjøsa', 'place lake', () => P(60.62, 11.0, 0.05), (t) => inS(t, 'map') ? clamp((t - S.map[0] - 1.2) / 0.5) * clamp((S.map[1] - t) / 0.35) : 0);
+function updateLabels(t) {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  for (const L of labels) {
+    const o = L.vis(t); L.el.style.opacity = o; if (o <= 0) continue;
+    v3.copy(L.getPos()).project(camera);
+    L.el.style.left = ((v3.x + 1) / 2 * w) + 'px'; L.el.style.top = ((1 - v3.y) / 2 * h) + 'px';
+  }
+}
+
+/* ───────── Kamera per scene ───────── */
+function updateCamera(t) {
+  if (t < S.flow[0]) {
+    const sway = Math.sin(t * 0.9) * 0.04;
+    camera.position.set(-1.25 + sway, 1.18, 0.5); camera.fov = 58; camera.lookAt(-1.1, 1.0, -20);
+    scene.fog = fogRoad; scene.background = C.blekk.clone().lerp(new THREE.Color('#1b2a4a'), 0.6);
+  } else if (t < S.map[0]) {
+    const k = (t - S.flow[0]) / (S.flow[1] - S.flow[0]);
+    const a = lerp(-0.35, 0.25, ease(k));
+    camera.position.set(Math.sin(a) * 11, lerp(2.6, 1.6, k), Math.cos(a) * 11); camera.fov = 50; camera.lookAt(0, 0, 0);
+    scene.fog = null; scene.background = C.blekk;
+  } else {
+    const k = ease(clamp((t - S.map[0]) / (S.map[1] - S.map[0] - 0.3)));
+    const from = P(61.0, 10.75), to = P(60.8, 11.3);
+    const look = from.clone().lerp(to, k);
+    camera.position.set(look.x - 0.4, lerp(8, 13.5, k), look.z + lerp(3.2, 5.2, k)); camera.fov = 50; camera.lookAt(look);
+    scene.fog = fogMap; scene.background = C.blekk;
+  }
+  camera.updateProjectionMatrix();
+}
+const fogRoad = new THREE.Fog('#1b2a4a', 18, 95);
+const fogMap = new THREE.Fog('#0E1116', 20, 40);
+
+/* ───────── HTML-tidslinje ───────── */
+const $ = (id) => document.getElementById(id);
+const A1 = 'Lørdag kl. 13:00: <b>Flisa 2 – LFH09 2</b> i Åsneshallen. Samme dag <b>Vaaler – LFH09 2</b> kl. 17:15.';
+const A2 = 'Navigerer til Åsneshallen, Idrettsvegen 24, Flisa.';
+function typed(html, k) {
+  const plain = html.replace(/<[^>]+>/g, ''); const n = Math.floor(plain.length * clamp(k));
+  let out = '', c = 0, inTag = false;
+  for (const ch of html) { if (ch === '<') inTag = true; if (inTag) { out += ch; if (ch === '>') inTag = false; continue; } if (c >= n) break; out += ch; c++; }
+  out = out.replace(/<b>([^<]*)$/, '<b>$1</b>');
+  return out + (k < 1 ? '<span class="caret"></span>' : '');
+}
+const show = (el, o, dy = 0) => { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}cqh)`; };
+function updateUI(t) {
+  show($('eyebrow'), win(t, 0.5, S.voice[1] - 0.2), 1.5);
+  $('eyebrowText').textContent = t < S.flow[0] ? 'Lørdag morgen · E6 sørover' : '';
+  const h = $('headline');
+  if (t < 3.6) { h.innerHTML = 'To bortekamper.<br>Én dag i Solør<span class="dot"></span>'; h.style.top = ''; h.style.bottom = ''; h.style.fontSize = ''; show(h, win(t, 0.9, 3.6, 0.5), 3); }
+  else if (inS(t, 'flow')) { h.innerHTML = 'Bare offentlige<br>lagdata<span class="dot"></span>'; show(h, win(t, S.flow[0] + 2.1, S.flow[1] - 0.1, 0.5), 3); h.style.top = '9cqh'; h.style.bottom = 'auto'; h.style.fontSize = '4.6cqw'; }
+  else { show(h, 0); h.style.top = ''; h.style.bottom = ''; h.style.fontSize = ''; }
+  if (inS(t, 'flow')) { h.style.left = '6cqw'; }
+
+  const chatOn = t > 5.3 && t < S.flow[0] - 0.1 || (t > S.map[0] + 0.2 && t < S.map[1] - 0.1);
+  show($('chatHead'), chatOn ? win(t, t < S.flow[0] ? 5.3 : S.map[0] + 0.2, t < S.flow[0] ? S.flow[0] - 0.1 : S.map[1] - 0.1) : 0, 1);
+  show($('q1'), win(t, 5.6, S.flow[0] - 0.1), 1.5);
+  show($('a1'), win(t, 6.9, S.flow[0] - 0.1), 1.5); $('a1t').innerHTML = typed(A1, (t - 7.1) / 3.0); $('a1s').style.opacity = clamp((t - 10.2) / 0.3);
+  show($('q2'), win(t, S.map[0] + 0.6, S.map[1] - 0.1), 1.5);
+  show($('a2'), win(t, S.map[0] + 1.5, S.map[1] - 0.1), 1.5); $('a2t').textContent = ''; $('a2t').innerHTML = typed(A2, (t - S.map[0] - 1.7) / 1.6); $('a2s').style.opacity = clamp((t - S.map[0] - 3.4) / 0.3);
+  const onMap = inS(t, 'map');
+  $('q1').style.display = $('a1').style.display = onMap ? 'none' : '';
+  $('q2').style.display = $('a2').style.display = onMap ? '' : 'none';
+
+  const card = $('card');
+  card.style.left = onMap ? 'auto' : ''; card.style.right = onMap ? '6cqw' : '';
+  if (onMap) { $('cardK').textContent = 'Rute'; $('cardV').textContent = 'Lillehammer → Flisa'; $('cardS').textContent = 'E6 langs Mjøsa · Rv 2 langs Glomma · 131 km'; show(card, win(t, S.map[0] + 1.0, S.map[1] - 0.1), 1.5); }
+  else if (t > S.voice[0] && t < S.voice[1]) { $('cardK').textContent = 'Kampdag · lør 21. nov'; $('cardV').textContent = '2 bortekamper'; $('cardS').textContent = 'Åsneshallen 13:00 · Våler 17:15'; show(card, win(t, 10.3, S.voice[1] - 0.1), 1.5); }
+  else show(card, 0);
+
+  const e = clamp((t - S.end[0] - 0.2) / 0.6); show($('end'), e, 2);
+  // svart overgang mellom scenene
+  let f = 0; for (const b of [S.voice[1], S.flow[1], S.map[1]]) f = Math.max(f, 1 - clamp(Math.abs(t - b) / 0.35));
+  f = Math.max(f, 1 - clamp(t / 0.6), clamp((t - (DUR - 0.5)) / 0.5));
+  $('fade').style.opacity = f;
+  $('progress').style.width = (t / DUR * 100) + '%';
+}
+
+/* ───────── Render ───────── */
+const endGlow = glow(C.glod, 10, 0); scene.add(endGlow);
+function renderAt(t) {
+  t = ((t % DUR) + DUR) % DUR;
+  road.visible = voice.visible = t < S.flow[0];
+  flow.visible = inS(t, 'flow');
+  map.visible = inS(t, 'map');
+  headl.visible = road.visible;
+  if (road.visible) updateRoad(t);
+  if (t >= S.voice[0] && t < S.flow[0]) { voice.visible = true; updateVoice(t, clamp((t - S.voice[0]) / 0.8)); } else voice.visible = false;
+  if (flow.visible) updateFlow(t, (t - S.flow[0]) / (S.flow[1] - S.flow[0]));
+  if (map.visible) updateMap(t, (t - S.map[0]) / (S.map[1] - S.map[0]));
+  endGlow.visible = inS(t, 'end');
+  if (endGlow.visible) { camera.position.set(0, 0, 8); camera.lookAt(0, 0, 0); camera.fov = 50; camera.updateProjectionMatrix(); scene.fog = null; scene.background = C.blekk; endGlow.position.set(0, 0.2, -2); endGlow.material.opacity = 0.18 + 0.08 * Math.sin(t * 2); endGlow.scale.setScalar(14 + Math.sin(t) * 1.5); }
+  else updateCamera(t);
+  camera.updateMatrixWorld();
+  updateUI(t);
+  updateLabels(t);
+  renderer.render(scene, camera);
+}
+
+function resize() { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+
+window.__DUR = DUR;
+window.__renderAt = (t) => { renderAt(t); return true; };
+
+let playing = !CAPTURE, start = performance.now(), pausedAt = 0;
+const btn = $('play');
+btn.onclick = () => { if (playing) { pausedAt = (performance.now() - start) / 1000; playing = false; btn.textContent = 'Spill'; } else { start = performance.now() - pausedAt * 1000; playing = true; btn.textContent = 'Pause'; loop(); } };
+$('replay').onclick = () => { start = performance.now(); if (!playing) { playing = true; btn.textContent = 'Pause'; loop(); } };
+function loop() { if (!playing) return; renderAt((performance.now() - start) / 1000); requestAnimationFrame(loop); }
+if (reduce && !CAPTURE) { playing = false; btn.textContent = 'Spill'; renderAt(S.end[0] + 1.5); }
+else if (!CAPTURE) loop(); else renderAt(0);
+document.fonts && document.fonts.ready.then(() => { window.__ready = true; });
+</script>
+</body>
+</html>

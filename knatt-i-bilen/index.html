@@ -21,6 +21,11 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta property="og:image:alt" content="Illustrasjon: Grok på skjermen i en Tesla langs Mjøsa svarer på «Hva er neste kamp?» og navigerer til Åsneshallen på Flisa">
+<meta property="og:video" content="https://knatt.no/knatt-i-bilen/film/knatt-i-bilen.mp4">
+<meta property="og:video:secure_url" content="https://knatt.no/knatt-i-bilen/film/knatt-i-bilen.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="1920">
+<meta property="og:video:height" content="1080">
 <meta property="og:locale" content="nb_NO">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Knatt i bilen — «Hva er neste kamp?»">
@@ -132,6 +137,18 @@ a { color: inherit; }
 .film-head .eyebrow { margin: 0; }
 .film-link { font-size: 14px; font-weight: 500; color: var(--glod); text-decoration: none; }
 .film-link:hover { text-decoration: underline; }
+.share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; }
+.share-main {
+  display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--body); cursor: pointer;
+  background: var(--glod); color: var(--blekk); border: none; padding: 11px 18px; border-radius: 10px;
+}
+.share-main:hover { background: var(--bein); }
+.share-btn {
+  font: 500 14px var(--body); color: var(--bein); text-decoration: none; cursor: pointer;
+  background: transparent; border: 1px solid var(--natt-edge); padding: 10px 14px; border-radius: 10px;
+}
+.share-btn:hover { border-color: var(--glod); }
+.share-status { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); margin-left: 4px; }
 .film-video { display: block; width: 100%; height: auto; border-radius: 20px; background: var(--natt); box-shadow: 0 0 0 1px rgba(240, 239, 236, 0.08), 0 40px 100px -40px rgba(255, 77, 56, 0.45); }
 .shot figcaption {
   font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em;
@@ -264,12 +281,24 @@ pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity
       <figcaption>Illustrasjon laget med KI · kampene er ekte, fra Knatt-lite</figcaption>
     </figure>
 
-    <div class="film" data-reveal>
+    <div class="film" id="filmen" data-reveal>
       <div class="film-head">
         <div class="eyebrow"><span class="dot"></span>Filmen · 26 sekunder · med lyd</div>
         <a class="film-link" href="film/">Se 3D-versjonen i nettleseren →</a>
       </div>
       <video class="film-video" src="film/knatt-i-bilen.mp4" poster="film/plakat.jpg" controls playsinline preload="none" width="1920" height="1080"></video>
+      <div class="share" aria-label="Del filmen">
+        <button class="share-main" type="button" data-share>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Del filmen
+        </button>
+        <button class="share-btn" type="button" data-copy>Kopier lenke</button>
+        <a class="share-btn" data-net="linkedin" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="share-btn" data-net="facebook" target="_blank" rel="noopener">Facebook</a>
+        <a class="share-btn" data-net="x" target="_blank" rel="noopener">X</a>
+        <a class="share-btn" href="film/knatt-i-bilen.mp4" download="knatt-i-bilen.mp4">Last ned MP4</a>
+        <span class="share-status" role="status" aria-live="polite"></span>
+      </div>
     </div>
   </div>
 </section>
@@ -392,6 +421,36 @@ pre .k { color: var(--lime); } pre .s { color: var(--glod-l); } pre .c { opacity
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
   els.forEach(function (el) { io.observe(el); });
   if (chat) io.observe(chat);
+})();
+</script>
+<script>
+(function () {
+  var url = 'https://knatt.no/knatt-i-bilen/#filmen';
+  var title = 'Knatt i bilen — «Hva er neste kamp?»';
+  var text = 'Spør Grok i bilen om neste kamp, og få svaret fra Knatt. 26 sekunder om Knatt-lite.';
+  var status = document.querySelector('.share-status');
+  var timer;
+  function say(msg) { if (!status) return; status.textContent = msg; clearTimeout(timer); timer = setTimeout(function () { status.textContent = ''; }, 2500); }
+  function copy() {
+    var done = function () { say('Lenke kopiert ✓'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(done, fallback); } else { fallback(); }
+    function fallback() {
+      var t = document.createElement('textarea'); t.value = url; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) { say('Kopier: ' + url); } document.body.removeChild(t);
+    }
+  }
+  var nets = {
+    linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url),
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url),
+    x: 'https://x.com/intent/post?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(title)
+  };
+  document.querySelectorAll('[data-net]').forEach(function (a) { a.href = nets[a.getAttribute('data-net')]; });
+  var c = document.querySelector('[data-copy]'); if (c) c.addEventListener('click', copy);
+  var m = document.querySelector('[data-share]');
+  if (m) m.addEventListener('click', function () {
+    if (navigator.share) { navigator.share({ title: title, text: text, url: url }).catch(function () {}); }
+    else { copy(); }
+  });
 })();
 </script>
 </body>

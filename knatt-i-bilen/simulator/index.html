@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Knatt i bilen — simulator</title>
+<meta name="description" content="Prøv selv: spør med stemmen om neste kamp, tabellen eller veien til hallen. Demo med oppdiktede data.">
+<meta name="theme-color" content="#0E1116">
+
+<link rel="canonical" href="https://knatt.no/knatt-i-bilen/simulator/">
+<meta property="og:site_name" content="Knatt">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://knatt.no/knatt-i-bilen/simulator/">
+<meta property="og:title" content="Knatt i bilen — prøv simulatoren">
+<meta property="og:description" content="Spør med stemmen: «Hva er neste kamp?» Demo med oppdiktede data.">
+<meta property="og:image" content="https://knatt.no/knatt-i-bilen/film/plakat.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:locale" content="nb_NO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://knatt.no/knatt-i-bilen/film/plakat.jpg">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --glod: #FF4D38; --lime: #C8F03A; --drom: #7C5CE0; --blekk: #0E1116; --bein: #F0EFEC; --natt: #15181E; --natt-edge: #252932;
+  --skjerm: #0b0e14; --panel: #151a23; --panel-2: #1c2230; --linje: #2a3242; --tekst-2: #9aa4b8; --rute: #3d8bff;
+  --disp: 'Space Grotesk', system-ui, sans-serif; --body: 'Inter', system-ui, -apple-system, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --dummy: 0; } }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--blekk); color: var(--bein); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 24px; max-width: 1280px; margin: 0 auto; }
+.logo { font-family: var(--disp); font-weight: 700; font-size: 22px; letter-spacing: -0.05em; text-decoration: none; display: inline-flex; align-items: flex-end; }
+.logo i { width: 5px; height: 5px; border-radius: 50%; background: var(--glod); margin: 0 0 4px 3px; }
+.back { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; opacity: .7; text-decoration: none; }
+.intro { max-width: 1280px; margin: 0 auto; padding: 8px 24px 20px; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.intro h1 { font-family: var(--disp); font-weight: 700; font-size: clamp(30px, 5vw, 52px); letter-spacing: -0.04em; line-height: 1; margin: 0; }
+.intro p { margin: 10px 0 0; color: var(--tekst-2); max-width: 640px; font-size: 15px; }
+.demo { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(200, 240, 58, .4); color: var(--lime); white-space: nowrap; }
+
+/* ───── Skjermen ───── */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px 28px; }
+.screen {
+  position: relative; aspect-ratio: 16 / 10; border-radius: 22px; background: var(--skjerm); overflow: hidden;
+  border: 10px solid #050608; box-shadow: 0 0 0 1px #1d222c, 0 40px 120px -40px rgba(61, 139, 255, .35), 0 20px 60px rgba(0, 0, 0, .6);
+  display: grid; grid-template-columns: 42% 58%; grid-template-rows: 1fr auto; font-size: clamp(11px, 1.15vw, 15px);
+}
+.left { position: relative; padding: 1.4em; display: flex; flex-direction: column; gap: .9em; min-height: 0; border-right: 1px solid #12161e; }
+.status { display: flex; align-items: flex-start; justify-content: space-between; }
+.gear { font-family: var(--body); font-weight: 500; letter-spacing: .3em; font-size: .85em; color: var(--tekst-2); }
+.gear b { color: var(--bein); }
+.speed { font-family: var(--body); font-weight: 500; font-size: 3.6em; line-height: 1; letter-spacing: -0.03em; margin-top: .1em; }
+.speed small { display: block; font-size: .24em; color: var(--tekst-2); letter-spacing: 0; margin-top: .25em; }
+.limit { width: 2.6em; height: 2.6em; border-radius: 50%; border: .3em solid #e0352b; background: #fff; color: #111; display: grid; place-items: center; font-weight: 700; font-size: 1.05em; }
+.clock { font-family: var(--mono); font-size: .85em; color: var(--tekst-2); }
+
+.assist { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--linje); border-radius: 1em; overflow: hidden; }
+.assist-head { display: flex; align-items: center; gap: .6em; padding: .8em 1em; border-bottom: 1px solid var(--linje); }
+.assist-head .ring { width: 1.1em; height: 1.1em; border-radius: 50%; border: .2em solid var(--glod); box-shadow: 0 0 .8em rgba(255, 77, 56, .7); }
+.assist-head b { font-weight: 600; }
+.assist-head small { margin-left: auto; font-family: var(--mono); font-size: .72em; letter-spacing: .1em; text-transform: uppercase; color: var(--tekst-2); }
+.log { flex: 1; overflow-y: auto; padding: .9em 1em; display: flex; flex-direction: column; gap: .6em; scroll-behavior: smooth; }
+.msg { max-width: 92%; padding: .6em .85em; border-radius: .9em; line-height: 1.4; animation: inn .35s ease both; }
+.msg.du { align-self: flex-end; background: var(--bein); color: var(--blekk); border-bottom-right-radius: .25em; }
+.msg.ki { align-self: flex-start; background: var(--panel-2); border-bottom-left-radius: .25em; }
+.msg.ki b { font-weight: 600; }
+.msg .src { display: block; margin-top: .45em; font-family: var(--mono); font-size: .7em; letter-spacing: .1em; text-transform: uppercase; color: var(--glod); }
+.msg table { border-collapse: collapse; margin-top: .4em; width: 100%; font-variant-numeric: tabular-nums; font-size: .92em; }
+.msg td { padding: .18em .35em; border-top: 1px solid var(--linje); }
+.msg td:nth-child(n+3) { text-align: right; color: var(--tekst-2); }
+.msg tr.oss td { color: var(--bein); font-weight: 600; background: rgba(61, 139, 255, .14); }
+@keyframes inn { from { opacity: 0; transform: translateY(.5em); } }
+.wave { height: 2.4em; display: flex; align-items: center; justify-content: center; gap: .18em; padding: 0 1em .6em; }
+.wave i { width: .18em; height: 12%; border-radius: .1em; background: linear-gradient(#3d6bff, #7c5ce0, #ff4d38); transition: height .12s ease; }
+
+.right { position: relative; min-height: 0; background: #0d1219; }
+.map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dest { position: absolute; left: 1em; top: 1em; display: flex; gap: .7em; align-items: center; padding: .7em .95em; background: rgba(15, 19, 27, .92); border: 1px solid var(--linje); border-radius: .8em; max-width: 70%; }
+.dest .pin { width: 1.2em; height: 1.2em; flex: none; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--bein); }
+.dest b { display: block; font-weight: 600; font-size: 1.05em; }
+.dest span { color: var(--tekst-2); font-size: .85em; }
+.trip { position: absolute; left: 1em; bottom: 1em; padding: .7em .95em; background: rgba(15, 19, 27, .92); border: 1px solid var(--linje); border-radius: .8em; display: none; }
+.trip.on { display: block; animation: inn .35s ease both; }
+.trip .tt { display: flex; gap: 1em; font-variant-numeric: tabular-nums; }
+.trip .tt b { font-size: 1.15em; }
+.trip .tt span { color: var(--tekst-2); }
+.trip button { margin-top: .55em; width: 100%; font: inherit; color: var(--bein); background: var(--panel-2); border: 0; border-radius: .5em; padding: .45em; cursor: pointer; }
+.mapbtns { position: absolute; right: 1em; top: 1em; display: flex; flex-direction: column; gap: .5em; }
+.mapbtns span { width: 2.2em; height: 2.2em; border-radius: 50%; background: rgba(15, 19, 27, .9); border: 1px solid var(--linje); display: grid; place-items: center; color: var(--tekst-2); }
+
+.dock { grid-column: 1 / -1; display: flex; align-items: center; gap: 1.2em; padding: .7em 1.4em; background: #07090d; border-top: 1px solid #12161e; }
+.dock .mic {
+  display: inline-flex; align-items: center; gap: .55em; font: 600 1em var(--body); color: var(--blekk); background: var(--bein);
+  border: 0; border-radius: 999px; padding: .65em 1.15em; cursor: pointer; transition: transform .1s ease, background .2s ease;
+}
+.dock .mic:hover { background: #fff; }
+.dock .mic.lytter { background: var(--glod); color: var(--blekk); animation: puls 1.2s ease-in-out infinite; }
+@keyframes puls { 50% { box-shadow: 0 0 0 .5em rgba(255, 77, 56, .25); } }
+.dock form { flex: 1; display: flex; gap: .5em; min-width: 0; }
+.dock input { flex: 1; min-width: 0; font: 1em var(--body); color: var(--bein); background: var(--panel); border: 1px solid var(--linje); border-radius: 999px; padding: .6em 1em; }
+.dock input::placeholder { color: #6b7488; }
+.dock .send { font: 600 1em var(--body); color: var(--bein); background: var(--panel-2); border: 1px solid var(--linje); border-radius: 999px; padding: .6em 1em; cursor: pointer; }
+.dock .lyd { font: 500 .9em var(--body); color: var(--tekst-2); background: none; border: 0; cursor: pointer; white-space: nowrap; }
+
+.chips { max-width: 1280px; margin: 0 auto; padding: 0 24px 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { font: 500 14px var(--body); color: var(--bein); background: var(--natt); border: 1px solid var(--natt-edge); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+.chips button:hover { border-color: var(--glod); }
+.note { max-width: 1280px; margin: 0 auto; padding: 0 24px 48px; color: #7c8496; font-size: 13px; line-height: 1.6; }
+.note b { color: var(--tekst-2); font-weight: 500; }
+
+@media (max-width: 760px) {
+  .screen { aspect-ratio: auto; grid-template-columns: 1fr; grid-template-rows: auto 46vh auto; font-size: 13px; }
+  .left { border-right: 0; border-bottom: 1px solid #12161e; max-height: 52vh; }
+  .speed { font-size: 2.6em; }
+  .dock { flex-wrap: wrap; }
+  .dock form { order: 3; flex-basis: 100%; }
+}
+:focus-visible { outline: 2px solid var(--glod); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">knatt<i></i></a>
+  <a class="back" href="/knatt-i-bilen/">← Knatt i bilen</a>
+</header>
+
+<section class="intro">
+  <div>
+    <h1>Spør Knatt.</h1>
+    <p>Trykk på mikrofonen og spør som i bilen: «Hva er neste kamp?», «Når må jeg kjøre?» eller «Naviger dit». Skjermen viser det en KI-assistent koblet til Knatt-lite ville svart.</p>
+  </div>
+  <span class="demo">Demo · oppdiktede data</span>
+</section>
+
+<div class="wrap">
+  <div class="screen" id="screen">
+    <div class="left">
+      <div class="status">
+        <div><div class="gear">P R N <b>D</b></div><div class="speed">80<small>km/t</small></div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.6em"><div class="limit">80</div><div class="clock" id="klokke"></div></div>
+      </div>
+      <div class="assist" aria-label="Samtale med assistenten">
+        <div class="assist-head"><span class="ring" aria-hidden="true"></span><b>Assistent</b><small>Knatt-lite · demo</small></div>
+        <div class="log" id="log" aria-live="polite"></div>
+        <div class="wave" id="wave" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="right">
+      <svg class="map" id="map" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Kart over Mjøsa-området med ruta"></svg>
+      <div class="dest" id="dest"><span class="pin" aria-hidden="true"></span><div><b id="destNavn">Knatthallen</b><span id="destSted">Lillehammer · her er du</span></div></div>
+      <div class="mapbtns" aria-hidden="true"><span>➤</span><span>+</span><span>−</span></div>
+      <div class="trip" id="trip"><div class="tt"><b id="tripKm"></b><span id="tripTid"></span><span id="tripFrem"></span></div><button type="button" id="avslutt">Avslutt tur</button></div>
+    </div>
+    <div class="dock">
+      <button class="mic" id="mic" type="button" aria-pressed="false"><span aria-hidden="true">🎙</span><span id="micTxt">Snakk</span></button>
+      <form id="form" autocomplete="off"><input id="input" type="text" placeholder="…eller skriv spørsmålet her" aria-label="Spørsmål"><button class="send" type="submit">Spør</button></form>
+      <button class="lyd" id="lydBtn" type="button">🔊 Opplesning på</button>
+    </div>
+  </div>
+</div>
+
+<div class="chips" id="chips">
+  <button type="button">Hva er neste kamp?</button>
+  <button type="button">Når må jeg kjøre?</button>
+  <button type="button">Naviger dit</button>
+  <button type="button">Hvordan står tabellen?</button>
+  <button type="button">Hvordan gikk forrige kamp?</button>
+  <button type="button">Hvordan går det med Solør Ørn?</button>
+  <button type="button">Hva skjer i dag?</button>
+</div>
+
+<p class="note"><b>Om demoen:</b> serien, lagene, kampene og hallene er oppdiktet; stedene og veiene er ekte. Ingenting sendes til Knatt. <b>Talegjenkjenning</b> skjer i nettleseren din — i Chrome sendes lyden til Google for å bli gjort om til tekst, i Safari til Apple. Vil du ikke det, skriv spørsmålet i stedet. Opplesningen bruker nettleserens norske stemme. Knatt er ikke tilknyttet xAI eller Tesla.</p>
+
+<script>
+(function () {
+  'use strict';
+  /* ───────── Syntetiske data ───────── */
+  function rng(seed) { return function () { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  var STED = {
+    Lillehammer: [61.115, 10.466], Moelv: [60.93, 10.70], Brumunddal: [60.88, 10.94], Hamar: [60.795, 11.068], 'Løten': [60.82, 11.33],
+    Elverum: [60.881, 11.563], 'Våler': [60.672, 11.83], Flisa: [60.612, 12.015], 'Gjøvik': [60.795, 10.69], Raufoss: [60.725, 10.613], Lena: [60.67, 10.81]
+  };
+  // Veinett: [fra, til, km, vei]
+  var VEI = [
+    ['Lillehammer', 'Moelv', 35, 'E6'], ['Moelv', 'Brumunddal', 17, 'E6'], ['Brumunddal', 'Hamar', 12, 'E6'],
+    ['Hamar', 'Løten', 16, 'Rv 25'], ['Løten', 'Elverum', 15, 'Rv 25'], ['Elverum', 'Våler', 22, 'Rv 2'], ['Våler', 'Flisa', 14, 'Rv 2'],
+    ['Lillehammer', 'Gjøvik', 45, 'Rv 4'], ['Gjøvik', 'Raufoss', 12, 'Rv 4'], ['Raufoss', 'Lena', 16, 'Fv 33'], ['Moelv', 'Gjøvik', 22, 'E6 / Rv 4']
+  ];
+  var LAG = [
+    { navn: 'Knatt J15', sted: 'Lillehammer', hall: 'Knatthallen', adr: 'Demo-vegen 1, Lillehammer', oss: true },
+    { navn: 'Solør Ørn', sted: 'Flisa', hall: 'Ørnehallen', adr: 'Idrettsvegen 3, Flisa' },
+    { navn: 'Glomdal HK', sted: 'Elverum', hall: 'Glomdalshallen', adr: 'Elvegata 12, Elverum' },
+    { navn: 'Mjøsa Bølge', sted: 'Hamar', hall: 'Bølgehallen', adr: 'Strandvegen 8, Hamar' },
+    { navn: 'Toten Tind', sted: 'Lena', hall: 'Tindhallen', adr: 'Skolegata 4, Lena' },
+    { navn: 'Brumund Bjørn', sted: 'Brumunddal', hall: 'Bjørnehiet', adr: 'Torget 2, Brumunddal' },
+    { navn: 'Vålerlia IL', sted: 'Våler', hall: 'Lia arena', adr: 'Liavegen 6, Våler' },
+    { navn: 'Gjøvik Gnist', sted: 'Gjøvik', hall: 'Gnisthallen', adr: 'Kirkegata 20, Gjøvik' }
+  ];
+  var OSS = LAG[0];
+  var DAG = 864e5;
+  function lordag(d) { var x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() + ((6 - x.getDay() + 7) % 7)); return x; }
+  var idag = new Date(); idag.setHours(0, 0, 0, 0);
+  var nesteLordag = lordag(idag);
+  if (nesteLordag.getTime() === idag.getTime() && new Date().getHours() >= 19) nesteLordag = new Date(nesteLordag.getTime() + 7 * DAG);
+  // Runde-robin (sirkelmetoden), 7 runder. Runde 1–4 er spilt, 5–7 kommer.
+  var r = rng(2026);
+  var idx = [0, 1, 2, 3, 4, 5, 6, 7], runder = [];
+  for (var k = 0; k < 7; k++) {
+    var par = [];
+    for (var i = 0; i < 4; i++) { var a = idx[i], b = idx[7 - i]; par.push(k % 2 ? [b, a] : [a, b]); }
+    runder.push(par); idx.splice(1, 0, idx.pop());
+  }
+  // Første kommende runde (runde 5) skal ha bortekampen mot Solør Ørn på Flisa
+  (function () {
+    var k = runder.findIndex(function (par) { return par.some(function (p) { return (p[0] === 0 && p[1] === 1) || (p[0] === 1 && p[1] === 0); }); });
+    var t = runder[4]; runder[4] = runder[k]; runder[k] = t;
+    runder[4] = runder[4].map(function (p) { return (p[0] === 0 && p[1] === 1) ? [1, 0] : p; });
+  })();
+  var TIDER = ['11:00', '12:30', '13:00', '14:15', '15:30', '17:15'];
+  var KAMPER = [];
+  runder.forEach(function (par, k) {
+    var dato = new Date(nesteLordag.getTime() + (k - 4) * 7 * DAG);
+    par.forEach(function (p, j) {
+      var hj = LAG[p[0]], bo = LAG[p[1]];
+      var kamp = { runde: k + 1, dato: dato, tid: TIDER[(k + j * 2) % TIDER.length], hjemme: hj, borte: bo, spilt: k < 4 };
+      if (kamp.spilt) { var sh = 14 + Math.floor(r() * 16), sb = 12 + Math.floor(r() * 16); if (hj.oss || bo.oss) { if (hj.oss) sh += 6; else sb += 6; } kamp.hm = sh; kamp.bm = sb; }
+      KAMPER.push(kamp);
+    });
+  });
+  function tabell() {
+    var t = LAG.map(function (l) { return { lag: l, k: 0, v: 0, u: 0, tap: 0, mf: 0, mm: 0, p: 0, form: [] }; });
+    KAMPER.filter(function (k) { return k.spilt; }).forEach(function (k) {
+      var h = t[LAG.indexOf(k.hjemme)], b = t[LAG.indexOf(k.borte)];
+      h.k++; b.k++; h.mf += k.hm; h.mm += k.bm; b.mf += k.bm; b.mm += k.hm;
+      if (k.hm > k.bm) { h.v++; b.tap++; h.p += 2; h.form.push('V'); b.form.push('T'); }
+      else if (k.hm < k.bm) { b.v++; h.tap++; b.p += 2; b.form.push('V'); h.form.push('T'); }
+      else { h.u++; b.u++; h.p++; b.p++; h.form.push('U'); b.form.push('U'); }
+    });
+    return t.sort(function (a, b) { return b.p - a.p || (b.mf - b.mm) - (a.mf - a.mm) || b.mf - a.mf; });
+  }
+  var vaare = KAMPER.filter(function (k) { return k.hjemme.oss || k.borte.oss; });
+  var neste = vaare.filter(function (k) { return !k.spilt; })[0];
+  var forrige = vaare.filter(function (k) { return k.spilt; }).slice(-1)[0];
+  var motst = function (k) { return k.hjemme.oss ? k.borte : k.hjemme; };
+  var hall = function (k) { return k.hjemme; };
+
+  /* ───────── Ruter (Dijkstra i veinettet) ───────── */
+  function rute(fra, til) {
+    var dist = {}, prev = {}, q = Object.keys(STED);
+    q.forEach(function (s) { dist[s] = Infinity; }); dist[fra] = 0;
+    while (q.length) {
+      q.sort(function (a, b) { return dist[a] - dist[b]; }); var u = q.shift(); if (u === til || dist[u] === Infinity) break;
+      VEI.forEach(function (e) { var v = e[0] === u ? e[1] : e[1] === u ? e[0] : null; if (v && q.indexOf(v) > -1 && dist[u] + e[2] < dist[v]) { dist[v] = dist[u] + e[2]; prev[v] = { u: u, vei: e[3] }; } });
+    }
+    var sti = [til], veier = []; while (sti[0] !== fra) { var p = prev[sti[0]]; if (!p) break; if (veier[0] !== p.vei) veier.unshift(p.vei); sti.unshift(p.u); }
+    return { sti: sti, km: dist[til], min: Math.round(dist[til] / 75 * 60), veier: veier };
+  }
+
+  /* ───────── Formatering ───────── */
+  var UKEDAG = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
+  var MND = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
+  function dag(d) {
+    var diff = Math.round((d - idag) / DAG);
+    if (diff === 0) return 'i dag'; if (diff === 1) return 'i morgen'; if (diff > 1 && diff < 7) return 'på ' + UKEDAG[d.getDay()];
+    return UKEDAG[d.getDay()] + ' ' + d.getDate() + '. ' + MND[d.getMonth()];
+  }
+  var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1); };
+  function varighet(min) { var t = Math.floor(min / 60), m = min % 60; return (t ? t + ' t ' : '') + m + ' min'; }
+  function minus(hhmm, min) { var p = hhmm.split(':'), x = (+p[0]) * 60 + (+p[1]) - min; x = Math.floor(x / 5) * 5; return String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0'); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  /* ───────── Kart (SVG) ───────── */
+  var svg = document.getElementById('map'), NS = 'http://www.w3.org/2000/svg';
+  function P(lat, lon) { return [(lon - 10.25) * Math.cos(60.85 * Math.PI / 180) * 900 + 40, (61.25 - lat) * 900 + 20]; }
+  function el(name, attrs, parent) { var e = document.createElementNS(NS, name); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; }
+  var defs = el('defs', {});
+  defs.innerHTML = '<filter id="glo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>' +
+    '<pattern id="dott" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#1c2534"/></pattern>';
+  el('rect', { x: 0, y: 0, width: 1000, height: 800, fill: '#0d1219' });
+  el('rect', { x: 0, y: 0, width: 1000, height: 800, fill: 'url(#dott)' });
+  var mjosa = [[61.11, 10.46], [61.03, 10.55], [60.95, 10.65], [60.9, 10.78], [60.86, 10.9], [60.82, 11.0], [60.79, 11.06], [60.74, 11.1], [60.66, 11.13], [60.58, 11.12], [60.5, 11.19], [60.42, 11.24], [60.35, 11.22], [60.36, 11.16], [60.45, 11.1], [60.55, 11.0], [60.63, 10.93], [60.7, 10.8], [60.77, 10.71], [60.84, 10.65], [60.92, 10.6], [61.0, 10.53], [61.08, 10.46]];
+  el('path', { d: 'M' + mjosa.map(function (p) { return P(p[0], p[1]).join(','); }).join('L') + 'Z', fill: '#16294a', stroke: '#21396a', 'stroke-width': 2 });
+  var lt = P(60.62, 10.98); var mt = el('text', { x: lt[0], y: lt[1], fill: '#4f74b8', 'font-size': 24, 'font-style': 'italic', 'font-family': 'Inter, sans-serif', 'text-anchor': 'middle' }); mt.textContent = 'Mjøsa';
+  var glomma = [[61.05, 11.42], [60.95, 11.5], [60.88, 11.56], [60.78, 11.7], [60.68, 11.83], [60.6, 12.01], [60.5, 12.05]];
+  el('path', { d: 'M' + glomma.map(function (p) { return P(p[0], p[1]).join(','); }).join('L'), fill: 'none', stroke: '#1e3a6a', 'stroke-width': 5, 'stroke-linecap': 'round' });
+  var veiLag = el('g', {}), ruteLag = el('g', {}), stedLag = el('g', {});
+  VEI.forEach(function (e) { var a = P.apply(null, STED[e[0]]), b = P.apply(null, STED[e[1]]); el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#2b3446', 'stroke-width': 4, 'stroke-linecap': 'round' }, veiLag); });
+  Object.keys(STED).forEach(function (s) {
+    var p = P.apply(null, STED[s]); el('circle', { cx: p[0], cy: p[1], r: 5, fill: '#8090ad' }, stedLag);
+    var t = el('text', { x: p[0] + 10, y: p[1] - 9, fill: '#c8d0e0', 'font-size': 19, 'font-family': 'Inter, sans-serif' }, stedLag); t.textContent = s;
+  });
+  var hjem = P.apply(null, STED.Lillehammer);
+  var meg = el('g', { transform: 'translate(' + hjem[0] + ',' + hjem[1] + ')' });
+  el('circle', { r: 16, fill: 'rgba(61,139,255,.25)' }, meg); el('circle', { r: 8, fill: '#3d8bff', stroke: '#fff', 'stroke-width': 3 }, meg);
+
+  function tegnRute(r) {
+    ruteLag.innerHTML = '';
+    var d = 'M' + r.sti.map(function (s) { return P.apply(null, STED[s]).join(','); }).join('L');
+    el('path', { d: d, fill: 'none', stroke: '#3d8bff', 'stroke-width': 14, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: .45, filter: 'url(#glo)' }, ruteLag);
+    var p = el('path', { d: d, fill: 'none', stroke: '#5fa0ff', 'stroke-width': 7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, ruteLag);
+    var len = p.getTotalLength(); p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
+    p.getBoundingClientRect(); p.style.transition = 'stroke-dashoffset 1.6s cubic-bezier(.3,.8,.3,1)'; p.style.strokeDashoffset = 0;
+    var m = P.apply(null, STED[r.sti[r.sti.length - 1]]);
+    var pin = el('g', { transform: 'translate(' + m[0] + ',' + m[1] + ')' }, ruteLag);
+    el('path', { d: 'M0,0 C-14,-20 -14,-34 0,-40 C14,-34 14,-20 0,0Z', fill: '#ff4d38', transform: 'translate(0,-2)' }, pin); el('circle', { cy: -26, r: 6, fill: '#fff' }, pin);
+  }
+  function settMaal(k, r) {
+    document.getElementById('destNavn').textContent = k ? hall(k).hall : 'Knatthallen';
+    document.getElementById('destSted').textContent = k ? hall(k).adr : 'Lillehammer · her er du';
+    var trip = document.getElementById('trip');
+    if (r) {
+      document.getElementById('tripKm').textContent = r.km + ' km';
+      document.getElementById('tripTid').textContent = varighet(r.min);
+      var n = new Date(Date.now() + r.min * 6e4); document.getElementById('tripFrem').textContent = 'fremme ' + String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+      trip.classList.add('on');
+    } else trip.classList.remove('on');
+  }
+  document.getElementById('avslutt').onclick = function () { ruteLag.innerHTML = ''; settMaal(null, null); aktivKamp = null; };
+
+  /* ───────── Svar ───────── */
+  var aktivKamp = null;
+  function kampLinje(k) { return '<b>' + esc(k.hjemme.navn) + ' – ' + esc(k.borte.navn) + '</b>'; }
+  function svar(q) {
+    var s = q.toLowerCase().replace(/[?!.,]/g, ' ');
+    var lagTreff = LAG.filter(function (l) { return !l.oss && (s.indexOf(l.navn.toLowerCase()) > -1 || s.indexOf(l.navn.toLowerCase().split(' ')[0]) > -1 || s.indexOf(l.sted.toLowerCase()) > -1); })[0];
+
+    if (/naviger|vis vei|kjør (meg )?dit|ta meg|vei(en)? til/.test(s)) {
+      var k = aktivKamp || neste; var r = rute('Lillehammer', hall(k).sted); aktivKamp = k;
+      tegnRute(r); settMaal(k, r);
+      return { tekst: 'Navigerer til ' + esc(hall(k).hall) + ', ' + esc(hall(k).adr) + '. ' + r.km + ' km, ' + varighet(r.min) + ' via ' + r.veier.join(', ') + '.', tale: 'Navigerer til ' + hall(k).hall + '. ' + r.km + ' kilometer, ' + varighet(r.min).replace('t', 'timer').replace('min', 'minutter') + '.', src: 'arenaer' };
+    }
+    if (/når må jeg|når bør jeg|kjøre|reise|dra hjemmefra|oppmøte/.test(s)) {
+      var k2 = aktivKamp || neste; aktivKamp = k2; var r2 = rute('Lillehammer', hall(k2).sted);
+      var oppm = minus(k2.tid, 60), dra = minus(k2.tid, 60 + r2.min + 5);
+      return { tekst: 'Avkast er ' + dag(k2.dato) + ' kl. ' + k2.tid + ' i ' + esc(hall(k2).hall) + '. Med oppmøte en time før må du være der <b>' + oppm + '</b>. Kjøretiden er ' + varighet(r2.min) + ', så kjør senest <b>' + dra + '</b>.', tale: 'Avkast er ' + dag(k2.dato) + ' klokka ' + k2.tid + '. Med oppmøte en time før bør du kjøre senest klokka ' + dra + '.', src: 'kamper · arenaer' };
+    }
+    if (/tabell|hvor står vi|plass|ligger vi/.test(s)) {
+      var t = tabell(), rows = t.map(function (x, i) { return '<tr class="' + (x.lag.oss ? 'oss' : '') + '"><td>' + (i + 1) + '</td><td>' + esc(x.lag.navn) + '</td><td>' + x.k + '</td><td>' + (x.mf - x.mm > 0 ? '+' : '') + (x.mf - x.mm) + '</td><td>' + x.p + '</td></tr>'; }).join('');
+      var plass = t.findIndex(function (x) { return x.lag.oss; }) + 1;
+      return { tekst: 'Knatt J15 ligger på <b>' + plass + '. plass</b> med ' + t[plass - 1].p + ' poeng etter ' + t[plass - 1].k + ' kamper.<table>' + rows + '</table>', tale: 'Knatt J femten ligger på ' + plass + '. plass med ' + t[plass - 1].p + ' poeng.', src: 'serietabell' };
+    }
+    if (/forrige|sist|hvordan gikk/.test(s)) {
+      var f = forrige, vi = f.hjemme.oss ? f.hm : f.bm, de = f.hjemme.oss ? f.bm : f.hm, utf = vi > de ? 'Seier' : vi < de ? 'Tap' : 'Uavgjort';
+      return { tekst: utf + ' ' + dag(f.dato) + ': ' + kampLinje(f) + ' ' + f.hm + '–' + f.bm + ' i ' + esc(hall(f).hall) + '.', tale: utf + ' ' + vi + ' mot ' + de + ' mot ' + motst(f).navn + '.', src: 'kamper' };
+    }
+    if (lagTreff && /hvordan|går det|form|spiller|om /.test(s)) {
+      var t2 = tabell(), x = t2.filter(function (y) { return y.lag === lagTreff; })[0], pl = t2.indexOf(x) + 1;
+      var mot = vaare.filter(function (k) { return motst(k) === lagTreff; })[0];
+      return { tekst: esc(lagTreff.navn) + ' ligger på ' + pl + '. plass med ' + x.p + ' poeng, form <b>' + x.form.join(' ') + '</b>, mål ' + x.mf + '–' + x.mm + '.' + (mot ? ' Vi møter dem ' + dag(mot.dato) + ' kl. ' + mot.tid + '.' : ''), tale: lagTreff.navn + ' ligger på ' + pl + '. plass med ' + x.p + ' poeng.', src: 'serietabell · kamper' };
+    }
+    if (/i dag|i morgen|skjer/.test(s)) {
+      var tid = /i morgen/.test(s) ? new Date(idag.getTime() + DAG) : idag;
+      var dk = vaare.filter(function (k) { return k.dato.getTime() === tid.getTime(); });
+      if (!dk.length) { var n = neste; return { tekst: 'Ingen kamper ' + (tid === idag ? 'i dag' : 'i morgen') + '. Neste kamp er ' + dag(n.dato) + ' kl. ' + n.tid + ': ' + kampLinje(n) + ' i ' + esc(hall(n).hall) + '.', tale: 'Ingen kamper ' + (tid === idag ? 'i dag' : 'i morgen') + '. Neste kamp er ' + dag(n.dato) + ' klokka ' + n.tid + ' mot ' + motst(n).navn + '.', src: 'dagens_agenda' }; }
+      return { tekst: dk.map(function (k) { return 'Kl. ' + k.tid + ': ' + kampLinje(k) + ' i ' + esc(hall(k).hall); }).join('<br>'), tale: dk.map(function (k) { return 'Klokka ' + k.tid + ' mot ' + motst(k).navn; }).join('. '), src: 'dagens_agenda' };
+    }
+    if (/neste|når spiller|kamp|hvem møter/.test(s)) {
+      aktivKamp = neste;
+      return { tekst: cap(dag(neste.dato)) + ' kl. ' + neste.tid + ': ' + kampLinje(neste) + ' i ' + esc(hall(neste).hall) + ', ' + esc(hall(neste).sted) + '.', tale: cap(dag(neste.dato)) + ' klokka ' + neste.tid + ': ' + neste.hjemme.navn + ' mot ' + neste.borte.navn + ' i ' + hall(neste).hall + '.', src: 'kamper' };
+    }
+    if (/hvor|hall|adresse/.test(s)) {
+      var k3 = aktivKamp || neste;
+      return { tekst: esc(hall(k3).hall) + ' ligger i ' + esc(hall(k3).adr) + '. Si «naviger dit», så viser jeg veien.', tale: hall(k3).hall + ' ligger i ' + hall(k3).sted + '. Si naviger dit, så viser jeg veien.', src: 'arenaer' };
+    }
+    return { tekst: 'Det vet jeg ikke ennå. Prøv «Hva er neste kamp?», «Når må jeg kjøre?», «Naviger dit» eller «Hvordan står tabellen?».', tale: 'Det vet jeg ikke ennå. Prøv: hva er neste kamp?', src: '' };
+  }
+
+  /* ───────── Samtale, bølge og opplesning ───────── */
+  var log = document.getElementById('log');
+  function legg(cls, html) { var d = document.createElement('div'); d.className = 'msg ' + cls; d.innerHTML = html; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  var wave = document.getElementById('wave'); for (var w = 0; w < 28; w++) wave.appendChild(document.createElement('i'));
+  var bars = wave.children, snakker = false, lytterNa = false;
+  (function anim() { var tt = performance.now() / 1000; for (var i = 0; i < bars.length; i++) { var on = snakker || lytterNa; var env = Math.exp(-Math.pow((i - 13.5) / 7, 2)); bars[i].style.height = (on ? 15 + 80 * env * Math.abs(Math.sin(tt * 7 + i * .6) * Math.sin(tt * 3 + i * .23)) : 10) + '%'; } requestAnimationFrame(anim); })();
+
+  var lyd = true, stemme = null;
+  function velgStemme() { var v = (window.speechSynthesis && speechSynthesis.getVoices()) || []; stemme = v.filter(function (x) { return /^(nb|no|nn)/i.test(x.lang); })[0] || null; }
+  if (window.speechSynthesis) { velgStemme(); speechSynthesis.onvoiceschanged = velgStemme; }
+  function les(tekst) {
+    if (!lyd || !window.speechSynthesis) return;
+    speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(tekst); u.lang = 'nb-NO'; if (stemme) u.voice = stemme; u.rate = 0.98; u.pitch = 0.9;
+    u.onstart = function () { snakker = true; }; u.onend = u.onerror = function () { snakker = false; }; speechSynthesis.speak(u);
+  }
+  var lydBtn = document.getElementById('lydBtn');
+  lydBtn.onclick = function () { lyd = !lyd; lydBtn.textContent = lyd ? '🔊 Opplesning på' : '🔇 Opplesning av'; if (!lyd && window.speechSynthesis) speechSynthesis.cancel(); };
+
+  function spor(q) {
+    q = q.trim(); if (!q) return;
+    legg('du', esc(q));
+    var s = svar(q);
+    setTimeout(function () { legg('ki', s.tekst + (s.src ? '<span class="src">Knatt-lite · ' + s.src + '</span>' : '')); les(s.tale); }, 380);
+  }
+  document.getElementById('form').onsubmit = function (e) { e.preventDefault(); var i = document.getElementById('input'); spor(i.value); i.value = ''; };
+  document.querySelectorAll('#chips button').forEach(function (b) { b.onclick = function () { spor(b.textContent); }; });
+
+  /* ───────── Talegjenkjenning ───────── */
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition, mic = document.getElementById('mic'), micTxt = document.getElementById('micTxt');
+  if (!SR) { mic.disabled = true; mic.title = 'Nettleseren din støtter ikke tale. Skriv spørsmålet i stedet.'; micTxt.textContent = 'Tale ikke støttet'; mic.style.opacity = .5; }
+  else {
+    var rec = new SR(); rec.lang = 'nb-NO'; rec.interimResults = true; rec.maxAlternatives = 1;
+    var input = document.getElementById('input'), fikk = false;
+    rec.onstart = function () { lytterNa = true; fikk = false; mic.classList.add('lytter'); mic.setAttribute('aria-pressed', 'true'); micTxt.textContent = 'Lytter …'; input.placeholder = 'Snakk nå …'; };
+    rec.onresult = function (e) { var t = ''; for (var i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; input.value = t; if (e.results[e.results.length - 1].isFinal) { fikk = true; rec.stop(); spor(t); input.value = ''; } };
+    rec.onerror = function (e) { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') legg('ki', 'Jeg fikk ikke bruke mikrofonen. Gi nettleseren tilgang, eller skriv spørsmålet.'); };
+    rec.onend = function () { lytterNa = false; mic.classList.remove('lytter'); mic.setAttribute('aria-pressed', 'false'); micTxt.textContent = 'Snakk'; input.placeholder = '…eller skriv spørsmålet her'; if (!fikk && input.value.trim()) { spor(input.value); input.value = ''; } };
+    mic.onclick = function () { if (lytterNa) { rec.stop(); return; } if (window.speechSynthesis) speechSynthesis.cancel(); try { rec.start(); } catch (e) {} };
+  }
+
+  /* ───────── Kartet tilpasser seg smale flater ───────── */
+  function tilpassKart() { var r = svg.getBoundingClientRect(); var smal = r.width / Math.max(1, r.height) < 1.15; svg.setAttribute('viewBox', smal ? '70 40 860 840' : '0 0 1000 800'); svg.setAttribute('preserveAspectRatio', smal ? 'xMidYMax meet' : 'xMidYMid slice'); }
+  addEventListener('resize', tilpassKart); tilpassKart();
+
+  /* ───────── Klokke og start ───────── */
+  function klokke() { var n = new Date(); document.getElementById('klokke').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0'); }
+  klokke(); setInterval(klokke, 15000);
+  legg('ki', 'Hei! Jeg er koblet til Knatt-lite. Spør meg om kampene, tabellen eller veien til hallen.<span class="src">Demo · oppdiktede data</span>');
+  window.__sim = { spor: spor, neste: neste, rute: rute };
+})();
+</script>
+</body>
+</html>

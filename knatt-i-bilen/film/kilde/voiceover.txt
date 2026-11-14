@@ -1,13 +1,13 @@
 Voiceover — Knatt i bilen (26 s)
-Stemme: «Barrett» (ElevenLabs via Higgsfield, text2speech_v2), norsk. Pauser kortet til ~0,4 s.
+Stemme: norsk tekst-til-tale fra speechgen.io (prosjekt 25011051), laget av Samuel. Delt i seks replikker.
 Miks: −16 LUFS, toppnivå −1,5 dBTP.
 
-0,7 s   Lørdag morgen. To bortekamper, én dag i Solør.
-5,2 s   Du spør bilen: Hva er neste kamp?
-8,3 s   Svaret kommer fra Knatt. Tid, motstander og hall.
-13,2 s  Bare offentlige lagdata. Aldri noe om spillerne.
-17,4 s  Naviger dit. Bilen tar resten.
-22,4 s  Knatt. Mer innsikt. Mindre styr.
+0,8 s   Lørdag morgen. To bortekamper, én dag i Solør.
+5,4 s   Du spør bilen: Hva er neste kamp?
+8,4 s   Svaret kommer fra Knatt. Tid, motstander og hall.
+13,3 s  Bare offentlige lagdata. Aldri noe om spillerne.
+17,6 s  Naviger dit. Bilen tar resten.
+22,5 s  Knatt. Mer innsikt. Mindre styr.
 
 Musikk: ElevenLabs Music v2.5 via Higgsfield, instrumental, rolig nordisk ambient (synthflater, filtpiano, lav puls).
 Ligger ca. 10 dB under stemmen, dukkes automatisk når stemmen snakker (sidechain), 1,2 kHz dempet 4 dB.

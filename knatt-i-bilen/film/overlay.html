@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<title>Knatt i bilen — tekstlag til filmen</title>
+<!--
+  Tekstlaget som legges over de fotorealistiske klippene i knatt-i-bilen.mp4.
+  Rendres bilde for bilde med gjennomsiktig bakgrunn (window.__renderAt(t)).
+  Tidslinja må stemme med klippene: 4 klipp à 6 s med 0,5 s kryssovergang + 3,75 s sluttkort = 26 s.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --glod: #FF4D38; --lime: #C8F03A; --drom: #7C5CE0; --blekk: #0E1116; --bein: #F0EFEC; --natt-edge: #252932;
+  --disp: 'Space Grotesk', system-ui, sans-serif; --body: 'Inter', system-ui, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; }
+.stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; color: var(--bein); font-family: var(--body); }
+.o { position: absolute; opacity: 0; will-change: opacity, transform; }
+
+.shade-top { inset: 0 0 auto 0; height: 420px; background: linear-gradient(180deg, rgba(8, 10, 14, .78), rgba(8, 10, 14, 0)); }
+.shade-bot { inset: auto 0 0 0; height: 460px; background: linear-gradient(0deg, rgba(8, 10, 14, .85), rgba(8, 10, 14, 0)); }
+.shade-all { inset: 0; background: rgba(8, 10, 14, .62); }
+
+.eyebrow { left: 110px; top: 92px; display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 20px; letter-spacing: .16em; text-transform: uppercase; }
+.eyebrow i { width: 12px; height: 12px; border-radius: 50%; background: var(--glod); }
+.headline { left: 104px; top: 140px; font-family: var(--disp); font-weight: 700; font-size: 104px; line-height: 1; letter-spacing: -0.045em; text-shadow: 0 6px 40px rgba(0, 0, 0, .45); }
+.headline.one { font-size: 64px; top: 136px; letter-spacing: -0.035em; }
+.sub.top { top: 120px; bottom: auto; }
+.headline .dot { display: inline-block; width: .13em; height: .13em; border-radius: 50%; background: var(--glod); margin-left: .04em; }
+
+.sub { left: 110px; bottom: 96px; max-width: 1180px; display: flex; gap: 22px; align-items: flex-start; }
+.sub .who { flex: none; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 18px; letter-spacing: .14em; text-transform: uppercase; padding-top: 12px; width: 150px; }
+.sub .who .ring { width: 22px; height: 22px; border-radius: 50%; border: 4px solid var(--glod); box-shadow: 0 0 18px rgba(255, 77, 56, .8); }
+.sub .who .du { width: 22px; height: 22px; border-radius: 50%; background: var(--bein); }
+.sub .text { font-family: var(--disp); font-weight: 500; font-size: 46px; line-height: 1.22; letter-spacing: -0.02em; text-shadow: 0 4px 30px rgba(0, 0, 0, .6); }
+.sub .text b { font-weight: 700; }
+.sub .src { display: block; margin-top: 12px; font-family: var(--mono); font-weight: 400; font-size: 16px; letter-spacing: .12em; text-transform: uppercase; color: var(--glod); text-shadow: none; }
+.caret { display: inline-block; width: 3px; height: .95em; background: var(--bein); vertical-align: -0.1em; margin-left: 3px; }
+
+.card { right: 110px; top: 92px; padding: 22px 26px; border-radius: 18px; background: rgba(14, 17, 22, .78); border: 1px solid rgba(240, 239, 236, .14); backdrop-filter: blur(10px); min-width: 420px; }
+.card .k { font-family: var(--mono); font-size: 16px; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
+.card .v { font-family: var(--disp); font-weight: 700; font-size: 38px; letter-spacing: -0.02em; margin-top: 6px; }
+.card .s { font-size: 21px; opacity: .8; margin-top: 4px; }
+
+/* Dataflyt over dronebildet */
+.flow { left: 160px; right: 160px; bottom: 120px; height: 150px; }
+.flow .line { position: absolute; left: 60px; right: 60px; top: 44px; height: 3px; background: rgba(240, 239, 236, .25); border-radius: 2px; }
+.flow .fill { position: absolute; left: 60px; top: 44px; height: 3px; background: linear-gradient(90deg, #dfe6f2, var(--glod) 33%, var(--lime) 66%, var(--drom)); border-radius: 2px; }
+.flow .node { position: absolute; top: 0; width: 90px; height: 90px; margin-left: -45px; border-radius: 50%; display: grid; place-items: center; }
+.flow .node i { width: 34px; height: 34px; border-radius: 50%; box-shadow: 0 0 34px currentColor, 0 0 0 10px rgba(255, 255, 255, .06); background: currentColor; }
+.flow .node span { position: absolute; top: 100px; white-space: nowrap; font-family: var(--mono); font-size: 18px; letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0, 0, 0, .8); }
+.flow .node.big i { width: 48px; height: 48px; }
+.flow .node.big span { font-family: var(--disp); font-weight: 700; font-size: 30px; letter-spacing: -0.01em; text-transform: none; top: 96px; }
+.flow .p { position: absolute; top: 39px; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: #fff; box-shadow: 0 0 16px #fff; }
+
+.end { inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.wordmark { font-family: var(--disp); font-weight: 700; font-size: 260px; letter-spacing: -0.06em; line-height: 1; display: inline-flex; align-items: flex-end; text-shadow: 0 10px 60px rgba(0, 0, 0, .5); }
+.wordmark i { display: inline-block; width: 42px; height: 42px; border-radius: 50%; background: var(--glod); margin: 0 0 33px 17px; box-shadow: 0 0 60px rgba(255, 77, 56, .9); }
+.tag { font-family: var(--disp); font-weight: 500; font-size: 58px; letter-spacing: -0.02em; margin-top: 30px; }
+.endsub { font-size: 28px; opacity: .8; margin-top: 20px; }
+.url { font-family: var(--mono); font-size: 24px; letter-spacing: .12em; color: var(--glod); margin-top: 42px; }
+.legal { left: 0; right: 0; bottom: 44px; text-align: center; font-family: var(--mono); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; }
+.progress { left: 0; bottom: 0; height: 5px; background: var(--glod); width: 0; opacity: .9 !important; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="o shade-top" id="shadeTop"></div>
+  <div class="o shade-bot" id="shadeBot"></div>
+  <div class="o shade-all" id="shadeAll"></div>
+
+  <div class="o eyebrow" id="eyebrow"><i></i><span>Lørdag morgen · E6 sørover</span></div>
+  <div class="o headline one" id="h1">To bortekamper. Én dag i Solør<span class="dot"></span></div>
+  <div class="o headline" id="h2">Bare offentlige<br>lagdata<span class="dot"></span></div>
+
+  <div class="o card" id="card1"><div class="k">Kampdag · lør 21. nov</div><div class="v">2 bortekamper</div><div class="s">Åsneshallen 13:00 · Våler 17:15</div></div>
+  <div class="o card" id="card2"><div class="k">Rute</div><div class="v">Lillehammer → Flisa</div><div class="s">E6 langs Mjøsa · Rv 2 langs Glomma · 131 km</div></div>
+
+  <div class="o sub" id="s1"><div class="who"><span class="du"></span>Du</div><div class="text">«Hva er neste kamp?»</div></div>
+  <div class="o sub" id="s2"><div class="who"><span class="ring"></span>Grok</div><div class="text"><span id="s2t"></span><span class="src" id="s2s">Kilde: Knatt-lite · kamper</span></div></div>
+  <div class="o sub top" id="s3"><div class="who"><span class="du"></span>Du</div><div class="text">«Naviger dit.»</div></div>
+  <div class="o sub top" id="s4"><div class="who"><span class="ring"></span>Grok</div><div class="text"><span id="s4t"></span><span class="src" id="s4s">Kilde: Knatt-lite · arenaer</span></div></div>
+
+  <div class="o flow" id="flow">
+    <div class="line"></div><div class="fill" id="fill"></div>
+    <div id="nodes"></div><div id="dots"></div>
+  </div>
+
+  <div class="o end" id="end">
+    <div class="wordmark">knatt<i></i></div>
+    <div class="tag">Mer innsikt. Mindre styr.</div>
+    <div class="endsub">Spør Grok om neste kamp — svaret kommer fra Knatt.</div>
+    <div class="url">knatt.no/knatt-i-bilen</div>
+  </div>
+  <div class="o legal" id="legal">Illustrasjon laget med KI · Kampdata fra Knatt-lite · Knatt er ikke tilknyttet xAI eller Tesla</div>
+  <div class="o progress" id="progress"></div>
+</div>
+<script>
+const DUR = 26;
+// Klippene starter: 0, 5.5, 11, 16.5; sluttkortet 22. Midt i hver kryssovergang:
+const T = { c1: [0, 5.75], c2: [5.75, 11.25], c3: [11.25, 16.75], c4: [16.75, 22.25], end: [22.25, 26] };
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+const win = (t, a, b, f = 0.4) => clamp((t - a) / f) * clamp((b - t) / f);
+const $ = (id) => document.getElementById(id);
+const show = (el, o, dy = 0) => { el.style.opacity = o; el.style.transform = `translateY(${(1 - easeOut(o)) * dy}px)`; };
+
+const A1 = 'Lørdag kl. 13:00: <b>Flisa 2 – LFH09 2</b> i Åsneshallen. Samme dag <b>Vaaler – LFH09 2</b> kl. 17:15.';
+const A2 = 'Navigerer til Åsneshallen, Idrettsvegen 24, Flisa.';
+function typed(html, k) {
+  const n = Math.floor(html.replace(/<[^>]+>/g, '').length * clamp(k)); let out = '', c = 0, tag = false;
+  for (const ch of html) { if (ch === '<') tag = true; if (tag) { out += ch; if (ch === '>') tag = false; continue; } if (c >= n) break; out += ch; c++; }
+  return out.replace(/<b>([^<]*)$/, '<b>$1</b>') + (k < 1 ? '<span class="caret"></span>' : '');
+}
+
+const NODES = [['handball.no · Min Håndball', '#dfe6f2'], ['Knatt', '#FF4D38', true], ['Knatt-lite', '#C8F03A'], ['Grok i bilen', '#7C5CE0']];
+const nodesEl = $('nodes'), dotsEl = $('dots');
+NODES.forEach(([label, color, big], i) => {
+  const d = document.createElement('div'); d.className = 'node' + (big ? ' big' : ''); d.style.left = `calc(60px + (100% - 120px) * ${i / 3})`; d.style.color = color;
+  d.innerHTML = `<i></i><span style="color: var(--bein)">${label}</span>`; nodesEl.appendChild(d);
+});
+const DOTS = 14; for (let i = 0; i < DOTS; i++) { const p = document.createElement('div'); p.className = 'p'; dotsEl.appendChild(p); }
+
+function renderAt(t) {
+  // skygger for lesbarhet
+  show($('shadeTop'), Math.max(win(t, 0.3, 5.4), win(t, T.c3[0] + 0.2, T.c3[1] - 0.2), win(t, T.c4[0] + 0.2, T.c4[1] - 0.2)));
+  show($('shadeBot'), Math.max(win(t, 3.4, 5.9), win(t, T.c3[0] + 0.3, T.c3[1] - 0.2)));
+  show($('shadeAll'), clamp((t - T.end[0]) / 0.6));
+
+  show($('eyebrow'), win(t, 0.4, 5.4), 12);
+  show($('h1'), win(t, 0.9, 4.2, 0.5), 30);
+  show($('h2'), win(t, T.c3[0] + 0.6, T.c3[1] - 0.25, 0.5), 30);
+
+  show($('card1'), 0);
+  show($('card2'), 0);
+
+  show($('s1'), win(t, 3.6, 5.9), 16);
+  show($('s2'), 0); $('s2t').innerHTML = typed(A1, (t - 7.25) / 2.8); $('s2s').style.opacity = clamp((t - 10.1) / 0.3);
+  show($('s3'), win(t, T.c4[0] + 0.3, T.c4[0] + 1.9), 16);
+  show($('s4'), win(t, T.c4[0] + 2.0, T.c4[1] - 0.15), 16); $('s4t').innerHTML = typed(A2, (t - T.c4[0] - 2.1) / 1.6); $('s4s').style.opacity = clamp((t - T.c4[0] - 3.8) / 0.3);
+
+  const fk = clamp((t - T.c3[0] - 0.4) / 2.2);
+  show($('flow'), win(t, T.c3[0] + 0.3, T.c3[1] - 0.2), 20);
+  $('fill').style.width = `calc((100% - 120px) * ${easeOut(fk)})`;
+  [...nodesEl.children].forEach((n, i) => { const o = clamp((fk * 3 - i + 0.3) / 0.5); n.style.opacity = o; n.style.transform = `scale(${0.6 + 0.4 * easeOut(o)})`; });
+  [...dotsEl.children].forEach((p, i) => { const u = Math.min(((i / DOTS) + t * 0.22) % 1, easeOut(fk)); p.style.left = `calc(60px + (100% - 120px) * ${u})`; p.style.opacity = fk > 0.05 ? 0.9 : 0; });
+
+  show($('end'), clamp((t - T.end[0] - 0.3) / 0.7), 24);
+  show($('legal'), clamp((t - T.end[0] - 0.8) / 0.6) * 0.5);
+  $('progress').style.width = (t / DUR * 100) + '%';
+}
+window.__DUR = DUR;
+window.__renderAt = (t) => { renderAt(t); return true; };
+renderAt(0);
+document.fonts.ready.then(() => { window.__ready = true; });
+</script>
+</body>
+</html>

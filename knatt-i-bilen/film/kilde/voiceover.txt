@@ -8,3 +8,7 @@ Miks: −16 LUFS, toppnivå −1,5 dBTP.
 13,2 s  Bare offentlige lagdata. Aldri noe om spillerne.
 17,4 s  Naviger dit. Bilen tar resten.
 22,4 s  Knatt. Mer innsikt. Mindre styr.
+
+Musikk: ElevenLabs Music v2.5 via Higgsfield, instrumental, rolig nordisk ambient (synthflater, filtpiano, lav puls).
+Ligger ca. 10 dB under stemmen, dukkes automatisk når stemmen snakker (sidechain), 1,2 kHz dempet 4 dB.
+Toner inn over 0,8 s og ut fra 24,4 s.

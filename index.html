@@ -546,20 +546,59 @@ a { color: inherit; }
 }
 @keyframes stamp { to { opacity: 1; transform: scale(1) rotate(8deg); } }
 
-/* Mål per 5 min — nede til høyre */
-.dash-goals {
+/* Nøkkeltall som bytter seg — nede til høyre */
+.dash-kpi {
   position: absolute;
   z-index: 2;
   right: -30px; bottom: 0;
-  width: 196px;
+  width: 212px;
   padding: 13px 14px 12px;
   transform: rotate(2deg);
   background: rgba(21, 24, 30, 0.94);
+  --bd: 150ms;
 }
+.kpi-dots { position: absolute; top: 12px; right: 13px; display: flex; gap: 4px; z-index: 1; }
+.kpi-dots i {
+  position: relative;
+  width: 5px; height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(240, 239, 236, 0.22);
+  cursor: pointer;
+  transition: width 0.5s var(--ease), background 0.5s ease;
+}
+.kpi-dots i.on { width: 16px; background: rgba(240, 239, 236, 0.4); }
+.kpi-dots b { position: absolute; inset: 0; background: var(--bein); transform: scaleX(0); transform-origin: left; }
+.kpi-dots i.on b { transform: scaleX(1); }
+.dash-kpi.auto .kpi-dots i.on b { animation: fillx 4.6s linear both; }
+.dash-kpi:hover .kpi-dots b { animation-play-state: paused; }
+@keyframes fillx { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.kpi-panes { display: grid; }
+.kpi-pane {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.7s var(--ease);
+  pointer-events: none;
+}
+.kpi-pane > .dash-label { padding-right: 44px; white-space: nowrap; }
+.kpi-pane.on { opacity: 1; transform: none; transition-delay: 0.14s; pointer-events: auto; }
+.kpi-pane.out { transform: translateY(-10px); }
+
+.kpi-big {
+  display: flex; align-items: baseline; gap: 6px;
+  margin-top: 8px;
+  font-family: var(--disp); font-weight: 700;
+  font-size: 26px; letter-spacing: -0.03em; line-height: 1;
+}
+.kpi-big small { font-family: var(--mono); font-weight: 400; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+
 .goals-bars {
   display: flex; align-items: flex-end; gap: 4px;
   height: 46px; margin-top: 10px;
 }
+.kpi-big + .goals-bars { height: 26px; margin-top: 8px; }
 .goals-bars i {
   flex: 1;
   height: calc(var(--h, 0) * 100%);
@@ -570,36 +609,56 @@ a { color: inherit; }
   transform: scaleY(0);
   transition: height 1s var(--ease), background 0.6s ease;
 }
-.dash.go .goals-bars i {
+.kpi-pane.run .goals-bars i {
   animation: grow 0.9s var(--ease) forwards;
-  animation-delay: calc(var(--i) * 45ms + 1300ms);
+  animation-delay: calc(var(--i) * 45ms + var(--bd));
 }
 .goals-bars i.top { background: var(--lime); }
 @keyframes grow { to { transform: scaleY(1); } }
 .goals-axis { display: flex; justify-content: space-between; margin-top: 5px; font-family: var(--mono); font-size: 8.5px; color: var(--dim); }
 
-/* Oppmøte-ring — nede til venstre */
-.dash-ring {
+/* Sesongen som rekke: én rute per kamp */
+.kpi-seg { display: flex; gap: 3px; margin-top: 12px; }
+.kpi-seg i { flex: 1; height: 10px; border-radius: 2px; background: rgba(240, 239, 236, 0.1); }
+.kpi-seg i.v { background: var(--lime); }
+.kpi-seg i.t { background: var(--glod); }
+.kpi-seg i.u { background: var(--gra); opacity: 0.7; }
+.kpi-pane.run .kpi-seg i { animation: seg 0.5s var(--ease) both; animation-delay: calc(var(--i) * 55ms + var(--bd)); }
+.kpi-seg i.ny { animation: pop 0.6s var(--ease) !important; }
+@keyframes seg { from { transform: scaleY(0); opacity: 0; } }
+
+/* Synkronisering — nede til venstre */
+.dash-sync {
   position: absolute;
   z-index: 2;
   left: -8px; bottom: 14px;
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px 10px 10px;
+  padding: 10px 16px 10px 10px;
   border-radius: 999px;
   transform: rotate(-1.5deg);
   background: rgba(21, 24, 30, 0.94);
 }
-.dash-ring svg { width: 40px; height: 40px; transform: rotate(-90deg); }
-.dash-ring circle { fill: none; stroke-width: 4; }
-.dash-ring .track { stroke: rgba(240, 239, 236, 0.12); }
-.dash-ring .arc {
-  stroke: var(--drom);
-  stroke-linecap: round;
-  stroke-dasharray: 100.5;
-  stroke-dashoffset: 100.5;
-  transition: stroke-dashoffset 1.6s var(--ease);
+.dash-sync svg { width: 40px; height: 40px; flex: none; }
+.dash-sync circle { fill: none; stroke-width: 4; }
+.dash-sync .track { stroke: rgba(240, 239, 236, 0.12); transition: stroke 0.5s ease, fill 0.5s ease; }
+.dash-sync .spin {
+  stroke: var(--lime); stroke-linecap: round;
+  stroke-dasharray: 26 100.5;
+  transform-origin: 20px 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-.dash-ring .big { font-family: var(--disp); font-weight: 700; font-size: 18px; letter-spacing: -0.02em; line-height: 1; }
+.dash-sync.busy .spin { opacity: 1; animation: spin 0.9s linear infinite; }
+.dash-sync .tick {
+  fill: none; stroke: var(--blekk); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 22; stroke-dashoffset: 22;
+  transition: stroke-dashoffset 0.5s var(--ease) 0.15s;
+}
+.dash-sync.ok .track { stroke: var(--lime); fill: var(--lime); }
+.dash-sync.ok .tick { stroke-dashoffset: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.sync-txt { min-width: 124px; }
+.sync-big { font-family: var(--disp); font-weight: 700; font-size: 15px; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 3px; }
 
 .dash-cards-in { opacity: 0; transform: translateY(16px) rotate(var(--rot, 0deg)); }
 .dash.go .dash-cards-in {
@@ -608,8 +667,8 @@ a { color: inherit; }
 }
 @keyframes card-in { to { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)); } }
 .dash-next.dash-cards-in { --rot: -3deg; }
-.dash-goals.dash-cards-in { --rot: 2deg; }
-.dash-ring.dash-cards-in { --rot: -1.5deg; }
+.dash-kpi.dash-cards-in { --rot: 2deg; }
+.dash-sync.dash-cards-in { --rot: -1.5deg; }
 
 /* Lett vipp mot pekeren på desktop */
 .dash-stage { transition: transform 0.9s var(--ease); transform-style: preserve-3d; }
@@ -644,18 +703,21 @@ a { color: inherit; }
   .dash-next { left: -6px; width: 210px; }
   .dash-stage { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
   .dash-table { flex: 0 0 100%; padding-bottom: 30px; }
-  .dash-ring, .dash-goals { position: relative; left: auto; right: auto; bottom: auto; margin-top: -26px; }
-  .dash-ring { flex: 0 0 auto; margin-left: -4px; }
-  .dash-goals { flex: 1 1 0; min-width: 0; width: auto; margin-right: -6px; }
+  .dash-sync, .dash-kpi { position: relative; left: auto; right: auto; bottom: auto; margin-top: -26px; }
+  .dash-sync { flex: 0 0 auto; margin-left: -4px; align-self: flex-start; }
+  .dash-kpi { flex: 1 1 0; min-width: 0; width: auto; margin-right: -6px; }
 }
 
 @media (max-width: 420px) {
   .dash-cols, .dash-row { grid-template-columns: 16px 1fr 52px 18px 30px 50px; gap: 4px; padding: 0 4px; }
   .form i { width: 7px; height: 7px; }
   .dash-table { padding: 16px 10px 10px; }
-  .dash-ring { padding: 8px 12px 8px 8px; gap: 8px; }
-  .dash-ring svg { width: 34px; height: 34px; }
-  .dash-ring .big { font-size: 16px; }
+  .dash-sync { padding: 8px 12px 8px 8px; gap: 8px; }
+  .dash-sync svg { width: 34px; height: 34px; }
+  .sync-txt { min-width: 0; }
+  .sync-big { font-size: 13.5px; }
+  .dash-sync .dash-label { font-size: 8.5px; letter-spacing: 0.08em; }
+  .kpi-big { font-size: 22px; }
 }
 
 .dash-row.settled { opacity: 1; transform: none; animation: none !important; }
@@ -1406,7 +1468,8 @@ a, button { transition: opacity 0.15s ease; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .js [data-reveal], .hero [data-in], .dash-row, .dash-cards-in, .goals-bars i { opacity: 1 !important; transform: none !important; }
+  .js [data-reveal], .hero [data-in], .dash-row, .dash-cards-in, .goals-bars i, .kpi-seg i { opacity: 1 !important; transform: none !important; }
+  .kpi-pane.out { transform: none !important; }
 }
 
 /* ─── Selection ─── */
@@ -1451,12 +1514,12 @@ a, button { transition: opacity 0.15s ease; }
       </div>
 
       <div data-in style="--d:3">
-        <div class="dash" data-dash role="img" aria-label="Illustrasjon av Knatt: neste kamp spilles, serietabellen oppdateres og vårt lag går til topps">
+        <div class="dash" data-dash role="img" aria-label="Illustrasjon av Knatt: neste kamp spilles, dataene synkroniseres, serietabellen regner seg om og vårt lag klatrer til tredjeplass">
           <div class="dash-stage" aria-hidden="true">
             <div class="dash-card dash-next dash-cards-in" style="--d:1" data-next>
               <span class="stamp">Seier</span>
               <div class="dash-label"><span class="live"></span><span data-next-label>Neste kamp</span></div>
-              <div class="teams"><span>LFH09 – Lag B</span><span class="score" data-score>0–0</span></div>
+              <div class="teams"><span>LFH09 – Lag C</span><span class="score" data-score>0–0</span></div>
               <div class="meta"><span>Lør 12:00 · Jorekstad</span><span data-clock>om 2 d</span></div>
             </div>
 
@@ -1469,15 +1532,37 @@ a, button { transition: opacity 0.15s ease; }
               <div class="dash-rows" data-rows></div>
             </div>
 
-            <div class="dash-card dash-ring dash-cards-in" style="--d:3">
-              <svg viewBox="0 0 40 40"><circle class="track" cx="20" cy="20" r="16"/><circle class="arc" cx="20" cy="20" r="16" data-arc/></svg>
-              <div><div class="big"><span data-ring>0</span> %</div><div class="dash-label">Oppmøte trening</div></div>
+            <div class="dash-card dash-sync dash-cards-in busy" style="--d:3" data-sync>
+              <svg viewBox="0 0 40 40"><circle class="track" cx="20" cy="20" r="16"/><circle class="spin" cx="20" cy="20" r="16"/><path class="tick" d="M13.5 20.5l4.5 4.5 8.5-9.5"/></svg>
+              <div class="sync-txt"><div class="sync-big" data-sync-title>Synkroniserer</div><div class="dash-label" data-sync-sub>handball.no · Rubic</div></div>
             </div>
 
-            <div class="dash-card dash-goals dash-cards-in" style="--d:2">
-              <div class="dash-label">Våre mål per 5 min</div>
-              <div class="goals-bars" data-bars></div>
-              <div class="goals-axis"><span>0'</span><span>30'</span><span>60'</span></div>
+            <div class="dash-card dash-kpi dash-cards-in" style="--d:2" data-kpi>
+              <div class="kpi-dots" data-dots><i class="on"><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+              <div class="kpi-panes">
+                <div class="kpi-pane on">
+                  <div class="dash-label">Våre mål per 5 min</div>
+                  <div class="goals-bars" data-bars></div>
+                  <div class="goals-axis"><span>0'</span><span>30'</span><span>60'</span></div>
+                </div>
+                <div class="kpi-pane">
+                  <div class="dash-label">Kamper spilt</div>
+                  <div class="kpi-big"><span data-to="6" data-played>6</span><small>av 14 i serien</small></div>
+                  <div class="kpi-seg" data-seg></div>
+                </div>
+                <div class="kpi-pane">
+                  <div class="dash-label">Treninger i høst</div>
+                  <div class="kpi-big"><span data-to="31">31</span><small>på 12 uker</small></div>
+                  <div class="goals-bars" data-train></div>
+                  <div class="goals-axis"><span>Aug</span><span>Nov</span></div>
+                </div>
+                <div class="kpi-pane">
+                  <div class="dash-label">Belastning</div>
+                  <div class="kpi-big"><span data-to="19" data-dec>1,9</span><small>kamper/uke</small></div>
+                  <div class="goals-bars" data-load></div>
+                  <div class="goals-axis"><span>8 uker siden</span><span>Nå</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1798,14 +1883,23 @@ a, button { transition: opacity 0.15s ease; }
     var MAXP = 12;
 
     var START = [
-      { id: 'a', lag: 'Lag A', k: 7, d: 18, p: 10, f: 'vvtvv' },
-      { id: 'o', lag: 'LFH09', k: 6, d: 14, p: 9, f: 'vtvuv', ours: true },
-      { id: 'b', lag: 'Lag B', k: 6, d: 6, p: 7, f: 'tvvuv' },
-      { id: 'c', lag: 'Lag C', k: 7, d: -9, p: 6, f: 'tvtvt' },
-      { id: 'e', lag: 'Lag D', k: 6, d: -15, p: 2, f: 'ttutt' }
+      { id: 'a', lag: 'Lag A', k: 7, d: 24, p: 12, f: 'vvtvv' },
+      { id: 'b', lag: 'Lag B', k: 7, d: 11, p: 10, f: 'vtvvu' },
+      { id: 'c', lag: 'Lag C', k: 6, d: 5, p: 8, f: 'tvvtv' },
+      { id: 'o', lag: 'LFH09', k: 6, d: 2, p: 7, f: 'tvuvt', ours: true },
+      { id: 'e', lag: 'Lag D', k: 7, d: -42, p: 1, f: 'ttutt' }
     ];
+    var NY = { o: { k: 7, d: 8, p: 9, f: 'v' }, c: { k: 7, d: -1, p: 8, f: 't' } };
     var GOALS0 = [2, 3, 5, 4, 3, 6, 2, 4, 5, 3, 6, 4];
     var GOALS1 = [3, 3, 6, 4, 3, 6, 3, 4, 6, 3, 7, 5];
+    var SEASON0 = 'vtvuvt', SEASON = SEASON0; // LFH09 sine kamper så langt, eldst først
+    var TRAIN = [2, 3, 3, 2, 3, 3, 1, 3, 3, 2, 3, 3];
+    var LOAD = [1, 2, 2, 3, 2, 1, 2, 2];
+    var kpi = root.querySelector('[data-kpi]');
+    var panes = kpi.querySelectorAll('.kpi-pane');
+    var dots = kpi.querySelectorAll('[data-dots] i');
+    var sync = root.querySelector('[data-sync]');
+    var cur = 0, played = 6;
 
     function sign(n) { return n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0'; }
     function ease(t) { return -(Math.cos(Math.PI * t) - 1) / 2; }
@@ -1826,6 +1920,56 @@ a, button { transition: opacity 0.15s ease; }
       el.classList.add('hit');
       later(1400, function () { el.classList.remove('hit'); });
     }
+    function bars(el, vals, max, topFn) {
+      el.innerHTML = vals.map(function (v, i) {
+        return '<i style="--i:' + i + ';--h:' + (v / max) + '"' + (topFn(v, i) ? ' class="top"' : '') + '></i>';
+      }).join('');
+    }
+    function seg(fresh) {
+      var res = SEASON.slice(0, played);
+      var html = '';
+      for (var i = 0; i < 14; i++) {
+        var c = res[i] || '';
+        html += '<i class="' + c + (fresh && i === played - 1 ? ' ny' : '') + '" style="--i:' + i + '"></i>';
+      }
+      root.querySelector('[data-seg]').innerHTML = html;
+    }
+    function setSync(state, title, sub) {
+      sync.classList.remove('busy', 'ok');
+      sync.classList.add(state);
+      root.querySelector('[data-sync-title]').textContent = title;
+      root.querySelector('[data-sync-sub]').textContent = sub;
+    }
+
+    // Nøkkeltallskortet: ett tall om gangen, glir inn og teller opp
+    function show(i, quiet) {
+      if (i !== cur) {
+        var old = panes[cur];
+        old.classList.remove('on');
+        old.classList.add('out');
+        setTimeout(function () { old.classList.remove('out'); if (!old.classList.contains('on')) old.classList.remove('run'); }, 700);
+      }
+      cur = i;
+      var pane = panes[i];
+      pane.classList.remove('run');
+      void pane.offsetWidth;
+      pane.classList.add('on', 'run');
+      if (!quiet && !reduce) {
+        pane.querySelectorAll('[data-to]').forEach(function (el) {
+          var dec = el.hasAttribute('data-dec');
+          countTo(el, 0, +el.dataset.to, 1000, dec ? function (n) { return (n / 10).toFixed(1).replace('.', ','); } : String);
+        });
+      }
+      dots.forEach(function (d) { d.classList.remove('on'); });
+      void kpi.offsetWidth;
+      dots[i].classList.add('on');
+    }
+    dots.forEach(function (d, i) {
+      d.addEventListener('click', function () { show(i); });
+      d.querySelector('b').addEventListener('animationend', function () {
+        if (kpi.classList.contains('auto') && d.classList.contains('on')) show((i + 1) % panes.length);
+      });
+    });
 
     function rowHtml(t, i) {
       return '<div class="dash-row' + (t.ours ? ' ours' : '') + '" data-id="' + t.id + '" style="--r:' + i + '">' +
@@ -1841,6 +1985,8 @@ a, button { transition: opacity 0.15s ease; }
     function setup() {
       timers.forEach(clearTimeout); timers = [];
       root.classList.remove('go');
+      kpi.classList.remove('auto');
+      kpi.style.setProperty('--bd', '1300ms');
       next.classList.remove('playing', 'done');
       root.querySelector('[data-next-label]').textContent = 'Neste kamp';
       root.querySelector('[data-clock]').textContent = 'om 2 d';
@@ -1848,17 +1994,24 @@ a, button { transition: opacity 0.15s ease; }
       var round = root.querySelector('[data-round]');
       round.textContent = 'J15 · Runde 7'; round.classList.remove('fresh');
       rowsEl.innerHTML = START.map(rowHtml).join('');
-      barsEl.innerHTML = GOALS0.map(function (g, i) {
-        return '<i style="--i:' + i + ';--h:' + (g / 8) + '"' + (g === 6 ? ' class="top"' : '') + '></i>';
-      }).join('');
-      root.querySelector('[data-arc]').style.strokeDashoffset = 100.5;
-      root.querySelector('[data-ring]').textContent = '0';
+      bars(barsEl, GOALS0, 8, function (g) { return g === 6; });
+      bars(root.querySelector('[data-train]'), TRAIN, 3, function (v, i) { return i === TRAIN.length - 1; });
+      bars(root.querySelector('[data-load]'), LOAD, 3, function (v) { return v === 3; });
+      played = 6; SEASON = SEASON0;
+      root.querySelector('[data-played]').dataset.to = played;
+      root.querySelector('[data-played]').textContent = played;
+      seg(false);
+      panes.forEach(function (p) { p.classList.remove('on', 'run', 'out'); });
+      dots.forEach(function (d) { d.classList.remove('on'); });
+      cur = 0; panes[0].classList.add('on'); dots[0].classList.add('on');
+      setSync('busy', 'Synkroniserer', 'handball.no · Rubic');
       if (replay) replay.classList.remove('vis');
       void root.offsetWidth; // start animasjonene på nytt
     }
 
     function intro() {
       root.classList.add('go');
+      panes[0].classList.add('run');
       rowsEl.querySelectorAll('.dash-row').forEach(function (r) {
         r.addEventListener('animationend', function () { r.classList.add('settled'); }, { once: true });
       });
@@ -1868,9 +2021,8 @@ a, button { transition: opacity 0.15s ease; }
           r.querySelector('.bar').style.setProperty('--p', t.p / MAXP);
           countTo(r.querySelector('[data-p]'), 0, t.p, 1100);
         });
-        root.querySelector('[data-arc]').style.strokeDashoffset = 100.5 * (1 - 0.91);
-        countTo(root.querySelector('[data-ring]'), 0, 91, 1600);
       });
+      later(1900, function () { setSync('ok', 'Synkronisert', 'handball.no · Rubic · nå'); });
     }
 
     function match() {
@@ -1886,18 +2038,21 @@ a, button { transition: opacity 0.15s ease; }
         next.classList.remove('playing');
         next.classList.add('done');
         root.querySelector('[data-next-label]').textContent = 'Slutt';
-        later(450, update);
+        later(400, function () { setSync('busy', 'Henter rapport', 'handball.no'); });
+        later(1500, function () {
+          setSync('ok', 'Synkronisert', 'Kamprapport · nå');
+          update();
+        });
       });
     }
 
     function update() {
       var round = root.querySelector('[data-round]');
       round.textContent = 'Oppdatert nå'; round.classList.add('fresh');
-      var ny = { o: { k: 7, d: 20, p: 11, f: 'v' }, b: { k: 7, d: 0, p: 7, f: 't' } };
-      Object.keys(ny).forEach(function (id) {
+      Object.keys(NY).forEach(function (id) {
         var r = rowsEl.querySelector('[data-id="' + id + '"]');
         var old = START.filter(function (t) { return t.id === id; })[0];
-        var n = ny[id];
+        var n = NY[id];
         var k = r.querySelector('[data-k]'), d = r.querySelector('[data-d]'), p = r.querySelector('[data-p]');
         k.textContent = n.k; flash(k);
         countTo(d, old.d, n.d, 900, sign); flash(d);
@@ -1908,24 +2063,29 @@ a, button { transition: opacity 0.15s ease; }
         dot.className = n.f + ' ny';
         form.appendChild(dot);
       });
-      // Målene per 5 min glir til de nye verdiene
+      // Målene per 5 min glir til de nye verdiene, og kampen legges til sesongen
       barsEl.querySelectorAll('i').forEach(function (bar, i) {
         bar.style.setProperty('--h', GOALS1[i] / 8);
         bar.classList.toggle('top', GOALS1[i] >= 7 || (GOALS1[i] === 6 && i === 8));
       });
+      played = 7;
+      SEASON = SEASON0 + 'v';
+      root.querySelector('[data-played]').dataset.to = played;
+      root.querySelector('[data-played]').textContent = played;
+      seg(true);
       later(700, reorder);
     }
 
-    // FLIP: LFH09 glir forbi Lag A
+    // FLIP: LFH09 glir forbi Lag C og opp på tredjeplass
     function reorder() {
       var rows = Array.prototype.slice.call(rowsEl.children);
       var first = {};
       rows.forEach(function (r) { first[r.dataset.id] = r.getBoundingClientRect().top; r.classList.add('settled'); });
-      rowsEl.insertBefore(rowsEl.querySelector('[data-id="o"]'), rowsEl.firstElementChild);
+      rowsEl.insertBefore(rowsEl.querySelector('[data-id="o"]'), rowsEl.querySelector('[data-id="c"]'));
       Array.prototype.slice.call(rowsEl.children).forEach(function (r, i) {
         r.querySelector('.pos').textContent = i + 1;
         var dy = first[r.dataset.id] - r.getBoundingClientRect().top;
-        if (!dy) return;
+        if (!dy || reduce) return;
         r.style.transform = 'translateY(' + dy + 'px)';
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
@@ -1935,7 +2095,14 @@ a, button { transition: opacity 0.15s ease; }
           });
         });
       });
-      later(1300, function () { if (replay) replay.classList.add('vis'); });
+      if (reduce) return;
+      later(1300, function () {
+        if (replay) replay.classList.add('vis');
+        // Deretter bytter kortet mellom åpne lagtall
+        kpi.style.setProperty('--bd', '200ms');
+        kpi.classList.add('auto');
+        show(0, true);
+      });
     }
 
     function finalState() {
@@ -1946,12 +2113,12 @@ a, button { transition: opacity 0.15s ease; }
         r.querySelector('.bar').style.setProperty('--p', t.p / MAXP);
         r.querySelector('[data-p]').textContent = t.p;
       });
-      root.querySelector('[data-arc]').style.strokeDashoffset = 100.5 * 0.09;
-      root.querySelector('[data-ring]').textContent = '91';
+      panes[0].classList.add('run');
       next.classList.add('done');
       root.querySelector('[data-next-label]').textContent = 'Slutt';
       root.querySelector('[data-score]').textContent = '28–22';
       root.querySelector('[data-clock]').textContent = "60'";
+      setSync('ok', 'Synkronisert', 'Kamprapport · nå');
       update();
     }
 
